@@ -8,7 +8,7 @@ public class NewBehaviourScript : MonoBehaviour {
 
 // caminho para o arquivo do banco
 
-string urlDataBase = "URI=file:MasterSQLite.db"
+string urlDataBase = "URI=file:MasterSQLite.db";
 
 void Iniciar()
 {
@@ -23,7 +23,7 @@ _connection .Open();
 
 // assim só criaremos a tabela uma vez
 
-string sql = “CREATE TABLE IF NOT EXISTS highscores (name VARCHAR(20), score INT)”;
+string sql = "CREATE TABLE IF NOT EXISTS highscores (name VARCHAR(20), score INT)";
 
 _command.CommandText = sql;
 
@@ -35,7 +35,7 @@ public void Inserir()
 
 {
 
-string sql = “INSERT INTO highscores (name, score) VALUES (‘Me’, 3000)”;
+string sql = "INSERT INTO highscores (name, score) VALUES (‘Me’, 3000)";
 
 _command.CommandText = sql;
 
@@ -47,7 +47,7 @@ void Recuperar()
 
 {
 
-string sqlQuery = “SELECT value,name, randomSequence ” + “FROM PlaceSequence”;
+string sqlQuery = "SELECT value,name, randomSequence " + "FROM PlaceSequence";
 
 dbcmd.CommandText = sqlQuery;
 
@@ -63,8 +63,9 @@ string name = reader.GetString(1);
 
 int rand = reader.GetInt32(2);
 
-Debug.Log( “value= “+value+” name =”+name+” random =”+ rand);
+Debug.Log( "value= "+value+" name ="+name+" random ="+ rand);
 
 }
 
+}
 }
