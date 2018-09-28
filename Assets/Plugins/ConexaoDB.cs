@@ -1,45 +1,62 @@
-﻿using System.Data;
-using Mono.Data.SqliteClient;
+﻿using Mono.Data.SqliteClient;
+using System.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ConexaoDB : MonoBehaviour {
-    private IDbConnection conexao;
-    private IDbComand comando;
-    private IDbDataReader reader;
 
+    // caminho para o arquivo do banco
 
-    private
+string urlDataBase = "URI=file:teste.db";
 
-public  void Start() {
-    Connection();
+void Iniciar()
+
+{
+
+IDbConnection _connection = new SqliteConnection(urlDataBase);
+
+IDbCommand _command = _connection .CreateCommand();
+
+string sql;
+
+_connection .Open();
+
+// assim só criaremos a tabela uma vez
+
+string sql = "CREATE TABLE IF NOT EXISTS highscores (name VARCHAR(20), score INT)";
+
+_command.CommandText = sql;
+
+_command.ExecuteNonQuery();
+
 }
 
+void Recuperar()
 
-public  void Connection() {
-    
+{
+
+string sqlQuery = "SELECT value,name, randomSequence " + "FROM PlaceSequence";
+
+dbcmd.CommandText = sqlQuery;
+
+IDataReader reader = dbcmd.ExecuteReader();
+
+while (reader.Read())
+
+{
+
+int value = reader.GetInt32(0);
+
+string name = reader.GetString(1);
+
+int rand = reader.GetInt32(2);
+
+Debug.Log( "value= "+value+" name ="+name+" random ="+ rand);
+
 }
 
-public  void Inserir() {
-    
 }
-
-public  void AtualizarColuna() {
-    
-}
-
-public  void Atualizar() {
-    
-}
-
-public  void Consultar() {
-    
-}
-
-public  void ConsultaCompleta() {
-    
-}
-
 
 }
