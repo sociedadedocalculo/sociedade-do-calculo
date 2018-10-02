@@ -7,14 +7,16 @@ A Sociedade do Cálculo é um open source RPG game desenvolvido em C# com a Unit
 
 #### Download do jogo
 ==============================
-* teste
-* teste
-
+* ...
 
 #### Recursos do projeto
+
 ==============================
 Unity3D - [https://unity3d.com](https://unity3d.com) 
 [<img src="https://github.com/unity-technologies.png" title="Unity Technologies" height="50">](https://github.com/unity-technologies)&nbsp;
+
+
+
 
 # License
 
