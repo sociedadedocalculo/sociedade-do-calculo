@@ -4,27 +4,36 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-	// Use this for initialization
+    float velocidadeFrente;
+    float velocidadeTras;
+    float velocidadeRotacao;
+
+	// Inicialização
 	void Start () {
+        velocidadeFrente = 10;
+        velocidadeTras = 5;
+        velocidadeRotacao = 60;
 		
 	}
-	
-	// Update is called once per framepublic float moveSpeed = 10f;
-    public float turnSpeed = 50f;
-    
-    
+
+
+   // Update is called once per frame
     void Update ()
     {
-        if(Input.GetKey(KeyCode.UpArrow))
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-        
-        if(Input.GetKey(KeyCode.DownArrow))
-            transform.Translate(-Vector3.forward * moveSpeed * Time.deltaTime);
-        
-        if(Input.GetKey(KeyCode.LeftArrow))
-            transform.Rotate(Vector3.up, -turnSpeed * Time.deltaTime);
-        
-        if(Input.GetKey(KeyCode.RightArrow))
-            transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
-    }
+       if(Input.GetKey ("w")){
+            transform.Translate(0, 0, (velocidadeFrente * Time.deltaTime));
+        }
+ 
+        if(Input.GetKey ("s")){
+            transform.Translate(0, 0, (-velocidadeTras * Time.deltaTime));
+        }
+ 
+        if(Input.GetKey ("a")){
+            transform.Rotate(0,(-velocidadeRotacao * Time.deltaTime), 0);
+        }
+         
+        if(Input.GetKey ("d")){
+            transform.Rotate(0,(velocidadeRotacao * Time.deltaTime), 0);
+        }
+}
 }
