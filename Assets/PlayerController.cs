@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 	
-	public float moveSpeed = 10f;
+	// Update is called once per framepublic float moveSpeed = 10f;
     public float turnSpeed = 50f;
     
     
