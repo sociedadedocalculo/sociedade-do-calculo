@@ -25,10 +25,6 @@ public class PlayerBehaviour : MonoBehaviour {
 			basicStats
 		}
 	}
-	{
-		
-		default:
-	}
 		
 	}
 	
