@@ -2,29 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum tipoPersonagem{
-	Hobbit,
-	Anao,
-	MagoNego,
-	Humano,
-	Elfo
+public enum TypeCharacter{
+	Hobbit = 0,
+	Anao = 1,
+	MagoNego = 2,
+	Humano = 3,
+	Elfo = 4
 }
 
-public class PlayerBehaviour : MonoBehaviour {
-
-	public tipoPersonagem tipo;
+public class PlayerBehaviour : CharacterBase {
+	
+	private TypeCharacter tipo;
+	
 
 	// Use this for initialization
-	protected void Start () {
+	protected void Start(){
 		base.Start();
+		PlayerStatsController.SetTypeCharacter(TypeCharacter.Hobbit);
 		currentLevel = PlayerStatsController.GetCurrentLevel();
-		tipo = PlayerStatsController.getTipoPersonagem();
+		tipo = PlayerStatsController.GetTypeCharacter();
 
-	switch (tipo){
-		case tipoPersonagem.Anao:{
-			basicStats
-		}
-	}
+	// switch (tipo){
+	// 	case tipoPersonagem.Anao:{
+	// 		basicStats
+	// 	}
+	// }
+
+		basicStats = PlayerStatsController.intance.GetBasicStats(tipo);
 		
 	}
 	
