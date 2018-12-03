@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4f113087ad14011993d16858cc2fc3, type: 3}
+  m_Name: Hard Shell
+  m_EditorClassIdentifier: 
+  followupDefaultAttack: 0
+  toolTip: '<b>{NAME} Lvl {LEVEL}</b>
+
+    Permanently increases Block chance.
+
+
+    Bonus Block: {BONUSBLOCKCHANCE}%'
+  image: {fileID: 21300000, guid: 97b896662375b4348872d073ccbbcf3b, type: 3}
+  learnDefault: 0
+  showCastBar: 0
+  cancelCastIfTargetDied: 0
+  predecessor: {fileID: 0}
+  requiresWeapon: 0
+  requiredLevel:
+    baseValue: 1
+    bonusPerLevel: 1
+  requiredSkillExperience:
+    baseValue: 10
+    bonusPerLevel: 10
+  maxLevel: 4
+  manaCosts:
+    baseValue: 0
+    bonusPerLevel: 0
+  castTime:
+    baseValue: 0
+    bonusPerLevel: 0
+  cooldown:
+    baseValue: 0
+    bonusPerLevel: 0
+  castRange:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusHealthMax:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusManaMax:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusDamage:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusDefense:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusBlockChance:
+    baseValue: 0.01
+    bonusPerLevel: 0.01
+  bonusCriticalChance:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusHealthPercentPerSecond:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusManaPercentPerSecond:
+    baseValue: 0
+    bonusPerLevel: 0

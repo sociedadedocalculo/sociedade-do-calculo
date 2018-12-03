@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a35e90b5d05249828a684e1082c84f7, type: 3}
+  m_Name: Health Aura Advanced
+  m_EditorClassIdentifier: 
+  followupDefaultAttack: 0
+  toolTip: '<b>{NAME} Lvl {LEVEL}</b>
+
+    Increases maximum health of all surrounding Players for a while.
+
+
+    Cast Time: {CASTTIME}
+
+    Cooldown: {COOLDOWN}
+
+    Cast Range: {CASTRANGE}
+
+    Buff Time: {BUFFTIME}
+
+    Buffs max Health: {BONUSHEALTHMAX}
+
+    Mana Costs: {MANACOSTS}'
+  image: {fileID: 21300000, guid: d8ade5344d09b4aef8b314b3da25334b, type: 3}
+  learnDefault: 0
+  showCastBar: 1
+  cancelCastIfTargetDied: 0
+  predecessor: {fileID: 11400000, guid: 77d6d092d0a8c45a2aec83e9196a2b47, type: 2}
+  predecessorLevel: 2
+  requiresWeapon: 1
+  requiredLevel:
+    baseValue: 2
+    bonusPerLevel: 1
+  requiredSkillExperience:
+    baseValue: 10
+    bonusPerLevel: 10
+  maxLevel: 1
+  manaCosts:
+    baseValue: 20
+    bonusPerLevel: 0
+  castTime:
+    baseValue: 3.167
+    bonusPerLevel: 0
+  cooldown:
+    baseValue: 20
+    bonusPerLevel: 0
+  castRange:
+    baseValue: 15
+    bonusPerLevel: 0
+  bonusHealthMax:
+    baseValue: 20
+    bonusPerLevel: 5
+  bonusManaMax:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusDamage:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusDefense:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusBlockChance:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusCriticalChance:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusHealthPercentPerSecond:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusManaPercentPerSecond:
+    baseValue: 0
+    bonusPerLevel: 0
+  bonusSpeed:
+    baseValue: 0
+    bonusPerLevel: 0
+  buffTime:
+    baseValue: 60
+    bonusPerLevel: 0
+  effect: {fileID: 114378660796971398, guid: f5eb3a5bff7624ecf86cbacca12bc947, type: 2}

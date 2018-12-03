@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c45ad0ab75b024602bc182fd34499b53, type: 3}
+  m_Name: Health Potion
+  m_EditorClassIdentifier: 
+  maxStack: 50
+  buyPrice: 2
+  sellPrice: 1
+  itemMallPrice: 50
+  sellable: 1
+  tradable: 1
+  destroyable: 1
+  toolTip: '<b>{NAME}</b>
+
+    Restores some Health.
+
+
+    Restores {USAGEHEALTH} Health on use.
+
+    Destroyable: {DESTROYABLE}
+
+    Sellable: {SELLABLE}
+
+    Tradable: {TRADABLE}
+
+    Required Level: {MINLEVEL}
+
+
+    Amount: {AMOUNT}
+
+    Price: {BUYPRICE} Gold
+
+    <i>Sells for: {SELLPRICE} Gold</i>'
+  image: {fileID: 21300000, guid: 07a54f0fd6b6f4f2bb63a7f654dbfeb5, type: 3}
+  minLevel: 1
+  usageHealth: 20
+  usageMana: 0
+  usageExperience: 0
+  usagePetHealth: 0
+  cooldownBuff: {fileID: 11400000, guid: 58b9f0dc3a41548cbbe4df5b9e5cbd22, type: 2}

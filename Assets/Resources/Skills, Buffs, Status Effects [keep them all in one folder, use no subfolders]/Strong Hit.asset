@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31df86bdb5207437cb20582b0b85ebcc, type: 3}
+  m_Name: Strong Hit
+  m_EditorClassIdentifier: 
+  followupDefaultAttack: 1
+  toolTip: '<b>{NAME} Lvl {LEVEL}</b>
+
+    Hits the target very hard!
+
+
+    Damage: {DAMAGE}
+
+    Stun Chance: {STUNCHANCE}%
+
+    Stun Time: {STUNTIME}s
+
+    Cast Time: {CASTTIME}
+
+    Cooldown: {COOLDOWN}
+
+    Cast Range: {CASTRANGE}
+
+    Mana Costs: {MANACOSTS}'
+  image: {fileID: 21300000, guid: 11e9e0a49822a4919adf05bddeb0f9f2, type: 3}
+  learnDefault: 0
+  showCastBar: 1
+  cancelCastIfTargetDied: 1
+  predecessor: {fileID: 0}
+  predecessorLevel: 1
+  requiresWeapon: 1
+  requiredLevel:
+    baseValue: 2
+    bonusPerLevel: 1
+  requiredSkillExperience:
+    baseValue: 5
+    bonusPerLevel: 5
+  maxLevel: 4
+  manaCosts:
+    baseValue: 5
+    bonusPerLevel: 1
+  castTime:
+    baseValue: 2.133
+    bonusPerLevel: 0
+  cooldown:
+    baseValue: 4
+    bonusPerLevel: 0
+  castRange:
+    baseValue: 2.3
+    bonusPerLevel: 0
+  damage:
+    baseValue: 25
+    bonusPerLevel: 5
+  stunChance:
+    baseValue: 1
+    bonusPerLevel: 0
+  stunTime:
+    baseValue: 2
+    bonusPerLevel: 0

@@ -1,0 +1,1751 @@
+fileFormatVersion: 2
+guid: 4f427e20e02cf4f2393a5014483b7a40
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Armature
+    100002: b_eyelid
+    100004: b_head
+    100006: b_L_armfore
+    100008: b_L_armup
+    100010: b_L_collar
+    100012: b_L_fingersA
+    100014: b_L_fingersB
+    100016: b_L_fingersC
+    100018: b_L_footheel
+    100020: b_L_footnub
+    100022: b_L_foottoe
+    100024: b_L_hand
+    100026: b_L_indexA
+    100028: b_L_indexB
+    100030: b_L_indexC
+    100032: b_L_legcalf
+    100034: b_L_legthigh
+    100036: b_L_thumbA
+    100038: b_L_thumbB
+    100040: b_L_thumbC
+    100042: b_neck
+    100044: b_pelvis
+    100046: b_R_armfore
+    100048: b_R_armup
+    100050: b_R_collar
+    100052: b_R_fingersA
+    100054: b_R_fingersB
+    100056: b_R_fingersC
+    100058: b_R_footheel
+    100060: b_R_footnub
+    100062: b_R_foottoe
+    100064: b_R_hand
+    100066: b_R_indexA
+    100068: b_R_indexB
+    100070: b_R_indexC
+    100072: b_R_legcalf
+    100074: b_R_legthigh
+    100076: b_R_thumbA
+    100078: b_R_thumbB
+    100080: b_R_thumbC
+    100082: b_spineHi
+    100084: b_spineLo
+    100086: b_spineMid
+    100088: feetA
+    100090: //RootNode
+    100092: hairJ
+    100094: handsA
+    100096: headA
+    100098: joint_L_arm
+    100100: joint_L_foot
+    100102: joint_L_leg
+    100104: joint_R_arm
+    100106: joint_R_foot
+    100108: joint_R_leg
+    100110: outfitC
+    100112: weaponMount
+    400000: Armature
+    400002: b_eyelid
+    400004: b_head
+    400006: b_L_armfore
+    400008: b_L_armup
+    400010: b_L_collar
+    400012: b_L_fingersA
+    400014: b_L_fingersB
+    400016: b_L_fingersC
+    400018: b_L_footheel
+    400020: b_L_footnub
+    400022: b_L_foottoe
+    400024: b_L_hand
+    400026: b_L_indexA
+    400028: b_L_indexB
+    400030: b_L_indexC
+    400032: b_L_legcalf
+    400034: b_L_legthigh
+    400036: b_L_thumbA
+    400038: b_L_thumbB
+    400040: b_L_thumbC
+    400042: b_neck
+    400044: b_pelvis
+    400046: b_R_armfore
+    400048: b_R_armup
+    400050: b_R_collar
+    400052: b_R_fingersA
+    400054: b_R_fingersB
+    400056: b_R_fingersC
+    400058: b_R_footheel
+    400060: b_R_footnub
+    400062: b_R_foottoe
+    400064: b_R_hand
+    400066: b_R_indexA
+    400068: b_R_indexB
+    400070: b_R_indexC
+    400072: b_R_legcalf
+    400074: b_R_legthigh
+    400076: b_R_thumbA
+    400078: b_R_thumbB
+    400080: b_R_thumbC
+    400082: b_spineHi
+    400084: b_spineLo
+    400086: b_spineMid
+    400088: feetA
+    400090: //RootNode
+    400092: hairJ
+    400094: handsA
+    400096: headA
+    400098: joint_L_arm
+    400100: joint_L_foot
+    400102: joint_L_leg
+    400104: joint_R_arm
+    400106: joint_R_foot
+    400108: joint_R_leg
+    400110: outfitC
+    400112: weaponMount
+    4300000: hairJ
+    4300002: headA
+    4300004: feetA
+    4300006: handsA
+    4300008: outfitC
+    7400000: Full Anim
+    7400002: Animation
+    7400004: Idle
+    7400006: Run
+    7400008: Attack-simple
+    7400010: Attack-hard
+    7400012: Drop Dead
+    9500000: //RootNode
+    13700000: feetA
+    13700002: hairJ
+    13700004: handsA
+    13700006: headA
+    13700008: outfitC
+    2186277476908879412: ImportLogs
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eye
+    second: {fileID: 2100000, guid: 8cd91ee276e1bdb44863e26de32c762a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: eyebrow
+    second: {fileID: 2100000, guid: 1312d333909b41645a624a8b6eb69fcb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: feetA
+    second: {fileID: 2100000, guid: 2b6cafbdf2e71f245aa75a08b009a9c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hairJ
+    second: {fileID: 2100000, guid: 9c0068acf5b35694894fbc2b51a58234, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: handsA
+    second: {fileID: 2100000, guid: 72a49ef6cc83ca940b41521cd27e83bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: headA
+    second: {fileID: 2100000, guid: 875e1683e8401a2479dd7a7109720b9c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: outfitC
+    second: {fileID: 2100000, guid: 571749e87f4a09840a11754952f3ad2d, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'Default Take' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'b_eyelid' has translation animation that
+      will be discarded.\n\t'b_R_thumbA' has translation animation that will be discarded.\n\t'b_R_thumbB'
+      has translation animation that will be discarded.\n\t'b_R_thumbC' has translation
+      animation that will be discarded.\n\t'b_R_indexA' has translation animation
+      that will be discarded.\n\t'b_R_indexB' has translation animation that will
+      be discarded.\n\t'b_R_indexC' has translation animation that will be discarded.\n\t'b_R_fingersA'
+      has translation animation that will be discarded.\n\t'b_R_fingersC' has translation
+      animation that will be discarded.\n\t'b_L_thumbA' has translation animation
+      that will be discarded.\n\t'b_L_thumbB' has translation animation that will
+      be discarded.\n\t'b_L_thumbC' has translation animation that will be discarded.\n\t'b_L_fingersA'
+      has translation animation that will be discarded.\n\t'b_L_fingersC' has translation
+      animation that will be discarded.\n\t'b_L_indexA' has translation animation
+      that will be discarded.\n\t'b_L_indexB' has translation animation that will
+      be discarded.\n\t'b_L_indexC' has translation animation that will be discarded.\n\nClip
+      'Animation' has import animation warnings that might lower retargeting quality:\nNote:
+      Activate translation DOF on avatar to improve retargeting quality.\n\t'b_eyelid'
+      has translation animation that will be discarded.\n\t'b_R_thumbA' has translation
+      animation that will be discarded.\n\t'b_R_thumbB' has translation animation
+      that will be discarded.\n\t'b_R_thumbC' has translation animation that will
+      be discarded.\n\t'b_R_indexA' has translation animation that will be discarded.\n\t'b_R_indexB'
+      has translation animation that will be discarded.\n\t'b_R_indexC' has translation
+      animation that will be discarded.\n\t'b_R_fingersA' has translation animation
+      that will be discarded.\n\t'b_R_fingersC' has translation animation that will
+      be discarded.\n\t'b_L_thumbA' has translation animation that will be discarded.\n\t'b_L_thumbB'
+      has translation animation that will be discarded.\n\t'b_L_thumbC' has translation
+      animation that will be discarded.\n\t'b_L_fingersA' has translation animation
+      that will be discarded.\n\t'b_L_fingersC' has translation animation that will
+      be discarded.\n\t'b_L_indexA' has translation animation that will be discarded.\n\t'b_L_indexB'
+      has translation animation that will be discarded.\n\t'b_L_indexC' has translation
+      animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Full Anim
+      takeName: Default Take
+      firstFrame: 0
+      lastFrame: 229
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/b_pelvis
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB/b_L_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB/b_L_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB/b_L_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head/b_eyelid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB/b_R_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB/b_R_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB/b_R_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe/b_L_footnub
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe/b_R_footnub
+        weight: 1
+      - path: Armature/weaponMount
+        weight: 1
+      - path: feetA
+        weight: 1
+      - path: hairJ
+        weight: 1
+      - path: handsA
+        weight: 1
+      - path: headA
+        weight: 1
+      - path: outfitC
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle
+      takeName: Default Take
+      firstFrame: 12
+      lastFrame: 62
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/b_pelvis
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB/b_L_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB/b_L_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB/b_L_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head/b_eyelid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB/b_R_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB/b_R_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB/b_R_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe/b_L_footnub
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe/b_R_footnub
+        weight: 1
+      - path: Armature/weaponMount
+        weight: 1
+      - path: feetA
+        weight: 1
+      - path: hairJ
+        weight: 1
+      - path: handsA
+        weight: 1
+      - path: headA
+        weight: 1
+      - path: outfitC
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Run
+      takeName: Default Take
+      firstFrame: 65
+      lastFrame: 84
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/b_pelvis
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB/b_L_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB/b_L_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB/b_L_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head/b_eyelid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB/b_R_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB/b_R_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB/b_R_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe/b_L_footnub
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe/b_R_footnub
+        weight: 1
+      - path: Armature/weaponMount
+        weight: 1
+      - path: feetA
+        weight: 1
+      - path: hairJ
+        weight: 1
+      - path: handsA
+        weight: 1
+      - path: headA
+        weight: 1
+      - path: outfitC
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Attack-simple
+      takeName: Default Take
+      firstFrame: 89
+      lastFrame: 134
+      wrapMode: 0
+      orientationOffsetY: -70
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/b_pelvis
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB/b_L_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB/b_L_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB/b_L_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head/b_eyelid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB/b_R_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB/b_R_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB/b_R_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe/b_L_footnub
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe/b_R_footnub
+        weight: 1
+      - path: Armature/weaponMount
+        weight: 1
+      - path: feetA
+        weight: 1
+      - path: hairJ
+        weight: 1
+      - path: handsA
+        weight: 1
+      - path: headA
+        weight: 1
+      - path: outfitC
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Attack-hard
+      takeName: Default Take
+      firstFrame: 134
+      lastFrame: 190
+      wrapMode: 0
+      orientationOffsetY: -70
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/b_pelvis
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB/b_L_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB/b_L_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB/b_L_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head/b_eyelid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB/b_R_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB/b_R_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB/b_R_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe/b_L_footnub
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe/b_R_footnub
+        weight: 1
+      - path: Armature/weaponMount
+        weight: 1
+      - path: feetA
+        weight: 1
+      - path: hairJ
+        weight: 1
+      - path: handsA
+        weight: 1
+      - path: headA
+        weight: 1
+      - path: outfitC
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Drop Dead
+      takeName: Default Take
+      firstFrame: 198
+      lastFrame: 229
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 0
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 1
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Armature
+        weight: 1
+      - path: Armature/b_pelvis
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_fingersA/b_L_fingersB/b_L_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_indexA/b_L_indexB/b_L_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_L_collar/joint_L_arm/b_L_armup/b_L_armfore/b_L_hand/b_L_thumbA/b_L_thumbB/b_L_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_neck/b_head/b_eyelid
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_fingersA/b_R_fingersB/b_R_fingersC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_indexA/b_R_indexB/b_R_indexC
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB
+        weight: 1
+      - path: Armature/b_pelvis/b_spineLo/b_spineMid/b_spineHi/b_R_collar/joint_R_arm/b_R_armup/b_R_armfore/b_R_hand/b_R_thumbA/b_R_thumbB/b_R_thumbC
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_L_leg/b_L_legthigh/b_L_legcalf/joint_L_foot/b_L_footheel/b_L_foottoe/b_L_footnub
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe
+        weight: 1
+      - path: Armature/b_pelvis/joint_R_leg/b_R_legthigh/b_R_legcalf/joint_R_foot/b_R_footheel/b_R_foottoe/b_R_footnub
+        weight: 1
+      - path: Armature/weaponMount
+        weight: 1
+      - path: feetA
+        weight: 1
+      - path: hairJ
+        weight: 1
+      - path: handsA
+        weight: 1
+      - path: headA
+        weight: 1
+      - path: outfitC
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human:
+    - boneName: b_pelvis
+      humanName: Hips
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_legthigh
+      humanName: LeftUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_legthigh
+      humanName: RightUpperLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_legcalf
+      humanName: LeftLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_legcalf
+      humanName: RightLowerLeg
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_footheel
+      humanName: LeftFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_footheel
+      humanName: RightFoot
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_spineLo
+      humanName: Spine
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_spineMid
+      humanName: Chest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_neck
+      humanName: Neck
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_head
+      humanName: Head
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_collar
+      humanName: LeftShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_collar
+      humanName: RightShoulder
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_armup
+      humanName: LeftUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_armup
+      humanName: RightUpperArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_armfore
+      humanName: LeftLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_armfore
+      humanName: RightLowerArm
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_hand
+      humanName: LeftHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_hand
+      humanName: RightHand
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_foottoe
+      humanName: LeftToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_foottoe
+      humanName: RightToes
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_eyelid
+      humanName: Jaw
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_thumbA
+      humanName: Left Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_thumbB
+      humanName: Left Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_thumbC
+      humanName: Left Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_indexA
+      humanName: Left Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_indexB
+      humanName: Left Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_indexC
+      humanName: Left Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_fingersA
+      humanName: Left Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_fingersB
+      humanName: Left Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_L_fingersC
+      humanName: Left Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_thumbA
+      humanName: Right Thumb Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_thumbB
+      humanName: Right Thumb Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_thumbC
+      humanName: Right Thumb Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_indexA
+      humanName: Right Index Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_indexB
+      humanName: Right Index Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_indexC
+      humanName: Right Index Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_fingersA
+      humanName: Right Little Proximal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_fingersB
+      humanName: Right Little Intermediate
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_R_fingersC
+      humanName: Right Little Distal
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    - boneName: b_spineHi
+      humanName: UpperChest
+      limit:
+        min: {x: 0, y: 0, z: 0}
+        max: {x: 0, y: 0, z: 0}
+        value: {x: 0, y: 0, z: 0}
+        length: 0
+        modified: 0
+    skeleton:
+    - name: female_archer(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature
+      parentName: female_archer(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: weaponMount
+      parentName: Armature
+      position: {x: 0.6757356, y: -0.068259455, z: 1.0577929}
+      rotation: {x: 0.3132663, y: 0.6154899, z: 0.6619479, w: -0.2913097}
+      scale: {x: 0.9999999, y: 1, z: 0.99999976}
+    - name: b_pelvis
+      parentName: Armature
+      position: {x: -1.7e-14, y: -0.017384, z: 0.966078}
+      rotation: {x: -0.49601573, y: -0.50395274, z: 0.49601603, w: 0.5039525}
+      scale: {x: 1.0000052, y: 1.0000058, z: 1.0000019}
+    - name: b_spineLo
+      parentName: b_pelvis
+      position: {x: 0.00000008288771, y: -0.12966147, z: -0.000000005425814}
+      rotation: {x: 0.000027541068, y: 0.00000056624407, z: -0.015372798, w: -0.99988186}
+      scale: {x: 1.0000001, y: 1.0000007, z: 1.0000001}
+    - name: b_spineMid
+      parentName: b_spineLo
+      position: {x: -0.000000057046293, y: -0.15641476, z: -0.000000005926321}
+      rotation: {x: 0.000027085915, y: -0.0000043759223, z: 0.16726631, w: 0.9859117}
+      scale: {x: 0.99999976, y: 0.9999993, z: 0.9999997}
+    - name: b_spineHi
+      parentName: b_spineMid
+      position: {x: -0.000000059607686, y: -0.17327316, z: 0.000000002735298}
+      rotation: {x: -0.00000023303434, y: 0.00000044305938, z: 0.22345303, w: -0.9747147}
+      scale: {x: 1.0000044, y: 1.0000026, z: 1.0000023}
+    - name: b_neck
+      parentName: b_spineHi
+      position: {x: 0.000000011171599, y: -0.21492575, z: 0.000000008374947}
+      rotation: {x: 0.0000005855918, y: -0.0000011182284, z: -0.17493385, w: 0.9845802}
+      scale: {x: 1.0000023, y: 1.0000023, z: 1.0000024}
+    - name: b_head
+      parentName: b_neck
+      position: {x: -0.000000056796928, y: -0.1046941, z: 8.5916e-10}
+      rotation: {x: -0.000045729816, y: -0.000010010174, z: 0.21512721, w: 0.9765861}
+      scale: {x: 0.99999857, y: 0.9999977, z: 0.9999966}
+    - name: b_eyelid
+      parentName: b_head
+      position: {x: -0.19598314, y: -0.09325587, z: -0.000017056987}
+      rotation: {x: -0.707005, y: -0.0062731947, z: -0.0062715034, w: -0.70715296}
+      scale: {x: 1.0000015, y: 1.0000043, z: 1.0000005}
+    - name: b_R_collar
+      parentName: b_spineHi
+      position: {x: -0.066321045, y: -0.11285715, z: -0.02299976}
+      rotation: {x: -0.63176566, y: -0.022965087, z: -0.22756152, w: -0.7406488}
+      scale: {x: 1.0000004, y: 1.0000021, z: 0.9999995}
+    - name: joint_R_arm
+      parentName: b_R_collar
+      position: {x: -0.00000023841858, y: -0.16766661, z: 0.000000015832484}
+      rotation: {x: 0.10230497, y: -0.12770632, z: -0.17108704, w: 0.971573}
+      scale: {x: 1.0000025, y: 1.0000087, z: 0.9999987}
+    - name: b_R_armup
+      parentName: joint_R_arm
+      position: {x: 0.000000004576208, y: 0.000000013800836, z: -0.0000000721661}
+      rotation: {x: -0.034437437, y: 0.7761285, z: -0.01345127, w: -0.62949}
+      scale: {x: 1.000004, y: 1.0000035, z: 1.0000037}
+    - name: b_R_armfore
+      parentName: b_R_armup
+      position: {x: 0.000000664033, y: -0.27605852, z: 0.000000040978193}
+      rotation: {x: -0.034692418, y: 0.0038062627, z: 0.019780278, w: 0.9991951}
+      scale: {x: 1.0000049, y: 1.0000029, z: 1.0000005}
+    - name: b_R_hand
+      parentName: b_R_armfore
+      position: {x: 0.00000036414713, y: -0.28597403, z: 0.0000003017485}
+      rotation: {x: 0.04768137, y: 0.11092288, z: -0.091358006, w: 0.98847175}
+      scale: {x: 0.9999982, y: 1.0000045, z: 1.0000021}
+    - name: b_R_thumbA
+      parentName: b_R_hand
+      position: {x: -0.009607827, y: -0.052614924, z: 0.031347044}
+      rotation: {x: -0.43927982, y: 0.12807128, z: -0.06772056, w: 0.88659173}
+      scale: {x: 1.0000011, y: 1.0000062, z: 1.0000025}
+    - name: b_R_thumbB
+      parentName: b_R_thumbA
+      position: {x: -0.000000029802322, y: -0.047875073, z: -0.000000029336661}
+      rotation: {x: 0.029308273, y: 0.0021897168, z: -0.0051725586, w: 0.9995547}
+      scale: {x: 0.99999815, y: 1.0000029, z: 0.9999987}
+    - name: b_R_thumbC
+      parentName: b_R_thumbB
+      position: {x: 0.00000017276034, y: -0.041144002, z: 0.000000078231096}
+      rotation: {x: 0.04922959, y: -0.31663233, z: -0.051844757, w: 0.9458502}
+      scale: {x: 1.0000024, y: 1.0000056, z: 1.000003}
+    - name: b_R_indexA
+      parentName: b_R_hand
+      position: {x: 0.014040121, y: -0.13304293, z: 0.036660083}
+      rotation: {x: -0.008545846, y: -0.035815425, z: 0.022062322, w: 0.99907833}
+      scale: {x: 1.0000023, y: 1.0000024, z: 1.0000029}
+    - name: b_R_indexB
+      parentName: b_R_indexA
+      position: {x: 0.000000044815657, y: -0.046233058, z: 0.000000040136456}
+      rotation: {x: 0.0000022528677, y: -0.000005103644, z: -0.04035026, w: 0.9991856}
+      scale: {x: 1.0000046, y: 1.0000027, z: 1.0000031}
+    - name: b_R_indexC
+      parentName: b_R_indexB
+      position: {x: -0.000000009722299, y: -0.044264928, z: 0.000000014803845}
+      rotation: {x: -0.0000018302526, y: 0.000001342627, z: -0.08954215, w: 0.99598306}
+      scale: {x: 1.0000035, y: 1.0000019, z: 1.0000042}
+    - name: b_R_fingersA
+      parentName: b_R_hand
+      position: {x: 0.018018166, y: -0.13304089, z: -0.01797094}
+      rotation: {x: -0.009481851, y: -0.035568684, z: 0.023071613, w: 0.99905586}
+      scale: {x: 0.9999998, y: 1.000004, z: 1.0000007}
+    - name: b_R_fingersB
+      parentName: b_R_fingersA
+      position: {x: -0.00000012039567, y: -0.049808078, z: 0.000000024001949}
+      rotation: {x: 0.000003418884, y: -0.0000037550913, z: -0.026703207, w: 0.9996434}
+      scale: {x: 1.0000002, y: 1.0000014, z: 1.0000019}
+    - name: b_R_fingersC
+      parentName: b_R_fingersB
+      position: {x: 0.000000051309712, y: -0.04129498, z: 0.00000004073081}
+      rotation: {x: -0.00000060207935, y: -0.0000019487015, z: -0.11148447, w: 0.9937662}
+      scale: {x: 1.0000012, y: 1.0000031, z: 1.0000025}
+    - name: b_L_collar
+      parentName: b_spineHi
+      position: {x: -0.06632106, y: -0.112857014, z: 0.023000252}
+      rotation: {x: -0.22756147, y: 0.74064857, z: -0.631766, w: 0.022964602}
+      scale: {x: 1.000004, y: 1.0000032, z: 1.0000008}
+    - name: joint_L_arm
+      parentName: b_L_collar
+      position: {x: 0.00000012665987, y: -0.16766664, z: -0.000000014901161}
+      rotation: {x: -0.12788603, y: 0.100914836, z: -0.9716996, w: 0.17105955}
+      scale: {x: 0.9999996, y: 1.000007, z: 0.9999961}
+    - name: b_L_armup
+      parentName: joint_L_arm
+      position: {x: 0.000000005486072, y: -0.000000009544237, z: 0.00000013445242}
+      rotation: {x: -0.77595687, y: 0.035091314, z: 0.62969005, w: 0.012249748}
+      scale: {x: 1.0000025, y: 1.0000064, z: 1.0000054}
+    - name: b_L_armfore
+      parentName: b_L_armup
+      position: {x: -0.000000173226, y: -0.27605867, z: 0.00000008009374}
+      rotation: {x: -0.034687392, y: -0.0038062122, z: -0.019781189, w: 0.9991952}
+      scale: {x: 1.0000017, y: 1.000002, z: 1.0000005}
+    - name: b_L_hand
+      parentName: b_L_armfore
+      position: {x: 0.0000003883615, y: -0.285974, z: 0.0000003054738}
+      rotation: {x: 0.0476754, y: -0.11100325, z: 0.09135313, w: 0.98846346}
+      scale: {x: 1.0000055, y: 1.0000072, z: 1.0000031}
+    - name: b_L_thumbA
+      parentName: b_L_hand
+      position: {x: 0.009607987, y: -0.05261603, z: 0.03134702}
+      rotation: {x: -0.4392841, y: -0.12806709, z: 0.067729026, w: 0.88658965}
+      scale: {x: 0.9999933, y: 1.0000032, z: 1.0000023}
+    - name: b_L_thumbB
+      parentName: b_L_thumbA
+      position: {x: -0.000000037951395, y: -0.04787503, z: -0.00000002561137}
+      rotation: {x: 0.029308623, y: -0.0021886062, z: 0.005170956, w: 0.9995547}
+      scale: {x: 1.0000044, y: 1.0000101, z: 0.9999974}
+    - name: b_L_thumbC
+      parentName: b_L_thumbB
+      position: {x: -0.00000009534415, y: -0.04114402, z: -0.000000001862645}
+      rotation: {x: 0.049229555, y: 0.3166325, z: 0.05184467, w: 0.94585013}
+      scale: {x: 0.9999985, y: 1.0000013, z: 0.99999714}
+    - name: b_L_fingersA
+      parentName: b_L_hand
+      position: {x: -0.018018043, y: -0.13304107, z: -0.017971002}
+      rotation: {x: -0.009484129, y: 0.0355692, z: -0.023062106, w: 0.9990561}
+      scale: {x: 0.9999996, y: 1.0000039, z: 1.0000025}
+    - name: b_L_fingersB
+      parentName: b_L_fingersA
+      position: {x: 0.000000029429373, y: -0.049808156, z: -0.00000003098296}
+      rotation: {x: 0.0000032053783, y: 0.0000032782543, z: 0.026703846, w: 0.9996434}
+      scale: {x: 1.0000006, y: 1.0000026, z: 1.000002}
+    - name: b_L_fingersC
+      parentName: b_L_fingersB
+      position: {x: 0.00000009908274, y: -0.041295037, z: -0.000000011928933}
+      rotation: {x: 0.0000007131145, y: 0.0000026470157, z: 0.111484565, w: 0.99376625}
+      scale: {x: 0.9999996, y: 1.0000039, z: 1.000001}
+    - name: b_L_indexA
+      parentName: b_L_hand
+      position: {x: -0.014040087, y: -0.13304313, z: 0.03666003}
+      rotation: {x: -0.008548989, y: 0.035815455, z: -0.022057297, w: 0.99907845}
+      scale: {x: 0.9999958, y: 1.0000008, z: 0.9999995}
+    - name: b_L_indexB
+      parentName: b_L_indexA
+      position: {x: 0.000000030400088, y: -0.046233084, z: -0.000000011855263}
+      rotation: {x: 0.0000039674305, y: 0.000005144621, z: 0.040357377, w: 0.9991853}
+      scale: {x: 1.0000064, y: 1.0000072, z: 1.0000049}
+    - name: b_L_indexC
+      parentName: b_L_indexB
+      position: {x: -0.000000096480335, y: -0.044265017, z: 0.000000035117864}
+      rotation: {x: -0.0000015364077, y: -0.0000009007897, z: 0.089541, w: 0.9959832}
+      scale: {x: 1.0000004, y: 1.0000036, z: 1.0000001}
+    - name: joint_L_leg
+      parentName: b_pelvis
+      position: {x: 0.00033300565, y: -0.033415936, z: 0.10922807}
+      rotation: {x: -0.70708454, y: -0.005612075, z: -0.005612209, w: -0.70708454}
+      scale: {x: 1.0000024, y: 1.0000031, z: 0.99999887}
+    - name: b_L_legthigh
+      parentName: joint_L_leg
+      position: {x: 0.0000000060563, y: 0.000000014903973, z: 0.000000009526954}
+      rotation: {x: -0.017541215, y: 0.70689577, z: 0.70688254, w: 0.017540988}
+      scale: {x: 1.0000017, y: 1.0000024, z: 0.9999843}
+    - name: b_L_legcalf
+      parentName: b_L_legthigh
+      position: {x: 0.000000001035982, y: -0.4536252, z: 0.0000001238188}
+      rotation: {x: -0.0000069322987, y: -0.0000008381902, z: -0.06959708, w: 0.99757516}
+      scale: {x: 1.000001, y: 1.0000005, z: 0.99999976}
+    - name: joint_L_foot
+      parentName: b_L_legcalf
+      position: {x: -0.0000002605618, y: -0.37250242, z: 0.000000062091125}
+      rotation: {x: 0.066695526, y: -0.70395595, z: -0.7039527, w: 0.06669647}
+      scale: {x: 1.0000031, y: 1.0000064, z: 1.0000019}
+    - name: b_L_footheel
+      parentName: joint_L_foot
+      position: {x: -0.00000017256778, y: -0.00000011606493, z: 0.00000000137382}
+      rotation: {x: 0.25973207, y: 0.6576763, z: 0.65767866, w: -0.2597304}
+      scale: {x: 1.0000024, y: 1.0000038, z: 1.0000032}
+    - name: b_L_foottoe
+      parentName: b_L_footheel
+      position: {x: -0.00000013497481, y: -0.19678192, z: -0.000000006721472}
+      rotation: {x: 0.0000011771916, y: -0.00000056624407, z: 0.39832914, w: 0.9172426}
+      scale: {x: 1.0000072, y: 1.0000007, z: 1.0000013}
+    - name: b_L_footnub
+      parentName: b_L_foottoe
+      position: {x: 0.00000006387448, y: -0.15269677, z: 0.000000006717994}
+      rotation: {x: -0.0000000127185995, y: -0.0000003408795, z: 0.008589148, w: 0.99996316}
+      scale: {x: 1.0000032, y: 1.0000069, z: 1.0000017}
+    - name: joint_R_leg
+      parentName: b_pelvis
+      position: {x: 0.00033294587, y: -0.033415902, z: -0.10900003}
+      rotation: {x: -0.70708454, y: -0.0056119557, z: -0.005612328, w: -0.70708454}
+      scale: {x: 0.9999983, y: 0.9999992, z: 0.99999887}
+    - name: b_R_legthigh
+      parentName: joint_R_leg
+      position: {x: 0.00000000699462, y: 2.846e-12, z: -0.000000009818886}
+      rotation: {x: 0.70688343, y: -0.017768893, z: 0.01776911, w: 0.70688367}
+      scale: {x: 1.0000068, y: 1.0000058, z: 1.0000077}
+    - name: b_R_legcalf
+      parentName: b_R_legthigh
+      position: {x: 0.00000004368423, y: -0.45406908, z: 0.000000026479995}
+      rotation: {x: -0, y: -0.000000008381901, z: 0.06896893, w: 0.99761885}
+      scale: {x: 1.000003, y: 1.0000025, z: 1.0000061}
+    - name: joint_R_foot
+      parentName: b_R_legcalf
+      position: {x: 0.00000016581367, y: -0.3720225, z: -0.0000002862301}
+      rotation: {x: -0.7039748, y: 0.066479795, z: -0.06647957, w: 0.70397466}
+      scale: {x: 0.99999774, y: 0.9999955, z: 0.99999666}
+    - name: b_R_footheel
+      parentName: joint_R_foot
+      position: {x: 0.00000002687728, y: -0.00000017759052, z: -0.00000001038206}
+      rotation: {x: -0.6576778, y: -0.25973076, z: 0.2597313, w: -0.65767735}
+      scale: {x: 1.0000004, y: 1.0000019, z: 0.9999978}
+    - name: b_R_foottoe
+      parentName: b_R_footheel
+      position: {x: 0.000000027748662, y: -0.19678181, z: 0.000000007071542}
+      rotation: {x: -0.00000005960463, y: 0.000000014901158, z: -0.39833137, w: 0.9172416}
+      scale: {x: 1.0000051, y: 1.0000098, z: 1.0000056}
+    - name: b_R_footnub
+      parentName: b_R_foottoe
+      position: {x: 0.000000020703459, y: -0.1526967, z: 0.000000002864638}
+      rotation: {x: -0.00000011409991, y: -0.00000026130206, z: 0.008588938, w: -0.99996316}
+      scale: {x: 1.0000017, y: 1.0000006, z: 1.0000001}
+    - name: feetA
+      parentName: female_archer(Clone)
+      position: {x: 0.000000001888983, y: -0.030450007, z: 0.26235}
+      rotation: {x: 0.000000014774816, y: -1.4835299e-16, z: 6.108653e-17, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: hairJ
+      parentName: female_archer(Clone)
+      position: {x: 0.0010500029, y: -0.043449998, z: 1.7597001}
+      rotation: {x: 0.000000012184693, y: -4.60767e-15, z: -4.2402774e-14, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: handsA
+      parentName: female_archer(Clone)
+      position: {x: 0.000000021679286, y: -0.035549995, z: 1.1752}
+      rotation: {x: -5.343611e-10, y: -0.0000000070445285, z: -2.0011859e-10, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: headA
+      parentName: female_archer(Clone)
+      position: {x: -3.44e-13, y: -0.004850002, z: 1.7624}
+      rotation: {x: -7.353816e-10, y: 4.6949355e-15, z: -9.032079e-15, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: outfitC
+      parentName: female_archer(Clone)
+      position: {x: 0.000000018163107, y: -0.0065999967, z: 1.06295}
+      rotation: {x: -5.343611e-10, y: -0.0000000070445285, z: -2.0011859e-10, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 3
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
