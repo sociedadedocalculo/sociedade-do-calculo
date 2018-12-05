@@ -15,7 +15,7 @@ public partial class UILogin : MonoBehaviour
     public Dropdown serverDropdown;
     public Button loginButton;
     public Button registerButton;
-    [TextArea(1, 30)] public string registerMessage = "First time? Just log in and we will\ncreate an account automatically.";
+    [TextArea(1, 30)] public string registerMessage = "Faça seu login...";
     public Button hostButton;
     public Button dedicatedButton;
     public Button cancelButton;
