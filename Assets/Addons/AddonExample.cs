@@ -52,7 +52,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 // Example Addon
-//    Author: ...
+//    Author: Patrick Garcia
 //
 //    Description: ...
 //
@@ -85,6 +85,7 @@ public partial class Player
     [Server] void OnDeath_Example() {}
     [Client] void OnSelect_Example(Entity entity) {}
     [Server] void OnLevelUp_Example() {}
+
 
     // you can use the drag and drop system too:
     void OnDragAndDrop_InventorySlot_ExampleSlot(int[] slotIndices) {}
