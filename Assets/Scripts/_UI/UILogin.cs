@@ -48,7 +48,7 @@ public partial class UILogin : MonoBehaviour
 
             // status
             if (manager.IsConnecting())
-                statusText.text = "Connecting...";
+                statusText.text = "Conectando...";
             else if (manager.state == NetworkState.Handshake)
                 statusText.text = "Handshake...";
             else
