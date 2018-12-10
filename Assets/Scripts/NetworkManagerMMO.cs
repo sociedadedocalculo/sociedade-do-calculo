@@ -348,7 +348,9 @@ public partial class NetworkManagerMMO : NetworkManager
         selection = -1;
         foreach (Transform location in selectionLocations)
             if (location.childCount > 0)
+            {
                 Destroy(location.GetChild(0).gameObject);
+            }
     }
 
     void OnClientCharactersAvailable(NetworkMessage netMsg)
