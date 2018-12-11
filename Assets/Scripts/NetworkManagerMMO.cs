@@ -347,10 +347,12 @@ public partial class NetworkManagerMMO : NetworkManager
     {
         selection = -1;
         foreach (Transform location in selectionLocations)
+        {
             if (location.childCount > 0)
             {
                 Destroy(location.GetChild(0).gameObject);
             }
+        }
     }
 
     void OnClientCharactersAvailable(NetworkMessage netMsg)
@@ -532,8 +534,8 @@ public partial class NetworkManagerMMO : NetworkManager
                 }
                 else
                 {
-                    print("character name already exists: " + message.name);
-                    ClientSendPopup(netMsg.conn, "name already exists", false);
+                    print("Nome do personagem já existe: " + message.name);
+                    ClientSendPopup(netMsg.conn, "nome ja existe", false);
                 }
             }
             else
@@ -544,8 +546,8 @@ public partial class NetworkManagerMMO : NetworkManager
         }
         else
         {
-            print("CharacterCreate: not in lobby");
-            ClientSendPopup(netMsg.conn, "CharacterCreate: not in lobby", true);
+            print("Personagem Criado: not in lobby");
+            ClientSendPopup(netMsg.conn, "Personagem Criado: not in lobby", true);
         }
     }
 
@@ -564,7 +566,7 @@ public partial class NetworkManagerMMO : NetworkManager
             if (0 <= message.index && message.index < characters.Count)
             {
                 // delete the character
-                print("delete character: " + characters[message.index]);
+                print("Deleta personagem : " + characters[message.index]);
                 Database.CharacterDelete(characters[message.index]);
 
                 // addon system hooks
@@ -577,14 +579,14 @@ public partial class NetworkManagerMMO : NetworkManager
             }
             else
             {
-                print("invalid character index: " + account + " " + message.index);
-                ClientSendPopup(netMsg.conn, "invalid character index", false);
+                print("invalido indice de personagem: " + account + " " + message.index);
+                ClientSendPopup(netMsg.conn, "invalido indice de personagem", false);
             }
         }
         else
         {
-            print("CharacterDelete: not in lobby: " + netMsg.conn);
-            ClientSendPopup(netMsg.conn, "CharacterDelete: not in lobby", true);
+            print("Personagem Deletado: not in lobby: " + netMsg.conn);
+            ClientSendPopup(netMsg.conn, "Personagem Deletado: not in lobby", true);
         }
     }
 
@@ -598,7 +600,7 @@ public partial class NetworkManagerMMO : NetworkManager
     {
         List<Player> players = Player.onlinePlayers.Values.ToList();
         Database.CharacterSaveMany(players);
-        if (players.Count > 0) Debug.Log("saved " + players.Count + " player(s)");
+        if (players.Count > 0) Debug.Log("salvado " + players.Count + " jogador(s)");
     }
 
     // stop/disconnect /////////////////////////////////////////////////////////
@@ -611,9 +613,9 @@ public partial class NetworkManagerMMO : NetworkManager
         if (conn.playerController != null)
         {
             Database.CharacterSave(conn.playerController.GetComponent<Player>(), false);
-            print("saved:" + conn.playerController.name);
+            print("salvado:" + conn.playerController.name);
         }
-        else print("no player to save for: " + conn);
+        else print("Sem jogador para salvar: " + conn);
 
         // addon system hooks
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerDisconnect_", conn);
@@ -631,7 +633,7 @@ public partial class NetworkManagerMMO : NetworkManager
         print("OnClientDisconnect");
 
         // show a popup so that users know what happened
-        uiPopup.Show("Disconnected.");
+        uiPopup.Show("Desconectado!");
 
         // call base function to guarantee proper functionality
         base.OnClientDisconnect(conn);
