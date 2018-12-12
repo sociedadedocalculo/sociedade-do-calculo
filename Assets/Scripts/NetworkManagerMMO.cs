@@ -55,7 +55,7 @@ public partial class NetworkManagerMMO : NetworkManager
         new ServerInfo{name="Local", ip="localhost"}
     };
 
-    [Header("Character Selection")]
+    [Header("Selecao de Personagem")]
     public int selection = -1;
     public Transform[] selectionLocations;
     public Transform selectionCameraLocation;
@@ -210,7 +210,7 @@ public partial class NetworkManagerMMO : NetworkManager
         string hash = Utils.PBKDF2Hash(loginPassword, "at_least_16_byte" + loginAccount);
         LoginMsg message = new LoginMsg{account=loginAccount, password=hash, version=Application.version};
         conn.Send(LoginMsg.MsgId, message);
-        print("login message was sent");
+        print("mensagem de login foi enviada...");
 
         // set state
         state = NetworkState.Handshake;
@@ -274,7 +274,7 @@ public partial class NetworkManagerMMO : NetworkManager
                     // not in lobby and not in world yet?
                     if (!AccountLoggedIn(message.account))
                     {
-                        print("login successful: " + message.account);
+                        print("Login ok: " + message.account);
 
                         // add to logged in accounts
                         lobby[netMsg.conn] = message.account;
@@ -288,8 +288,8 @@ public partial class NetworkManagerMMO : NetworkManager
                     }
                     else
                     {
-                        print("account already logged in: " + message.account);
-                        ClientSendPopup(netMsg.conn, "already logged in", true);
+                        print("conta ja logada: " + message.account);
+                        ClientSendPopup(netMsg.conn, "ja logada", true);
 
                         // note: we should disconnect the client here, but we can't as
                         // long as unity has no "SendAllAndThenDisconnect" function,
@@ -299,20 +299,20 @@ public partial class NetworkManagerMMO : NetworkManager
                 }
                 else
                 {
-                    print("invalid account or password for: " + message.account);
-                    ClientSendPopup(netMsg.conn, "invalid account", true);
+                    print("Senha ou conta invalida: " + message.account);
+                    ClientSendPopup(netMsg.conn, "conta invalida", true);
                 }
             }
             else
             {
-                print("account name not allowed: " + message.account);
-                ClientSendPopup(netMsg.conn, "account name not allowed", true);
+                print("nome da conta nao permitido: " + message.account);
+                ClientSendPopup(netMsg.conn, "nome da conta nao permitido", true);
             }
         }
         else
         {
-            print("version mismatch: " + message.account + " expected:" + Application.version + " received: " + message.version);
-            ClientSendPopup(netMsg.conn, "outdated version", true);
+            print("incompatibilidade de versao: " + message.account + " esperado:" + Application.version + " recebido: " + message.version);
+            ClientSendPopup(netMsg.conn, "versao desatualizada", true);
         }
     }
 
@@ -358,7 +358,7 @@ public partial class NetworkManagerMMO : NetworkManager
     void OnClientCharactersAvailable(NetworkMessage netMsg)
     {
         charactersAvailableMsg = netMsg.ReadMessage<CharactersAvailableMsg>();
-        print("characters available:" + charactersAvailableMsg.characters.Length);
+        print("personagens disponiveis:" + charactersAvailableMsg.characters.Length);
 
         // set state
         state = NetworkState.Lobby;
@@ -376,7 +376,7 @@ public partial class NetworkManagerMMO : NetworkManager
             if (prefab != null)
                 LoadPreview(prefab.gameObject, selectionLocations[i], i, character);
             else
-                Debug.LogWarning("Character Selection: no prefab found for class " + character.className);
+                Debug.LogWarning("Personagem selecionado: no prefab found for class " + character.className);
         }
 
         // setup camera
@@ -406,7 +406,7 @@ public partial class NetworkManagerMMO : NetworkManager
                 // validate index
                 if (0 <= message.index && message.index < characters.Count)
                 {
-                    print(account + " selected player " + characters[message.index]);
+                    print(account + " jogador selecinado " + characters[message.index]);
 
                     // load character data
                     GameObject go = Database.CharacterLoad(characters[message.index], GetPlayerClasses());
@@ -422,8 +422,8 @@ public partial class NetworkManagerMMO : NetworkManager
                 }
                 else
                 {
-                    print("invalid character index: " + account + " " + message.index);
-                    ClientSendPopup(conn, "invalid character index", false);
+                    print("indicide de personagem invalido: " + account + " " + message.index);
+                    ClientSendPopup(conn, "indicide de personagem invalido", false);
                 }
             }
             else
@@ -487,7 +487,7 @@ public partial class NetworkManagerMMO : NetworkManager
                             // -> skills are handled in Database.CharacterLoad every time. if we
                             //    add new ones to a prefab, all existing players should get them
                             // (instantiate temporary player)
-                            print("creating character: " + message.name + " " + message.classIndex);
+                            print("criando personagem: " + message.name + " " + message.classIndex);
                             Player prefab = GameObject.Instantiate(classes[message.classIndex]).GetComponent<Player>();
                             prefab.name = message.name;
                             prefab.account = account;
@@ -522,26 +522,26 @@ public partial class NetworkManagerMMO : NetworkManager
                         }
                         else
                         {
-                            print("character invalid class: " + message.classIndex);
-                            ClientSendPopup(netMsg.conn, "character invalid class", false);
+                            print("classe de personagem invalida: " + message.classIndex);
+                            ClientSendPopup(netMsg.conn, "classe de personagem invalida", false);
                         }
                     }
                     else
                     {
-                        print("character limit reached: " + message.name);
-                        ClientSendPopup(netMsg.conn, "character limit reached", false);
+                        print("limite de personagem atingido: " + message.name);
+                        ClientSendPopup(netMsg.conn, "limite de personagem atingido", false);
                     }
                 }
                 else
                 {
-                    print("Nome do personagem já existe: " + message.name);
+                    print("Nome do personagem ja existe: " + message.name);
                     ClientSendPopup(netMsg.conn, "nome ja existe", false);
                 }
             }
             else
             {
-                print("character name not allowed: " + message.name);
-                ClientSendPopup(netMsg.conn, "character name not allowed", false);
+                print("nome do personagem nao permitido: " + message.name);
+                ClientSendPopup(netMsg.conn, "nome do personagem nao permitido", false);
             }
         }
         else
@@ -680,7 +680,7 @@ public partial class NetworkManagerMMO : NetworkManager
 
         // ip has to be changed in the server list. make it obvious to users.
         if (!Application.isPlaying && networkAddress != "")
-            networkAddress = "Use the Server List below!";
+            networkAddress = "Use a lista de servidores abaixo!!";
 
         // need enough character selection locations for character limit
         if (selectionLocations.Length != characterLimit)
