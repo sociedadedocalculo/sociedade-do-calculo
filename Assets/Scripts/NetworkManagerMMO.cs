@@ -666,12 +666,17 @@ public partial class NetworkManagerMMO : NetworkManager
     // -> this also avoids the OnDisconnectError UNET bug (#838689) more often
     new void OnApplicationQuit()
     {
-        base.OnApplicationQuit();
+        NewMethod();
         if (IsClientConnected())
         {
             StopClient();
             print("OnApplicationQuit: stopped client");
         }
+    }
+
+    private void NewMethod()
+    {
+        base.OnApplicationQuit();
     }
 
     new void OnValidate()
