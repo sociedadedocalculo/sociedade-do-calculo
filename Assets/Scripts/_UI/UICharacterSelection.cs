@@ -38,7 +38,7 @@ public partial class UICharacterSelection : MonoBehaviour
                 startButton.gameObject.SetActive(manager.selection != -1);
                 startButton.onClick.SetListener(() => {
                     // add player
-                    CharacterSelectMsg message = new CharacterSelectMsg{index=manager.selection};
+                    CharacterSelectMsg message = new CharacterSelectMsg { index = manager.selection };
                     ClientScene.AddPlayer(manager.client.connection, message);
 
                     // clear character selection previews
@@ -51,7 +51,7 @@ public partial class UICharacterSelection : MonoBehaviour
                 // delete button
                 deleteButton.gameObject.SetActive(manager.selection != -1);
                 deleteButton.onClick.SetListener(() => {
-                    CharacterDeleteMsg message = new CharacterDeleteMsg{index=manager.selection};
+                    CharacterDeleteMsg message = new CharacterDeleteMsg { index = manager.selection };
                     manager.client.Send(CharacterDeleteMsg.MsgId, message);
                 });
 

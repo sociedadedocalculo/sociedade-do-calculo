@@ -15,7 +15,7 @@ public partial class UILogin : MonoBehaviour
     public Dropdown serverDropdown;
     public Button loginButton;
     public Button registerButton;
-    [TextArea(1, 30)] public string registerMessage = "Faça seu login...";
+    [TextArea(1, 30)] public string registerMessage = "First time? Just log in and we will\ncreate an account automatically.";
     public Button hostButton;
     public Button dedicatedButton;
     public Button cancelButton;
@@ -48,7 +48,7 @@ public partial class UILogin : MonoBehaviour
 
             // status
             if (manager.IsConnecting())
-                statusText.text = "Conectando...";
+                statusText.text = "Connecting...";
             else if (manager.state == NetworkState.Handshake)
                 statusText.text = "Handshake...";
             else
