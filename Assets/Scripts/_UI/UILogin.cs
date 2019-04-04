@@ -8,7 +8,7 @@ public partial class UILogin : MonoBehaviour
 {
     public UIPopup uiPopup;
     public UIPopupMessage uiPopupMessage;
-    public NetworkManagerMMO manager; // singleton=null in Start/Awake
+    public NetworkManagerMMO manager; 
     public GameObject panel;
     public Text statusText;
     public InputField accountInput;
