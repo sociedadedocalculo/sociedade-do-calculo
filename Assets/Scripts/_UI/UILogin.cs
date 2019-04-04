@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public partial class UILogin : MonoBehaviour
 {
     public UIPopup uiPopup;
+    public UIPopupMessage uiPopupMessage;
     public NetworkManagerMMO manager; // singleton=null in Start/Awake
     public GameObject panel;
     public Text statusText;
@@ -15,11 +16,13 @@ public partial class UILogin : MonoBehaviour
     public Dropdown serverDropdown;
     public Button loginButton;
     public Button registerButton;
-    [TextArea(1, 30)] public string registerMessage = "First time? Just log in and we will\ncreate an account automatically.";
+    [TextArea(1, 30)] public string registerMessage = "Primeira vez? Tente criar o seu cadastro para logar-se...";
     public Button hostButton;
     public Button dedicatedButton;
     public Button cancelButton;
     public Button quitButton;
+
+
 
     void Start()
     {
@@ -39,24 +42,16 @@ public partial class UILogin : MonoBehaviour
 
     void Update()
     {
-        // only show while offline
-        // AND while in handshake since we don't want to show nothing while
-        // trying to login and waiting for the server's response
-        if (manager.state == NetworkState.Offline || manager.state == NetworkState.Handshake)
+        // only show while offline or trying to connect
+        if (!manager.IsClientConnected())
         {
             panel.SetActive(true);
 
             // status
-            if (manager.IsConnecting())
-                statusText.text = "Connecting...";
-            else if (manager.state == NetworkState.Handshake)
-                statusText.text = "Handshake...";
-            else
-                statusText.text = "";
+            statusText.text = manager.IsConnecting() ? "Conectando..." : "";
 
             // buttons. interactable while network is not active
             // (using IsConnecting is slightly delayed and would allow multiple clicks)
-            registerButton.interactable = !manager.isNetworkActive;
             registerButton.onClick.SetListener(() => { uiPopup.Show(registerMessage); });
             loginButton.interactable = !manager.isNetworkActive && manager.IsAllowedAccountName(accountInput.text);
             loginButton.onClick.SetListener(() => { manager.StartClient(); });
@@ -80,5 +75,7 @@ public partial class UILogin : MonoBehaviour
             manager.networkAddress = manager.serverList[serverDropdown.value].ip;
         }
         else panel.SetActive(false);
+
     }
+
 }
