@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public partial class UILogin : MonoBehaviour
 {
     public UIPopup uiPopup;
-    public UIPopupMessage uiPopupMessage;
     public NetworkManagerMMO manager; 
     public GameObject panel;
     public Text statusText;
