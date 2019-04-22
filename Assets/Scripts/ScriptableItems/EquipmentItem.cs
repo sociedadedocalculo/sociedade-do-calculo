@@ -40,9 +40,6 @@ public class EquipmentItem : UsableItem
 
     public override void Use(Player player, int inventoryIndex)
     {
-        // always call base function too
-        base.Use(player, inventoryIndex);
-
         // find a slot that accepts this category, then equip it
         int slot = FindEquipableSlotFor(player, inventoryIndex);
         if (slot != -1)

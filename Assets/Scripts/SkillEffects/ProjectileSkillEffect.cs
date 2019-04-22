@@ -5,28 +5,15 @@
 // the position to all clients, which is the easy method. But we just move it on
 // the server and the on the client to save bandwidth. Same result.
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 public class ProjectileSkillEffect : SkillEffect
 {
-    public float speed = 35;
+    public float speed = 1;
     [HideInInspector] public int damage = 1; // set by skill
-    [HideInInspector] public float stunChance; // set by skill
-    [HideInInspector] public float stunTime; // set by skill
 
-    public override void OnStartClient()
-    {
-        // the projectile should always start at the effectMount position.
-        // -> server doesn't run animations, so it will never spawn it exactly
-        //    where the effectMount is on the client by the time the packet
-        //    reaches the client.
-        // -> the best solution is to correct it here once
-        if (target != null && caster != null)
-        {
-            transform.position = caster.effectMount.position;
-            transform.LookAt(target.collider.bounds.center);
-        }
-    }
+    // update here already so that it doesn't spawn with a weird rotation
+    void Start() { FixedUpdate(); }
 
     // fixedupdate on client and server to simulate the same effect without
     // using a NetworkTransform
@@ -39,7 +26,7 @@ public class ProjectileSkillEffect : SkillEffect
         {
             // move closer and look at the target
             Vector3 goal = target.collider.bounds.center;
-            transform.position = Vector3.MoveTowards(transform.position, goal, speed * Time.fixedDeltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, goal, speed);
             transform.LookAt(goal);
 
             // server: reached it? apply skill and destroy self
@@ -48,7 +35,7 @@ public class ProjectileSkillEffect : SkillEffect
                 if (target.health > 0)
                 {
                     // find the skill that we casted this effect with
-                    caster.DealDamageAt(target, caster.damage + damage, stunChance, stunTime);
+                    caster.DealDamageAt(target, caster.damage + damage);
                 }
                 NetworkServer.Destroy(gameObject);
             }

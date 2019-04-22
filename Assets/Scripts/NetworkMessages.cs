@@ -1,7 +1,7 @@
 ﻿// Contains all the network messages that we need.
 using System.Collections.Generic;
 using System.Linq;
-using Mirror;
+using UnityEngine.Networking;
 
 // client to server ////////////////////////////////////////////////////////////
 public partial class LoginMsg : MessageBase
@@ -48,7 +48,6 @@ public partial class CharactersAvailableMsg : MessageBase
     {
         public string name;
         public string className; // = the prefab name
-        public ItemSlot[] equipment;
     }
     public CharacterPreview[] characters;
 
@@ -56,12 +55,11 @@ public partial class CharactersAvailableMsg : MessageBase
     // in the addon hooks
     public void Load(List<Player> players)
     {
-        // we only need name, class, equipment for our UI
+        // we only need name and class for our UI
         characters = players.Select(
             player => new CharacterPreview{
                 name = player.name,
-                className = player.className,
-                equipment = player.equipment.ToArray()
+                className = player.className
             }
         ).ToArray();
 

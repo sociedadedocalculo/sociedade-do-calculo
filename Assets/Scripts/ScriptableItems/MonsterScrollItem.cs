@@ -1,9 +1,7 @@
-﻿// note: spawns should have a NetworkName component for name synchronization,
-//       otherwise they keep the "(Clone)" suffix on clients
-using System;
+﻿using System;
 using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 using System.Collections.Generic;
 
 [CreateAssetMenu(menuName="uMMORPG Item/Monster Scroll", order=999)]
@@ -22,9 +20,6 @@ public class MonsterScrollItem : UsableItem
 
     public override void Use(Player player, int inventoryIndex)
     {
-        // always call base function too
-        base.Use(player, inventoryIndex);
-
         foreach (SpawnInfo spawn in spawns)
         {
             if (spawn.monster != null)

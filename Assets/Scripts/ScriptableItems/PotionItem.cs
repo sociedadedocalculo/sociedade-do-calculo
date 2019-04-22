@@ -13,10 +13,6 @@ public class PotionItem : UsableItem
     // usage
     public override void Use(Player player, int inventoryIndex)
     {
-        // always call base function too
-        base.Use(player, inventoryIndex);
-
-        // increase health/mana/etc.
         player.health += usageHealth;
         player.mana += usageMana;
         player.experience += usageExperience;

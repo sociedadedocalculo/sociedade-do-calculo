@@ -4,21 +4,31 @@
 // We don't use the playerPrefab, instead all available player classes should be
 // dragged into the spawnable objects property.
 //
+// Network Configuration modified parameters:
+// - Max Buffered Packets: 16 => 512. allows to send more data to one connection
+//   without running into errors too soon
+// - Channels:
+//   0: Reliable Fragmented for important messages that have to be delivered
+//   1: Unreliable Fragmented for less important messages
+//   (https://www.youtube.com/watch?v=-_0TtPY5LCc)
+// - Min Update Timeout: 10 => 1. utilize the other thread as much as possible;
+//   also avoids errors at the 200KB/s mark
+// - Connect Timeout: 2000 => 5000. lags happen
+// - Disconnect Timeout: 2000 => 5000. lags happen
+// - Ping Timeout: 500 => 3000. lags happen
+// - Reactor Max Recv/Send Messages: 1024 => 4096 to avoid errors.
+//
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-// we need a clearly defined state to know if we are offline/in world/in lobby
-// otherwise UICharacterSelection etc. never know 100% if they should be visible
-// or not.
 public partial class NetworkManagerMMO : NetworkManager
-
 {
     // <conn, account> dict for the lobby
     // (people that are still creating or selecting characters)
@@ -51,11 +61,6 @@ public partial class NetworkManagerMMO : NetworkManager
         new ServerInfo{name="Local", ip="localhost"}
     };
 
-    [Header("Selecao de Personagem")]
-    public int selection = -1;
-    public Transform[] selectionLocations;
-    public Transform selectionCameraLocation;
-
     [Header("Database")]
     public int characterLimit = 4;
     public int characterNameMaxLength = 16;
@@ -65,7 +70,7 @@ public partial class NetworkManagerMMO : NetworkManager
     // store characters available message on client so that UI can access it
     [HideInInspector] public CharactersAvailableMsg charactersAvailableMsg;
 
-    // Checando nome /////////////////////////////////////////////////////////////
+    // name checks /////////////////////////////////////////////////////////////
     public bool IsAllowedAccountName(string account)
     {
         // not too long?
@@ -84,7 +89,7 @@ public partial class NetworkManagerMMO : NetworkManager
                Regex.IsMatch(characterName, @"^[a-zA-Z0-9_]+$");
     }
 
-    // Eventos //////////////////////////////////////////////////////////////////
+    // events //////////////////////////////////////////////////////////////////
     void Start()
     {
         // headless mode? then automatically start a dedicated server
@@ -101,7 +106,7 @@ public partial class NetworkManagerMMO : NetworkManager
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "Start_");
     }
 
-    // Mensagens poppup do client ///////////////////////////////////////////////////
+    // client popup messages ///////////////////////////////////////////////////
     void ClientSendPopup(NetworkConnection conn, string error, bool disconnect)
     {
         ErrorMsg message = new ErrorMsg { text = error, causesDisconnect = disconnect };
@@ -129,6 +134,7 @@ public partial class NetworkManagerMMO : NetworkManager
             if (NetworkServer.active) StopHost();
         }
     }
+
     // start & stop ////////////////////////////////////////////////////////////
     public override void OnStartServer()
     {

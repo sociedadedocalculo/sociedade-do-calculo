@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 public class OneTimeTargetSkillEffect : SkillEffect
 {

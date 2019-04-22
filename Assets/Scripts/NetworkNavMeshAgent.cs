@@ -13,19 +13,19 @@
 // - We also need the stopping distance, otherwise entities move too far.
 using UnityEngine;
 using UnityEngine.AI;
-using Mirror;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(NavMeshAgent))]
-[NetworkSettings(sendInterval=0.1f)]
+// unreliable is enough and we want
+// to send changes immediately. everything else causes lags.
+[NetworkSettings(channel=Channels.DefaultUnreliable, sendInterval=0)]
 public class NetworkNavMeshAgent : NetworkBehaviour
 {
     public NavMeshAgent agent; // assign in Inspector (instead of GetComponent)
+    Vector3 lastDestination; // for dirty bit
+    Vector3 lastVelocity; // for dirty bit
+    bool hadPath = false; // had path since last time? for warp detection
     Vector3 requiredVelocity; // to apply received velocity in Update constanly
-
-    // remember last serialized values for dirty bit
-    Vector3 lastUpdatePosition;
-    Vector3 lastSerializedDestination;
-    Vector3 lastSerializedVelocity;
 
     // look at a transform while only rotating on the Y axis (to avoid weird
     // tilts)
@@ -38,33 +38,10 @@ public class NetworkNavMeshAgent : NetworkBehaviour
     {
         if (isServer)
         {
-            // detect move mode
-            bool hasPath = agent.hasPath || agent.pathPending; // might still be computed
-
-            // click movement and destination changed since last sync?
-            if (hasPath && agent.destination != lastSerializedDestination)
-            {
-                //Debug.LogWarning(name + " dirty because destination changed from: " + lastSerializedDestination + " to " + agent.destination + " hasPath=" + agent.hasPath + " pathPending=" + agent.pathPending);
+            // find out if destination changed on server
+            if (agent.hasPath || agent.pathPending) hadPath = true;
+            if (agent.destination != lastDestination || agent.velocity != lastVelocity)
                 SetDirtyBit(1);
-            }
-            // wasd movement and velocity changed since last sync?
-            else if (!hasPath && agent.velocity != lastSerializedVelocity)
-            {
-                //Debug.LogWarning(name + " dirty because velocity changed from: " + lastVelocity + " to " + agent.velocity);
-                SetDirtyBit(1);
-            }
-            // neither click or wasd movement, but position changed further than 'speed'?
-            // then we must have teleported, no other way to move this fast.
-            else if (!hasPath && Vector3.Distance(transform.position, lastUpdatePosition) > agent.speed)
-            {
-                // warp detection is just about 100% correct, so let's send a
-                // Rpc to warp the client and not leave it up to OnDeserialize's
-                // guess wether or not we warped. this is worth it for corerctness.
-                //Debug.Log(name + " teleported from: " + lastUpdatePosition + " to: " + transform.position);
-                RpcWarped(transform.position);
-            }
-
-            lastUpdatePosition = transform.position;
         }
         else if (isClient)
         {
@@ -72,106 +49,88 @@ public class NetworkNavMeshAgent : NetworkBehaviour
             // (not on host because server handles it already anyway)
             if (requiredVelocity != Vector3.zero)
             {
-                agent.ResetMovement(); // needed after click movement before we can use .velocity
+                agent.ResetPath(); // needed after click movement before we can use .velocity
                 agent.velocity = requiredVelocity;
                 LookAtY(transform.position + requiredVelocity); // velocity doesn't set rotation
             }
         }
     }
 
-    [ClientRpc]
-    public void RpcWarped(Vector3 position)
-    {
-        agent.Warp(position);
-    }
-
     // server-side serialization
+    //
+    // I M P O R T A N T
+    //
+    // always read and write the same amount of bytes. never let any errors
+    // happen. otherwise readstr/readbytes out of range bugs happen.
     public override bool OnSerialize(NetworkWriter writer, bool initialState)
     {
-        // always send position so client knows if he's too far off and needs warp
-        writer.Write(transform.position);
-
-        // always send speed in case it's modified by something
+        // click based movement needs destination. wasd needs velocity. we send
+        // everything just to be sure and to deserialize more easily.
+        writer.Write(transform.position); // for rubberbanding
         writer.Write(agent.speed);
+        writer.Write(agent.stoppingDistance);
+        writer.Write(agent.destination);
+        writer.Write(agent.velocity);
+        writer.Write(agent.hasPath); // for click/wasd detection
+        writer.Write(agent.destination != lastDestination && !hadPath); // warped? avoid sliding to respawn point etc.
 
-        // click or wasd movement?
-        // (no need to send everything all the time, saves bandwidth)
-        bool hasPath = agent.hasPath || agent.pathPending;
-        writer.Write(hasPath);
-        if (hasPath)
-        {
-            // destination
-            writer.Write(agent.destination);
+        // reset helpers
+        lastDestination = agent.destination;
+        lastVelocity = agent.velocity;
+        hadPath = false;
 
-            // always send stopping distance because monsters might stop early etc.
-            writer.Write(agent.stoppingDistance);
-
-            // remember last serialized path so we do it again if it changed.
-            // (first OnSerialize never seems to detect path yet for whatever
-            //  reason, so this way we can be 100% sure that it's called again
-            //  as soon as the path was detected)
-            lastSerializedDestination = agent.destination;
-        }
-        else
-        {
-            // velocity
-            writer.Write(agent.velocity);
-
-            // remember last serialized velocity
-            lastSerializedVelocity = agent.velocity;
-        }
         return true;
     }
 
     // client-side deserialization
+    //
+    // I M P O R T A N T
+    //
+    // always read and write the same amount of bytes. never let any errors
+    // happen. otherwise readstr/readbytes out of range bugs happen.
     public override void OnDeserialize(NetworkReader reader, bool initialState)
     {
-        // read position, speed and movement type
-        Vector3 position = reader.ReadVector3();
-        agent.speed = reader.ReadSingle();
-        bool hasPath = reader.ReadBoolean();
+        Vector3 position       = reader.ReadVector3();
+        agent.speed            = reader.ReadSingle();
+        agent.stoppingDistance = reader.ReadSingle();
+        Vector3 destination    = reader.ReadVector3();
+        Vector3 velocity       = reader.ReadVector3();
+        bool hasPath           = reader.ReadBoolean();
+        bool warped            = reader.ReadBoolean();
 
-        // click or wasd movement?
-        if (hasPath)
+        // OnDeserialize must always return so that next one is called too
+        try
         {
-            // read destination and stopping distance
-            Vector3 destination = reader.ReadVector3();
-            float stoppingDistance = reader.ReadSingle();
-            //Debug.Log("OnDeserialize: click: " + destination);
-
-            // try setting destination if on navmesh
-            // (might not be while falling from the sky after joining etc.)
+            // only try to use agent while on navmesh
+            // (it might not be while falling from the sky after joining)
             if (agent.isOnNavMesh)
             {
-                agent.stoppingDistance = stoppingDistance;
-                agent.destination = destination;
+                // warp if necessary. distance check to filter out false positives
+                if (warped && Vector3.Distance(transform.position, position) > agent.radius)
+                    agent.Warp(position); // to pos is always smoother
+
+                // rubberbanding: if we are too far off because of a rapid position
+                // change or latency, then warp
+                // -> agent moves 'speed' meter per seconds
+                // -> if we are 2 speed units behind, then we teleport
+                //    (using speed is better than using a hardcoded value)
+                if (Vector3.Distance(transform.position, position) > agent.speed * 2)
+                    agent.Warp(position);
+
+                // click or wasd movement?
+                if (hasPath)
+                {
+                    // set destination afterwards, so that we never stop going there
+                    // even after being warped etc.
+                    agent.destination = destination;
+                    requiredVelocity = Vector3.zero; // reset just to be sure
+                }
+                else
+                {
+                    // apply required velocity in Update later
+                    requiredVelocity = velocity;
+                }
             }
-            else Debug.LogWarning("NetworkNavMeshAgent.OnSerialize: agent not on NavMesh, name=" + name + " position=" + transform.position + " destination=" + destination);
-
-            requiredVelocity = Vector3.zero; // reset just to be sure
-        }
-        else
-        {
-            // read velocity
-            Vector3 velocity = reader.ReadVector3();
-            //Debug.Log("OnDeserialize: wasd: " + velocity);
-
-            // apply required velocity in Update later
-            requiredVelocity = velocity;
-        }
-
-        // rubberbanding: if we are too far off because of a rapid position
-        // change or latency, then warp
-        // -> agent moves 'speed' meter per seconds
-        // -> if we are speed * 2 units behind, then we teleport
-        //    (using speed is better than using a hardcoded value)
-        // -> we use speed * 2 for update/network latency tolerance. player
-        //    might have moved quit a bit already before OnSerialize was called
-        //    on the server.
-        if (Vector3.Distance(transform.position, position) > agent.speed * 2 && agent.isOnNavMesh)
-        {
-            agent.Warp(position);
-            //Debug.Log(name + " rubberbanding to " + position);
-        }
+        } catch {}
     }
 }

@@ -3,7 +3,7 @@
 //
 // Note: Particle Systems need Simulation Space = Local for it to work.
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 public class BuffSkillEffect : SkillEffect
 {
@@ -20,7 +20,8 @@ public class BuffSkillEffect : SkillEffect
             if (index != -1)
             {
                 Buff buff = target.buffs[index];
-                if (lastRemainingTime >= buff.BuffTimeRemaining()) {
+                if (lastRemainingTime >= buff.BuffTimeRemaining())
+                {
                     transform.position = target.collider.bounds.center;
                     lastRemainingTime = buff.BuffTimeRemaining();
                     return;
