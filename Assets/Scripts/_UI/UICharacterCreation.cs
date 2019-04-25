@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
+using UnityEngine.Networking;
 using System.Linq;
 
 public partial class UICharacterCreation : MonoBehaviour
 {
     public NetworkManagerMMO manager; // singleton is null until update
     public GameObject panel;
+    public GameObject poppanel;
     public InputField nameInput;
     public Dropdown classDropdown;
     public Button createButton;
@@ -17,8 +18,8 @@ public partial class UICharacterCreation : MonoBehaviour
         // only update while visible (after character selection made it visible)
         if (panel.activeSelf)
         {
-            // still in lobby?
-            if (manager.state == NetworkState.Lobby)
+            // still connected, not in world?
+            if (manager.IsClientConnected() && !Utils.ClientLocalPlayer())
             {
                 Show();
 
@@ -30,7 +31,8 @@ public partial class UICharacterCreation : MonoBehaviour
                 // create
                 createButton.interactable = manager.IsAllowedCharacterName(nameInput.text);
                 createButton.onClick.SetListener(() => {
-                    CharacterCreateMsg message = new CharacterCreateMsg{
+                    CharacterCreateMsg message = new CharacterCreateMsg
+                    {
                         name = nameInput.text,
                         classIndex = classDropdown.value
                     };
@@ -49,7 +51,17 @@ public partial class UICharacterCreation : MonoBehaviour
         else Hide();
     }
 
-    public void Hide() { panel.SetActive(false); }
-    public void Show() { panel.SetActive(true); }
+    public void Hide()
+    {
+        poppanel.SetActive(false);
+        panel.SetActive(false);
+
+
+    }
+    public void Show()
+    {
+        panel.SetActive(true);
+
+    }
     public bool IsVisible() { return panel.activeSelf; }
 }

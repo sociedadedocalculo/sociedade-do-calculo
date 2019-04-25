@@ -5,10 +5,8 @@
 //
 // Quests have to be structs in order to work with SyncLists.
 using System;
-using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Quest
@@ -18,55 +16,30 @@ public partial struct Quest
     // string's hashcode instead of the string takes WAY less bandwidth.
     public int hash;
 
-    // fulfillment fields can be used by inheriting scriptablequests
-    // (no arrays because this way database save/load is easier)
-    // -> the field(s) can be:
-    //    * kill counters for 1 monster
-    //    * kill counters for 4 monsters (split into 4 bytes, so 4x255 kills)
-    //    * simple boolean checks (1/0)
-    //    * checklists (by setting the 32 bits to 1/0)
-    // -> could add more fields in the future, but this is probably enough
-    public int field0;
-
-    // a quest is complete after finishing it at the npc and getting rewards
-    public bool completed;
+    // dynamic stats
+    public int killed;
+    public bool completed; // after finishing it at the npc and getting rewards
 
     // constructors
     public Quest(ScriptableQuest data)
     {
         hash = data.name.GetStableHashCode();
-        field0 = 0;
+        killed = 0;
         completed = false;
     }
 
     // wrappers for easier access
-    public ScriptableQuest data
-    {
-        get
-        {
-            // show a useful error message if the key can't be found
-            // note: ScriptableQuest.OnValidate 'is in resource folder' check
-            //       causes Unity SendMessage warnings and false positives.
-            //       this solution is a lot better.
-            if (!ScriptableQuest.dict.ContainsKey(hash))
-                throw new KeyNotFoundException("There is no ScriptableQuest with hash=" + hash + ". Make sure that all ScriptableQuests are in the Resources folder so they are loaded properly.");
-            return ScriptableQuest.dict[hash];
-        }
-    }
+    public ScriptableQuest data { get { return ScriptableQuest.dict[hash]; } }
     public string name { get { return data.name; } }
     public int requiredLevel { get { return data.requiredLevel; } }
     public string predecessor { get { return data.predecessor != null ? data.predecessor.name : ""; } }
     public long rewardGold { get { return data.rewardGold; } }
     public long rewardExperience { get { return data.rewardExperience; } }
     public ScriptableItem rewardItem { get { return data.rewardItem; } }
-
-    // events
-    public void OnKilled(Player player, int questIndex, Entity victim) { data.OnKilled(player, questIndex, victim); }
-    public void OnLocation(Player player, int questIndex, Collider location) { data.OnLocation(player, questIndex, location); }
-
-    // completion
-    public bool IsFulfilled(Player player) { return data.IsFulfilled(player, this); }
-    public void OnCompleted(Player player) { data.OnCompleted(player, this); }
+    public Monster killTarget { get { return data.killTarget; } }
+    public int killAmount { get { return data.killAmount; } }
+    public ScriptableItem gatherItem { get { return data.gatherItem; } }
+    public int gatherAmount { get { return data.gatherAmount; } }
 
     // fill in all variables into the tooltip
     // this saves us lots of ugly string concatenation code. we can't do it in
@@ -74,20 +47,51 @@ public partial struct Quest
     // would end up with some variables not replaced in the string when calling
     // Tooltip() from the data.
     // -> note: each tooltip can have any variables, or none if needed
-    public string ToolTip(Player player)
+    // -> example usage:
+    /*
+    <b>{NAME}</b>
+    Description here...
+
+    Tasks:
+    * Kill {KILLTARGET}: {KILLED}/{KILLAMOUNT}
+    * Gather {GATHERITEM}: {GATHERED}/{GATHERAMOUNT}
+
+    Rewards:
+    * {REWARDGOLD} Gold
+    * {REWARDEXPERIENCE} Experience
+    * {REWARDITEM}
+
+    {STATUS}
+    */
+    public string ToolTip(int gathered = 0)
     {
         // we use a StringBuilder so that addons can modify tooltips later too
         // ('string' itself can't be passed as a mutable object)
-        // note: field0 tooltip part is done in the scriptable quest, because it
-        //       might be a number, might be 'Yes'/'No', etc.
-        StringBuilder tip = new StringBuilder(data.ToolTip(player, this));
-        tip.Replace("{STATUS}", IsFulfilled(player) ? "<i>Complete!</i>" : "");
+        StringBuilder tip = new StringBuilder(data.toolTip);
+        tip.Replace("{NAME}", name);
+        tip.Replace("{KILLTARGET}", killTarget != null ? killTarget.name : "");
+        tip.Replace("{KILLAMOUNT}", killAmount.ToString());
+        tip.Replace("{GATHERITEM}", gatherItem != null ? gatherItem.name : "");
+        tip.Replace("{GATHERAMOUNT}", gatherAmount.ToString());
+        tip.Replace("{REWARDGOLD}", rewardGold.ToString());
+        tip.Replace("{REWARDEXPERIENCE}", rewardExperience.ToString());
+        tip.Replace("{REWARDITEM}", rewardItem != null ? rewardItem.name : "");
+        tip.Replace("{KILLED}", killed.ToString());
+        tip.Replace("{GATHERED}", gathered.ToString());
+        tip.Replace("{STATUS}", IsFulfilled(gathered) ? "<i>Concluído!</i>" : "");
 
         // addon system hooks
         Utils.InvokeMany(typeof(Quest), this, "ToolTip_", tip);
 
         return tip.ToString();
     }
+
+    // a quest is fulfilled if all requirements were met and it can be completed
+    // at the npc
+    public bool IsFulfilled(int gathered)
+    {
+        return killed >= killAmount && gathered >= gatherAmount;
+    }
 }
 
-public class SyncListQuest : SyncListSTRUCT<Quest> {}
+public class SyncListQuest : SyncListStruct<Quest> { }
