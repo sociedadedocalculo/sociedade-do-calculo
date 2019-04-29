@@ -14,7 +14,7 @@ public partial class UISkills : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // hotkey (not while typing in chat, etc.)
@@ -34,22 +34,19 @@ public partial class UISkills : MonoBehaviour
                 UISkillSlot slot = content.GetChild(i).GetComponent<UISkillSlot>();
                 Skill skill = player.skills[i];
 
-                bool isPassive = skill.data is PassiveSkill;
-
-                // set state
-                slot.dragAndDropable.name = i.ToString();
-                slot.dragAndDropable.dragable = skill.level > 0 && !isPassive;
+                // drag and drop name has to be the index in the real skill list,
+                // not in the filtered list, otherwise drag and drop may fail
+                int skillIndex = player.skills.FindIndex(s => s.name == skill.name);
+                slot.dragAndDropable.name = skillIndex.ToString();
 
                 // click event
-                slot.button.interactable = skill.level > 0 &&
-                                           !isPassive &&
-                                           player.CastCheckSelf(skill); // checks mana, cooldown etc.
-                int icopy = i;
+                slot.button.interactable = skill.level > 0 && player.CastCheckSelf(skill); // checks mana, cooldown etc.
                 slot.button.onClick.SetListener(() => {
-                    // try use the skill or walk closer if needed
-                    player.TryUseSkill(icopy);
+                    player.CmdUseSkill(skillIndex);
                 });
 
+                // set state
+                slot.dragAndDropable.dragable = skill.level > 0;
 
                 // image
                 if (skill.level > 0)
@@ -66,7 +63,7 @@ public partial class UISkills : MonoBehaviour
                 {
                     slot.upgradeButton.gameObject.SetActive(true);
                     slot.upgradeButton.GetComponentInChildren<Text>().text = skill.level == 0 ? "Learn" : "Upgrade";
-                    slot.upgradeButton.onClick.SetListener(() => { player.CmdUpgradeSkill(icopy); });
+                    slot.upgradeButton.onClick.SetListener(() => { player.CmdUpgradeSkill(skillIndex); });
                 }
                 else slot.upgradeButton.gameObject.SetActive(false);
 

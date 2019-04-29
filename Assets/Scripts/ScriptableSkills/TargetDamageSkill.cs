@@ -1,10 +1,12 @@
 ﻿using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
-[CreateAssetMenu(menuName="uMMORPG Skill/Target Damage", order=999)]
-public class TargetDamageSkill : DamageSkill
+[CreateAssetMenu(menuName = "uMMORPG Skill/Target Damage", order = 999)]
+public class TargetDamageSkill : ScriptableSkill
 {
+    public LevelBasedInt damage = new LevelBasedInt { baseValue = 1 };
+
     public override bool CheckTarget(Entity caster)
     {
         // target exists, alive, not self, oktype?
@@ -16,7 +18,7 @@ public class TargetDamageSkill : DamageSkill
         // target still around?
         if (caster.target != null)
         {
-            destination = caster.target.collider.ClosestPoint(caster.transform.position);
+            destination = caster.target.collider.ClosestPointOnBounds(caster.transform.position);
             return Utils.ClosestDistance(caster.collider, caster.target.collider) <= castRange.Get(skillLevel);
         }
         destination = caster.transform.position;
@@ -26,9 +28,14 @@ public class TargetDamageSkill : DamageSkill
     public override void Apply(Entity caster, int skillLevel)
     {
         // deal damage directly with base damage + skill damage
-        caster.DealDamageAt(caster.target,
-                            caster.damage + damage.Get(skillLevel),
-                            stunChance.Get(skillLevel),
-                            stunTime.Get(skillLevel));
+        caster.DealDamageAt(caster.target, caster.damage + damage.Get(skillLevel));
+    }
+
+    // tooltip /////////////////////////////////////////////////////////////////
+    public override string ToolTip(int skillLevel, bool showRequirements = false)
+    {
+        StringBuilder tip = new StringBuilder(base.ToolTip(skillLevel, showRequirements));
+        tip.Replace("{DAMAGE}", damage.Get(skillLevel).ToString());
+        return tip.ToString();
     }
 }

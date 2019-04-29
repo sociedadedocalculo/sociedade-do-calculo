@@ -4,12 +4,11 @@
 // Npcs first show the welcome text and then have options for item trading and
 // quests.
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-[RequireComponent(typeof(NetworkNavMeshAgent))]
 public partial class Npc : Entity
 {
     [Header("Text Meshes")]
@@ -23,6 +22,9 @@ public partial class Npc : Entity
 
     [Header("Quests")]
     public ScriptableQuest[] quests;
+
+    [Header("Perguntas")]
+    public ScriptableQuest[] perguntas;
 
     [Header("Teleportation")]
     public Transform teleportTo;
@@ -48,30 +50,26 @@ public partial class Npc : Entity
 
     // finite state machine states /////////////////////////////////////////////
     [Server] protected override string UpdateServer() { return state; }
-    [Client] protected override void UpdateClient()
+    [Client]
+    protected override void UpdateClient()
     {
-        // addon system hooks
-        Utils.InvokeMany(GetType(), this, "UpdateClient_");
-    }
-
-    // overlays ////////////////////////////////////////////////////////////////
-    protected override void UpdateOverlays()
-    {
-        base.UpdateOverlays();
-
         if (questOverlay != null)
         {
             // find local player (null while in character selection)
-            if (Player.localPlayer != null)
+            Player player = Utils.ClientLocalPlayer();
+            if (player != null)
             {
-                if (quests.Any(q => Player.localPlayer.CanCompleteQuest(q.name)))
+                if (quests.Any(q => player.CanCompleteQuest(q.name)))
                     questOverlay.text = "!";
-                else if (quests.Any(Player.localPlayer.CanAcceptQuest))
+                else if (quests.Any(player.CanAcceptQuest))
                     questOverlay.text = "?";
                 else
                     questOverlay.text = "";
             }
         }
+
+        // addon system hooks
+        Utils.InvokeMany(GetType(), this, "UpdateClient_");
     }
 
     // skills //////////////////////////////////////////////////////////////////

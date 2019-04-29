@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 public partial class UICrafting : MonoBehaviour
 {
@@ -13,14 +12,10 @@ public partial class UICrafting : MonoBehaviour
     public Image resultSlotImage;
     public UIShowToolTip resultSlotToolTip;
     public Button craftButton;
-    public Slider progressSlider;
-    public Text resultText;
-    public Color successColor = Color.green;
-    public Color failedColor = Color.red;
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // hotkey (not while typing in chat, etc.)
@@ -80,13 +75,6 @@ public partial class UICrafting : MonoBehaviour
                 resultSlotToolTip.text = new ItemSlot(item).ToolTip(); // ItemSlot so that {AMOUNT} is replaced too
                 resultSlotImage.color = Color.white;
                 resultSlotImage.sprite = recipe.result.image;
-
-                // show progress bar while crafting
-                // (show 100% if craft time = 0 because it's just better feedback)
-                progressSlider.gameObject.SetActive(player.state == "CRAFTING");
-                double startTime = player.craftingTimeEnd - recipe.craftingTime;
-                double elapsedTime = NetworkTime.time - startTime;
-                progressSlider.value = recipe.craftingTime > 0 ? (float)elapsedTime / recipe.craftingTime : 1;
             }
             else
             {
@@ -94,44 +82,12 @@ public partial class UICrafting : MonoBehaviour
                 resultSlotToolTip.enabled = false;
                 resultSlotImage.color = Color.clear;
                 resultSlotImage.sprite = null;
-                progressSlider.gameObject.SetActive(false);
             }
 
-            // craft result
-            // (no recipe != null check because it will be null if those were
-            //  the last two ingredients in our inventory)
-            if (player.craftingState == CraftingState.Success)
-            {
-                resultText.color = successColor;
-                resultText.text = "Success!";
-            }
-            else if (player.craftingState == CraftingState.Failed)
-            {
-                resultText.color = failedColor;
-                resultText.text = "Failed :(";
-            }
-            else
-            {
-                resultText.text = "";
-            }
-
-            // craft button with 'Try' prefix to let people know that it might fail
-            // (disabled while in progress)
-            craftButton.GetComponentInChildren<Text>().text = recipe != null &&
-                                                              recipe.probability < 1 ? "Try Craft" : "Craft";
-            craftButton.interactable = recipe != null &&
-                                       player.state != "CRAFTING" &&
-                                       player.craftingState != CraftingState.InProgress &&
-                                       player.InventoryCanAdd(new Item(recipe.result), 1);
+            // craft button
+            craftButton.interactable = recipe != null && player.InventoryCanAdd(new Item(recipe.result), 1);
             craftButton.onClick.SetListener(() => {
-                player.craftingState = CraftingState.InProgress; // wait for result
-
-                // pass original array so server can copy it to it's own
-                // craftingIndices. we pass original one and not only the valid
-                // indicies because then in host mode we would make the crafting
-                // indices array smaller by only copying the valid indices,
-                // hence losing crafting slots
-                player.CmdCraft(player.craftingIndices.ToArray());
+                player.CmdCraft(validIndices.ToArray());
             });
         }
     }

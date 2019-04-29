@@ -17,7 +17,7 @@ public partial class UIQuests : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // hotkey (not while typing in chat, etc.)
@@ -48,7 +48,8 @@ public partial class UIQuests : MonoBehaviour
                 });
 
                 // description
-                slot.descriptionText.text = quest.ToolTip(player);
+                int gathered = quest.gatherItem != null ? player.InventoryCount(new Item(quest.gatherItem)) : 0;
+                slot.descriptionText.text = quest.ToolTip(gathered);
             }
         }
     }

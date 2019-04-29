@@ -1,7 +1,7 @@
 // This class contains some helper functions.
 using UnityEngine;
 using UnityEngine.Rendering;
-using Mirror;
+using UnityEngine.Networking;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;
@@ -53,7 +53,7 @@ public class Utils
         return String.IsNullOrEmpty(value) || value.Trim().Length == 0;
     }
 
-    // Distance between two ClosestPoints
+    // Distance between two ClosestPointOnBounds
     // this is needed in cases where entites are really big. in those cases,
     // we can't just move to entity.transform.position, because it will be
     // unreachable. instead we have to go the closest point on the boundary.
@@ -73,17 +73,8 @@ public class Utils
     //
     public static float ClosestDistance(Collider a, Collider b)
     {
-        // return 0 if both intersect or if one is inside another.
-        // ClosestPoint distance wouldn't be > 0 in those cases otherwise.
-        if (a.bounds.Intersects(b.bounds))
-            return 0;
-
-        // Unity offers ClosestPointOnBounds and ClosestPoint.
-        // ClosestPoint is more accurate. OnBounds often doesn't get <1 because
-        // it uses a point at the top of the player collider, not in the center.
-        // (use Debug.DrawLine here to see the difference)
-        return Vector3.Distance(a.ClosestPoint(b.transform.position),
-                                b.ClosestPoint(a.transform.position));
+        return Vector3.Distance(a.ClosestPointOnBounds(b.transform.position),
+                                b.ClosestPointOnBounds(a.transform.position));
     }
 
     // raycast while ignoring self (by setting layer to "Ignore Raycasts" first)
@@ -138,7 +129,7 @@ public class Utils
     {
         float scroll = Input.GetAxisRaw("Mouse ScrollWheel");
         if (scroll < 0) return -1;
-        if (scroll > 0) return  1;
+        if (scroll > 0) return 1;
         return 0;
     }
 
@@ -176,6 +167,24 @@ public class Utils
         return 0;
     }
 
+    // find first valid gameobject from player controllers list
+    public static GameObject GetGameObjectFromPlayerControllers(List<PlayerController> controllers)
+    {
+        PlayerController controller = controllers.Find(pc => pc.gameObject != null);
+        return controller != null ? controller.gameObject : null;
+    }
+
+    // find local player (clientsided)
+    public static Player ClientLocalPlayer()
+    {
+        // note: ClientScene.localPlayers.Count cant be used as check because
+        // nothing is removed from that list, even after disconnect. It still
+        // contains entries like: ID=0 NetworkIdentity NetID=null Player=null
+        // (which might be a UNET bug)
+        GameObject go = GetGameObjectFromPlayerControllers(ClientScene.localPlayers);
+        return go != null ? go.GetComponent<Player>() : null;
+    }
+
     // parse first upper cased noun from a string, e.g.
     //   EquipmentWeaponBow => Equipment
     //   EquipmentShield => Equipment
@@ -191,7 +200,7 @@ public class Utils
     public static string ParseLastNoun(string text)
     {
         MatchCollection matches = new Regex(@"([A-Z][a-z]*)").Matches(text);
-        return matches.Count > 0 ? matches[matches.Count-1].Value : "";
+        return matches.Count > 0 ? matches[matches.Count - 1].Value : "";
     }
 
     // check if the cursor is over a UI or OnGUI element right now
@@ -227,10 +236,10 @@ public class Utils
     // -> works for static classes too if object = null
     // -> cache it so it's fast enough for Update calls
     // -> C# only has Tuple support in 4.6, so we use KeyValuePair instead
-    static Dictionary<KeyValuePair<Type,string>, MethodInfo[]> lookup = new Dictionary<KeyValuePair<Type,string>, MethodInfo[]>();
+    static Dictionary<KeyValuePair<Type, string>, MethodInfo[]> lookup = new Dictionary<KeyValuePair<Type, string>, MethodInfo[]>();
     public static MethodInfo[] GetMethodsByPrefix(Type type, string methodPrefix)
     {
-        KeyValuePair<Type,string> key = new KeyValuePair<Type,string>(type, methodPrefix);
+        KeyValuePair<Type, string> key = new KeyValuePair<Type, string>(type, methodPrefix);
         if (!lookup.ContainsKey(key))
         {
             MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)

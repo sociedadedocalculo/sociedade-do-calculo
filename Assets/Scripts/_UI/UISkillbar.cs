@@ -9,7 +9,7 @@ public partial class UISkillbar : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         panel.SetActive(player != null); // hide while not in the game world
         if (!player) return;
 
@@ -28,8 +28,8 @@ public partial class UISkillbar : MonoBehaviour
 
             // skill, inventory item or equipment item?
             int skillIndex = player.GetSkillIndexByName(player.skillbar[i].reference);
-            int inventoryIndex = player.GetInventoryIndexByName(player.skillbar[i].reference);
-            int equipmentIndex = player.GetEquipmentIndexByName(player.skillbar[i].reference);
+            int invIndex = player.GetInventoryIndexByName(player.skillbar[i].reference);
+            int equipIndex = player.GetEquipmentIndexByName(player.skillbar[i].reference);
             if (skillIndex != -1)
             {
                 Skill skill = player.skills[skillIndex];
@@ -39,15 +39,13 @@ public partial class UISkillbar : MonoBehaviour
                     !UIUtils.AnyInputActive() &&
                     player.CastCheckSelf(skill)) // checks mana, cooldowns, etc.) {
                 {
-                    // try use the skill or walk closer if needed
-                    player.TryUseSkill(skillIndex);
+                    player.CmdUseSkill(skillIndex);
                 }
 
                 // refresh skill slot
                 slot.button.interactable = player.CastCheckSelf(skill); // check mana, cooldowns, etc.
                 slot.button.onClick.SetListener(() => {
-                    // try use the skill or walk closer if needed
-                    player.TryUseSkill(skillIndex);
+                    player.CmdUseSkill(skillIndex);
                 });
                 slot.tooltip.enabled = true;
                 slot.tooltip.text = skill.ToolTip();
@@ -60,17 +58,17 @@ public partial class UISkillbar : MonoBehaviour
                 slot.cooldownCircle.fillAmount = skill.cooldown > 0 ? cooldown / skill.cooldown : 0;
                 slot.amountOverlay.SetActive(false);
             }
-            else if (inventoryIndex != -1)
+            else if (invIndex != -1)
             {
-                ItemSlot itemSlot = player.inventory[inventoryIndex];
+                ItemSlot itemSlot = player.inventory[invIndex];
 
                 // hotkey pressed and not typing in any input right now?
                 if (Input.GetKeyDown(player.skillbar[i].hotKey) && !UIUtils.AnyInputActive())
-                    player.CmdUseInventoryItem(inventoryIndex);
+                    player.CmdUseInventoryItem(invIndex);
 
                 // refresh inventory slot
                 slot.button.onClick.SetListener(() => {
-                    player.CmdUseInventoryItem(inventoryIndex);
+                    player.CmdUseInventoryItem(invIndex);
                 });
                 slot.tooltip.enabled = true;
                 slot.tooltip.text = itemSlot.ToolTip();
@@ -82,9 +80,9 @@ public partial class UISkillbar : MonoBehaviour
                 slot.amountOverlay.SetActive(itemSlot.amount > 1);
                 slot.amountText.text = itemSlot.amount.ToString();
             }
-            else if (equipmentIndex != -1)
+            else if (equipIndex != -1)
             {
-                ItemSlot itemSlot = player.equipment[equipmentIndex];
+                ItemSlot itemSlot = player.equipment[equipIndex];
 
                 // refresh equipment slot
                 slot.button.onClick.RemoveAllListeners();

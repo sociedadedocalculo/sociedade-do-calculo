@@ -11,7 +11,7 @@ public partial class UINpcQuests : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // npc quest
@@ -41,10 +41,11 @@ public partial class UINpcQuests : MonoBehaviour
                     // instead of static one
                     Quest quest = player.quests[questIndex];
                     ScriptableItem reward = npc.quests[npcIndex].rewardItem;
+                    int gathered = quest.gatherItem != null ? player.InventoryCount(new Item(quest.gatherItem)) : 0;
                     bool hasSpace = reward == null || player.InventoryCanAdd(new Item(reward), 1);
 
                     // description + not enough space warning (if needed)
-                    slot.descriptionText.text = quest.ToolTip(player);
+                    slot.descriptionText.text = quest.ToolTip(gathered);
                     if (!hasSpace)
                         slot.descriptionText.text += "\n<color=red>Not enough inventory space!</color>";
 
@@ -58,9 +59,9 @@ public partial class UINpcQuests : MonoBehaviour
                 else
                 {
                     // new quest
-                    slot.descriptionText.text = new Quest(npc.quests[npcIndex]).ToolTip(player);
+                    slot.descriptionText.text = new Quest(npc.quests[npcIndex]).ToolTip();
                     slot.actionButton.interactable = true;
-                    slot.actionButton.GetComponentInChildren<Text>().text = "Accept";
+                    slot.actionButton.GetComponentInChildren<Text>().text = "Aceita";
                     slot.actionButton.onClick.SetListener(() => {
                         player.CmdAcceptQuest(npcIndex);
                     });

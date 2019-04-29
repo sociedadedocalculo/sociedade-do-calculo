@@ -2,7 +2,6 @@
 // always find it from other code. (GameObject.Find doesn't find inactive ones)
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 public partial class UITarget : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public partial class UITarget : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // show nextTarget > target

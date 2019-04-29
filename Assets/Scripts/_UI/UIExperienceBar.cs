@@ -9,7 +9,7 @@ public partial class UIExperienceBar : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         panel.SetActive(player != null); // hide while not in the game world
         if (!player) return;
 
