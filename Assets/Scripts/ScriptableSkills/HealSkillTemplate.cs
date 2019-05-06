@@ -2,7 +2,7 @@
 // => there may be target heal, targetless heal, aoe heal, etc.
 using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 public abstract class HealSkillTemplate : ScriptableSkill
 {

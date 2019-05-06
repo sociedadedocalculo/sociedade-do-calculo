@@ -7,14 +7,13 @@
 //
 // We implemented the cooldowns in a non-traditional way. Instead of counting
 // and increasing the elapsed time since the last cast, we simply set the
-// 'end' Time variable to NetworkTime.time + cooldown after casting each time.
-// This way we don't need an extra Update method that increases the elapsed time
-// for each skill all the time.
+// 'end' Time variable to Time.time + cooldown after casting each time. This
+// way we don't need an extra Update method that increases the elapsed time for
+// each skill all the time.
 using System;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Skill
@@ -26,8 +25,8 @@ public partial struct Skill
 
     // dynamic stats (cooldowns etc.)
     public int level; // 0 if not learned, >0 if learned
-    public double castTimeEnd; // server time. double for long term precision.
-    public double cooldownEnd; // server time. double for long term precision.
+    public float castTimeEnd; // server time
+    public float cooldownEnd; // server time
 
     // constructors
     public Skill(ScriptableSkill data)
@@ -38,23 +37,11 @@ public partial struct Skill
         level = data.learnDefault ? 1 : 0;
 
         // ready immediately
-        castTimeEnd = cooldownEnd = NetworkTime.time;
+        castTimeEnd = cooldownEnd = Time.time;
     }
 
     // wrappers for easier access
-    public ScriptableSkill data
-    {
-        get
-        {
-            // show a useful error message if the key can't be found
-            // note: ScriptableSkill.OnValidate 'is in resource folder' check
-            //       causes Unity SendMessage warnings and false positives.
-            //       this solution is a lot better.
-            if (!ScriptableSkill.dict.ContainsKey(hash))
-                throw new KeyNotFoundException("There is no ScriptableSkill with hash=" + hash + ". Make sure that all ScriptableSkills are in the Resources folder so they are loaded properly.");
-            return ScriptableSkill.dict[hash];
-        }
-    }
+    public ScriptableSkill data { get { return ScriptableSkill.dict[hash]; } }
     public string name { get { return data.name; } }
     public float castTime { get { return data.castTime.Get(level); } }
     public float cooldown { get { return data.cooldown.Get(level); } }
@@ -67,17 +54,11 @@ public partial struct Skill
     public bool cancelCastIfTargetDied { get { return data.cancelCastIfTargetDied; } }
     public int maxLevel { get { return data.maxLevel; } }
     public ScriptableSkill predecessor { get { return data.predecessor; } }
-    public int predecessorLevel { get { return data.predecessorLevel; } }
     public bool requiresWeapon { get { return data.requiresWeapon; } }
-    public int upgradeRequiredLevel { get { return data.requiredLevel.Get(level+1); } }
-    public long upgradeRequiredSkillExperience { get { return data.requiredSkillExperience.Get(level+1); } }
+    public int upgradeRequiredLevel { get { return data.requiredLevel.Get(level + 1); } }
+    public long upgradeRequiredSkillExperience { get { return data.requiredSkillExperience.Get(level + 1); } }
 
     // events
-    public bool CheckSelf(Entity caster, bool checkSkillReady=true)
-    {
-        return (!checkSkillReady || IsReady()) &&
-               data.CheckSelf(caster, level);
-    }
     public bool CheckTarget(Entity caster) { return data.CheckTarget(caster); }
     public bool CheckDistance(Entity caster, out Vector3 destination) { return data.CheckDistance(caster, level, out destination); }
     public void Apply(Entity caster) { data.Apply(caster, level); }
@@ -85,12 +66,9 @@ public partial struct Skill
     // tooltip - dynamic part
     public string ToolTip(bool showRequirements = false)
     {
-        // unlearned skills (level 0) should still show tooltip for level 1
-        int showLevel = Mathf.Max(level, 1);
-
         // we use a StringBuilder so that addons can modify tooltips later too
         // ('string' itself can't be passed as a mutable object)
-        StringBuilder tip = new StringBuilder(data.ToolTip(showLevel, showRequirements));
+        StringBuilder tip = new StringBuilder(data.ToolTip(level, showRequirements));
 
         // addon system hooks
         Utils.InvokeMany(typeof(Skill), this, "ToolTip_", tip);
@@ -109,7 +87,7 @@ public partial struct Skill
     public float CastTimeRemaining()
     {
         // how much time remaining until the casttime ends? (using server time)
-        return NetworkTime.time >= castTimeEnd ? 0 : (float)(castTimeEnd - NetworkTime.time);
+        return NetworkTime.time >= castTimeEnd ? 0 : castTimeEnd - NetworkTime.time;
     }
 
     public bool IsCasting()
@@ -121,7 +99,7 @@ public partial struct Skill
     public float CooldownRemaining()
     {
         // how much time remaining until the cooldown ends? (using server time)
-        return NetworkTime.time >= cooldownEnd ? 0 : (float)(cooldownEnd - NetworkTime.time);
+        return NetworkTime.time >= cooldownEnd ? 0 : cooldownEnd - NetworkTime.time;
     }
 
     public bool IsReady()
@@ -130,4 +108,4 @@ public partial struct Skill
     }
 }
 
-public class SyncListSkill : SyncListSTRUCT<Skill> {}
+public class SyncListSkill : SyncListStruct<Skill> { }

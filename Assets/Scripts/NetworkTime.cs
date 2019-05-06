@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 // until the next sync. so let's sync relatively often so the client is usually
 // perfectly in sync.
 // (reliable is important, we really do need the time all the time)
-[NetworkSettings(sendInterval=5)]
+[NetworkSettings(sendInterval = 5)]
 public class NetworkTime : NetworkBehaviour
 {
     // add offset to Time.time to get the server time

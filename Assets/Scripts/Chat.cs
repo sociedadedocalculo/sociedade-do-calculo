@@ -13,9 +13,8 @@
 //
 // _Note: the channel names, colors and commands can be edited in the Inspector_
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public class ChannelInfo
@@ -59,12 +58,13 @@ public class ChatMessage
     }
 }
 
-[NetworkSettings]
+[NetworkSettings(channel = Channels.DefaultUnreliable)]
 public partial class Chat : NetworkBehaviour
 {
     [Header("Components")] // to be assigned in inspector
     public Player player;
     public NetworkIdentity netIdentity;
+    UIChat chat;
 
     [Header("Channels")]
     public ChannelInfo whisper = new ChannelInfo("/w", "(TO)", "(FROM)", Color.magenta);
@@ -78,15 +78,20 @@ public partial class Chat : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
+        // cache the UI chat component so we don't have to call FindObject each time
+        // -> only the local player needs it, no reason to waste computations for
+        //    all players here
+        chat = FindObjectOfType<UIChat>();
+
         // test messages
-        UIChat.singleton.AddMessage(new ChatMessage("", info.identifierIn, "Use /w NAME to whisper", "",  info.color));
-        UIChat.singleton.AddMessage(new ChatMessage("", info.identifierIn, "Use /p for party chat", "",  info.color));
-        UIChat.singleton.AddMessage(new ChatMessage("", info.identifierIn, "Use /g for guild chat", "",  info.color));
-        UIChat.singleton.AddMessage(new ChatMessage("", info.identifierIn, "Or click on a message to reply", "",  info.color));
-        UIChat.singleton.AddMessage(new ChatMessage("Someone", guild.identifierIn, "Anyone here?", "/g ",  guild.color));
-        UIChat.singleton.AddMessage(new ChatMessage("Someone", party.identifierIn, "Let's hunt!", "/p ",  party.color));
-        UIChat.singleton.AddMessage(new ChatMessage("Someone", whisper.identifierIn, "Are you there?", "/w Someone ",  whisper.color));
-        UIChat.singleton.AddMessage(new ChatMessage("Someone", local.identifierIn, "Hello!", "/w Someone ",  local.color));
+        chat.AddMessage(new ChatMessage("", info.identifierIn, "Just type a message here to chat!", "", info.color));
+        chat.AddMessage(new ChatMessage("", info.identifierIn, "  Use /g for guild chat", "", info.color));
+        chat.AddMessage(new ChatMessage("", info.identifierIn, "  Use /w NAME to whisper a player", "", info.color));
+        chat.AddMessage(new ChatMessage("", info.identifierIn, "  Or click on a message to reply", "", info.color));
+        chat.AddMessage(new ChatMessage("Someone", guild.identifierIn, "Anyone here?", "/g ", guild.color));
+        chat.AddMessage(new ChatMessage("Someone", party.identifierIn, "Let's hunt!", "/p ", party.color));
+        chat.AddMessage(new ChatMessage("Someone", whisper.identifierIn, "Are you there?", "/w Someone ", whisper.color));
+        chat.AddMessage(new ChatMessage("Someone", local.identifierIn, "Hello!", "/w Someone ", local.color));
 
         // addon system hooks
         Utils.InvokeMany(typeof(Chat), this, "OnStartLocalPlayer_");
@@ -178,28 +183,29 @@ public partial class Chat : NetworkBehaviour
             if (i >= 0)
             {
                 string user = content.Substring(0, i);
-                string msg = content.Substring(i+1);
-                return new string[] {user, msg};
+                string msg = content.Substring(i + 1);
+                return new string[] { user, msg };
             }
         }
-        return new string[] {"", ""};
+        return new string[] { "", "" };
     }
 
     // networking //////////////////////////////////////////////////////////////
-    [Command]
+    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
     void CmdMsgLocal(string message)
     {
         if (message.Length > maxLength) return;
 
         // it's local chat, so let's send it to all observers via TargetRpc
-        foreach (KeyValuePair<int, NetworkConnection> kvp in netIdentity.observers)
+        foreach (NetworkConnection conn in netIdentity.observers)
         {
             // call TargetRpc on that GameObject for that connection
-            kvp.Value.playerController.GetComponent<Chat>().TargetMsgLocal(kvp.Value, name, message);
+            GameObject go = Utils.GetGameObjectFromPlayerControllers(conn.playerControllers);
+            go.GetComponent<Chat>().TargetMsgLocal(conn, name, message);
         }
     }
 
-    [Command]
+    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
     void CmdMsgParty(string message)
     {
         if (message.Length > maxLength) return;
@@ -219,7 +225,7 @@ public partial class Chat : NetworkBehaviour
         }
     }
 
-    [Command]
+    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
     void CmdMsgGuild(string message)
     {
         if (message.Length > maxLength) return;
@@ -239,7 +245,7 @@ public partial class Chat : NetworkBehaviour
         }
     }
 
-    [Command]
+    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
     void CmdMsgWhisper(string playerName, string message)
     {
         if (message.Length > maxLength) return;
@@ -256,50 +262,50 @@ public partial class Chat : NetworkBehaviour
     }
 
     // message handlers ////////////////////////////////////////////////////////
-    [TargetRpc]
+    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
     public void TargetMsgWhisperFrom(NetworkConnection target, string sender, string message)
     {
         // add message with identifierIn
         string identifier = whisper.identifierIn;
         string reply = whisper.command + " " + sender + " "; // whisper
-        UIChat.singleton.AddMessage(new ChatMessage(sender, identifier, message, reply, whisper.color));
+        chat.AddMessage(new ChatMessage(sender, identifier, message, reply, whisper.color));
     }
 
-    [TargetRpc]
+    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
     public void TargetMsgWhisperTo(NetworkConnection target, string receiver, string message)
     {
         // add message with identifierOut
         string identifier = whisper.identifierOut;
         string reply = whisper.command + " " + receiver + " "; // whisper
-        UIChat.singleton.AddMessage(new ChatMessage(receiver, identifier, message, reply, whisper.color));
+        chat.AddMessage(new ChatMessage(receiver, identifier, message, reply, whisper.color));
     }
 
-    [TargetRpc] // send to observers
+    [TargetRpc(channel = Channels.DefaultUnreliable)] // send to observers
     public void TargetMsgLocal(NetworkConnection target, string sender, string message)
     {
         // add message with identifierIn or Out depending on who sent it
         string identifier = sender != name ? local.identifierIn : local.identifierOut;
         string reply = whisper.command + " " + sender + " "; // whisper
-        UIChat.singleton.AddMessage(new ChatMessage(sender, identifier, message, reply, local.color));
+        chat.AddMessage(new ChatMessage(sender, identifier, message, reply, local.color));
     }
 
-    [TargetRpc]
+    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
     public void TargetMsgGuild(NetworkConnection target, string sender, string message)
     {
         string reply = whisper.command + " " + sender + " "; // whisper
-        UIChat.singleton.AddMessage(new ChatMessage(sender, guild.identifierIn, message, reply, guild.color));
+        chat.AddMessage(new ChatMessage(sender, guild.identifierIn, message, reply, guild.color));
     }
 
-    [TargetRpc]
+    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
     public void TargetMsgParty(NetworkConnection target, string sender, string message)
     {
         string reply = whisper.command + " " + sender + " "; // whisper
-        UIChat.singleton.AddMessage(new ChatMessage(sender, party.identifierIn, message, reply, party.color));
+        chat.AddMessage(new ChatMessage(sender, party.identifierIn, message, reply, party.color));
     }
 
-    [TargetRpc]
+    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
     public void TargetMsgInfo(NetworkConnection target, string message)
     {
-        UIChat.singleton.AddMessage(new ChatMessage("", info.identifierIn, message, "", info.color));
+        chat.AddMessage(new ChatMessage("", info.identifierIn, message, "", info.color));
     }
 }

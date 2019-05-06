@@ -1,8 +1,8 @@
 ﻿using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
-[CreateAssetMenu(menuName="uMMORPG Skill/Target Heal", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Skill/Target Heal", order = 999)]
 public class TargetHealSkill : HealSkillTemplate
 {
     public bool canHealSelf = true;
@@ -50,7 +50,7 @@ public class TargetHealSkill : HealSkillTemplate
         // target still around?
         if (caster.target != null)
         {
-            destination = caster.target.collider.ClosestPoint(caster.transform.position);
+            destination = caster.target.collider.ClosestPointOnBounds(caster.transform.position);
             return Utils.ClosestDistance(caster.collider, caster.target.collider) <= castRange.Get(skillLevel);
         }
         destination = caster.transform.position;

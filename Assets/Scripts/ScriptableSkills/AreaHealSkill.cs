@@ -3,9 +3,9 @@
 // => monster heals monsters in cast range
 using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
-[CreateAssetMenu(menuName="uMMORPG Skill/Area Heal", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Skill/Area Heal", order = 999)]
 public class AreaHealSkill : HealSkillTemplate
 {
     public override bool CheckTarget(Entity caster)

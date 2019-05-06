@@ -27,11 +27,10 @@
 // will always be generated randomly. Monsters can also randomly generate loot
 // gold between a minimum and a maximum amount.
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 using System.Linq;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(NetworkNavMeshAgent))]
 public partial class Monster : Entity
 {
     [Header("Movement")]
@@ -42,7 +41,6 @@ public partial class Monster : Entity
     // attack range, so that archers will always pull aggro, even when attacking
     // from far away.
     public float followDistance = 20;
-    [Range(0.1f, 1)] public float attackToMoveRangeRatio = 0.8f; // move as close as 0.8 * attackRange to a target
 
     [Header("Experience Reward")]
     public long rewardExperience = 10;
@@ -58,10 +56,10 @@ public partial class Monster : Entity
 
     [Header("Respawn")]
     public float deathTime = 30f; // enough for animation & looting
-    double deathTimeEnd; // double for long term precision
+    float deathTimeEnd;
     public bool respawn = true;
     public float respawnTime = 10f;
-    double respawnTimeEnd; // double for long term precision
+    float respawnTimeEnd;
 
     // save the start position for random movement distance and respawning
     Vector3 startPosition;
@@ -124,7 +122,6 @@ public partial class Monster : Entity
         {
             animator.SetBool("MOVING", state == "MOVING" && agent.velocity != Vector3.zero);
             animator.SetBool("CASTING", state == "CASTING");
-            animator.SetBool("STUNNED", state == "STUNNED");
             animator.SetBool("DEAD", state == "DEAD");
             foreach (Skill skill in skills)
                 animator.SetBool(skill.name, skill.CastTimeRemaining() > 0);
@@ -156,12 +153,12 @@ public partial class Monster : Entity
 
     bool EventDeathTimeElapsed()
     {
-        return state == "DEAD" && NetworkTime.time >= deathTimeEnd;
+        return state == "DEAD" && Time.time >= deathTimeEnd;
     }
 
     bool EventRespawnTimeElapsed()
     {
-        return state == "DEAD" && respawn && NetworkTime.time >= respawnTimeEnd;
+        return state == "DEAD" && respawn && Time.time >= respawnTimeEnd;
     }
 
     bool EventTargetDisappeared()
@@ -185,12 +182,7 @@ public partial class Monster : Entity
     bool EventTargetTooFarToFollow()
     {
         return target != null &&
-               Vector3.Distance(startPosition, target.collider.ClosestPoint(transform.position)) > followDistance;
-    }
-
-    bool EventTargetEnteredSafeZone()
-    {
-        return target != null && target.inSafeZone;
+               Vector3.Distance(startPosition, target.collider.ClosestPointOnBounds(transform.position)) > followDistance;
     }
 
     bool EventAggro()
@@ -219,11 +211,6 @@ public partial class Monster : Entity
         return Random.value <= moveProbability * Time.deltaTime;
     }
 
-    bool EventStunned()
-    {
-        return NetworkTime.time <= stunTimeEnd;
-    }
-
     // finite state machine - server ///////////////////////////////////////////
     [Server]
     string UpdateServer_IDLE()
@@ -233,12 +220,8 @@ public partial class Monster : Entity
         {
             // we died.
             OnDeath();
+            currentSkill = -1; // in case we died while trying to cast
             return "DEAD";
-        }
-        if (EventStunned())
-        {
-            agent.ResetMovement();
-            return "STUNNED";
         }
         if (EventTargetDied())
         {
@@ -261,26 +244,9 @@ public partial class Monster : Entity
         {
             // we had a target before, but it's out of attack range now.
             // follow it. (use collider point(s) to also work with big entities)
-            agent.stoppingDistance = CurrentCastRange() * attackToMoveRangeRatio;
-            agent.destination = target.collider.ClosestPoint(transform.position);
+            agent.stoppingDistance = CurrentCastRange() * 0.8f;
+            agent.destination = target.collider.ClosestPointOnBounds(transform.position);
             return "MOVING";
-        }
-        if (EventTargetEnteredSafeZone())
-        {
-            // if our target entered the safe zone, we need to be really careful
-            // to avoid kiting.
-            // -> players could pull a monster near a safe zone and then step in
-            //    and out of it before/after attacks without ever getting hit by
-            //    the monster
-            // -> running back to start won't help, can still kit while running
-            // -> warping back to start won't help, we might accidentally placed
-            //    a monster in attack range of a safe zone
-            // -> the 100% secure way is to die and hide it immediately. many
-            //    popular MMOs do it the same way to avoid exploits.
-            // => call Entity.OnDeath without rewards etc. and hide immediately
-            base.OnDeath(); // no looting
-            respawnTimeEnd = NetworkTime.time + respawnTime; // respawn in a while
-            return "DEAD";
         }
         if (EventSkillRequest())
         {
@@ -289,8 +255,9 @@ public partial class Monster : Entity
             Skill skill = skills[currentSkill];
             if (CastCheckSelf(skill) && CastCheckTarget(skill))
             {
-                // start casting
-                StartCastSkill(skill);
+                // start casting and set the casting end time
+                skill.castTimeEnd = Time.time + skill.castTime;
+                skills[currentSkill] = skill;
                 return "CASTING";
             }
             else
@@ -317,11 +284,11 @@ public partial class Monster : Entity
             agent.destination = startPosition + new Vector3(circle2D.x, 0, circle2D.y);
             return "MOVING";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
-        if (EventRespawnTimeElapsed()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
+        if (EventRespawnTimeElapsed()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
 
         return "IDLE"; // nothing interesting happened
     }
@@ -334,13 +301,9 @@ public partial class Monster : Entity
         {
             // we died.
             OnDeath();
-            agent.ResetMovement();
+            currentSkill = -1; // in case we died while trying to cast
+            agent.ResetPath();
             return "DEAD";
-        }
-        if (EventStunned())
-        {
-            agent.ResetMovement();
-            return "STUNNED";
         }
         if (EventMoveEnd())
         {
@@ -352,7 +315,7 @@ public partial class Monster : Entity
             // we had a target before, but it died now. clear it.
             target = null;
             currentSkill = -1;
-            agent.ResetMovement();
+            agent.ResetPath();
             return "IDLE";
         }
         if (EventTargetTooFarToFollow())
@@ -369,26 +332,9 @@ public partial class Monster : Entity
         {
             // we had a target before, but it's out of attack range now.
             // follow it. (use collider point(s) to also work with big entities)
-            agent.stoppingDistance = CurrentCastRange() * attackToMoveRangeRatio;
-            agent.destination = target.collider.ClosestPoint(transform.position);
+            agent.stoppingDistance = CurrentCastRange() * 0.8f;
+            agent.destination = target.collider.ClosestPointOnBounds(transform.position);
             return "MOVING";
-        }
-        if (EventTargetEnteredSafeZone())
-        {
-            // if our target entered the safe zone, we need to be really careful
-            // to avoid kiting.
-            // -> players could pull a monster near a safe zone and then step in
-            //    and out of it before/after attacks without ever getting hit by
-            //    the monster
-            // -> running back to start won't help, can still kit while running
-            // -> warping back to start won't help, we might accidentally placed
-            //    a monster in attack range of a safe zone
-            // -> the 100% secure way is to die and hide it immediately. many
-            //    popular MMOs do it the same way to avoid exploits.
-            // => call Entity.OnDeath without rewards etc. and hide immediately
-            base.OnDeath(); // no looting
-            respawnTimeEnd = NetworkTime.time + respawnTime; // respawn in a while
-            return "DEAD";
         }
         if (EventAggro())
         {
@@ -396,15 +342,15 @@ public partial class Monster : Entity
             // (we may get a target while randomly wandering around)
             if (skills.Count > 0) currentSkill = NextSkill();
             else Debug.LogError(name + " has no skills to attack with.");
-            agent.ResetMovement();
+            agent.ResetPath();
             return "IDLE";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
-        if (EventRespawnTimeElapsed()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
-        if (EventSkillRequest()) {} // don't care, finish movement first
-        if (EventMoveRandomly()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
+        if (EventRespawnTimeElapsed()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventSkillRequest()) { } // don't care, finish movement first
+        if (EventMoveRandomly()) { } // don't care
 
         return "MOVING"; // nothing interesting happened
     }
@@ -420,13 +366,8 @@ public partial class Monster : Entity
         {
             // we died.
             OnDeath();
+            currentSkill = -1; // in case we died while trying to cast
             return "DEAD";
-        }
-        if (EventStunned())
-        {
-            currentSkill = -1;
-            agent.ResetMovement();
-            return "STUNNED";
         }
         if (EventTargetDisappeared())
         {
@@ -448,31 +389,10 @@ public partial class Monster : Entity
                 return "IDLE";
             }
         }
-        if (EventTargetEnteredSafeZone())
-        {
-            // cancel if the target matters for this skill
-            if (skills[currentSkill].cancelCastIfTargetDied)
-            {
-                // if our target entered the safe zone, we need to be really careful
-                // to avoid kiting.
-                // -> players could pull a monster near a safe zone and then step in
-                //    and out of it before/after attacks without ever getting hit by
-                //    the monster
-                // -> running back to start won't help, can still kit while running
-                // -> warping back to start won't help, we might accidentally placed
-                //    a monster in attack range of a safe zone
-                // -> the 100% secure way is to die and hide it immediately. many
-                //    popular MMOs do it the same way to avoid exploits.
-                // => call Entity.OnDeath without rewards etc. and hide immediately
-                base.OnDeath(); // no looting
-                respawnTimeEnd = NetworkTime.time + respawnTime; // respawn in a while
-                return "DEAD";
-            }
-        }
         if (EventSkillFinished())
         {
             // finished casting. apply the skill on the target.
-            FinishCastSkill(skills[currentSkill]);
+            CastSkill(skills[currentSkill]);
 
             // did the target die? then clear it so that the monster doesn't
             // run towards it if the target respawned
@@ -483,36 +403,16 @@ public partial class Monster : Entity
             currentSkill = -1;
             return "IDLE";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
-        if (EventRespawnTimeElapsed()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventTargetTooFarToAttack()) {} // don't care, we were close enough when starting to cast
-        if (EventTargetTooFarToFollow()) {} // don't care, we were close enough when starting to cast
-        if (EventAggro()) {} // don't care, always have aggro while casting
-        if (EventSkillRequest()) {} // don't care, that's why we are here
-        if (EventMoveRandomly()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
+        if (EventRespawnTimeElapsed()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventTargetTooFarToAttack()) { } // don't care, we were close enough when starting to cast
+        if (EventTargetTooFarToFollow()) { } // don't care, we were close enough when starting to cast
+        if (EventAggro()) { } // don't care, always have aggro while casting
+        if (EventSkillRequest()) { } // don't care, that's why we are here
+        if (EventMoveRandomly()) { } // don't care
 
         return "CASTING"; // nothing interesting happened
-    }
-
-    [Server]
-    string UpdateServer_STUNNED()
-    {
-        // events sorted by priority (e.g. target doesn't matter if we died)
-        if (EventDied())
-        {
-            // we died.
-            OnDeath();
-            return "DEAD";
-        }
-        if (EventStunned())
-        {
-            return "STUNNED";
-        }
-
-        // go back to idle if we aren't stunned anymore and process all new
-        // events there too
-        return "IDLE";
     }
 
     [Server]
@@ -537,18 +437,16 @@ public partial class Monster : Entity
             else NetworkServer.Destroy(gameObject);
             return "DEAD";
         }
-        if (EventSkillRequest()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
-        if (EventTargetDied()) {} // don't care
-        if (EventTargetTooFarToFollow()) {} // don't care
-        if (EventTargetTooFarToAttack()) {} // don't care
-        if (EventTargetEnteredSafeZone()) {} // don't care
-        if (EventAggro()) {} // don't care
-        if (EventMoveRandomly()) {} // don't care
-        if (EventStunned()) {} // don't care
-        if (EventDied()) {} // don't care, of course we are dead
+        if (EventSkillRequest()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventTargetTooFarToFollow()) { } // don't care
+        if (EventTargetTooFarToAttack()) { } // don't care
+        if (EventAggro()) { } // don't care
+        if (EventMoveRandomly()) { } // don't care
+        if (EventDied()) { } // don't care, of course we are dead
 
         return "DEAD"; // nothing interesting happened
     }
@@ -556,11 +454,10 @@ public partial class Monster : Entity
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE")    return UpdateServer_IDLE();
-        if (state == "MOVING")  return UpdateServer_MOVING();
+        if (state == "IDLE") return UpdateServer_IDLE();
+        if (state == "MOVING") return UpdateServer_MOVING();
         if (state == "CASTING") return UpdateServer_CASTING();
-        if (state == "STUNNED") return UpdateServer_STUNNED();
-        if (state == "DEAD")    return UpdateServer_DEAD();
+        if (state == "DEAD") return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
     }
@@ -630,7 +527,7 @@ public partial class Monster : Entity
         // that everything works fine even if a monster isn't updated for a
         // while. so as soon as it's updated again, the death/respawn will
         // happen immediately if current time > end time.
-        deathTimeEnd = NetworkTime.time + deathTime;
+        deathTimeEnd = Time.time + deathTime;
         respawnTimeEnd = deathTimeEnd + respawnTime; // after death time ended
 
         // generate gold
@@ -653,7 +550,9 @@ public partial class Monster : Entity
     // we use 'is' instead of 'GetType' so that it works for inherited types too
     public override bool CanAttack(Entity entity)
     {
-        return base.CanAttack(entity) &&
+        return health > 0 &&
+               entity.health > 0 &&
+               entity != this &&
                (entity is Player ||
                 entity is Pet);
     }

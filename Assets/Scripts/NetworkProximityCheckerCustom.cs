@@ -34,36 +34,36 @@ public class NetworkProximityCheckerCustom : NetworkProximityChecker
         switch (checkMethod)
         {
             case CheckMethod.Physics3D:
-            {
-                var hits = Physics.OverlapSphere(transform.position, visRange, castLayers);
-                foreach (var hit in hits)
                 {
-                    // (if an object has a connectionToClient, it is a player)
-                    //var uv = hit.GetComponent<NetworkIdentity>();             <----- DEFAULT
-                    var uv = hit.GetComponentInParent<NetworkIdentity>(); //    <----- MODIFIED
-                    if (uv != null && uv.connectionToClient != null)
+                    var hits = Physics.OverlapSphere(transform.position, visRange, castLayers);
+                    foreach (var hit in hits)
                     {
-                        observers.Add(uv.connectionToClient);
+                        // (if an object has a connectionToClient, it is a player)
+                        //var uv = hit.GetComponent<NetworkIdentity>();             <----- DEFAULT
+                        var uv = hit.GetComponentInParent<NetworkIdentity>(); //    <----- MODIFIED
+                        if (uv != null && uv.connectionToClient != null)
+                        {
+                            observers.Add(uv.connectionToClient);
+                        }
                     }
+                    return true;
                 }
-                return true;
-            }
 
             case CheckMethod.Physics2D:
-            {
-                var hits = Physics2D.OverlapCircleAll(transform.position, visRange, castLayers);
-                foreach (var hit in hits)
                 {
-                    // (if an object has a connectionToClient, it is a player)
-                    //var uv = hit.GetComponent<NetworkIdentity>();             <----- DEFAULT
-                    var uv = hit.GetComponentInParent<NetworkIdentity>(); //    <----- MODIFIED
-                    if (uv != null && uv.connectionToClient != null)
+                    var hits = Physics2D.OverlapCircleAll(transform.position, visRange, castLayers);
+                    foreach (var hit in hits)
                     {
-                        observers.Add(uv.connectionToClient);
+                        // (if an object has a connectionToClient, it is a player)
+                        //var uv = hit.GetComponent<NetworkIdentity>();             <----- DEFAULT
+                        var uv = hit.GetComponentInParent<NetworkIdentity>(); //    <----- MODIFIED
+                        if (uv != null && uv.connectionToClient != null)
+                        {
+                            observers.Add(uv.connectionToClient);
+                        }
                     }
+                    return true;
                 }
-                return true;
-            }
         }
         return false;
     }

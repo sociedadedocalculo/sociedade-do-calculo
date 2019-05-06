@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
-[CreateAssetMenu(menuName="uMMORPG Skill/Target Buff", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Skill/Target Buff", order = 999)]
 public class TargetBuffSkill : BuffSkill
 {
     public bool canBuffSelf = true;
@@ -61,7 +61,7 @@ public class TargetBuffSkill : BuffSkill
         // target still around?
         if (caster.target != null)
         {
-            destination = caster.target.collider.ClosestPoint(caster.transform.position);
+            destination = caster.target.collider.ClosestPointOnBounds(caster.transform.position);
             return Utils.ClosestDistance(caster.collider, caster.target.collider) <= castRange.Get(skillLevel);
         }
         destination = caster.transform.position;
