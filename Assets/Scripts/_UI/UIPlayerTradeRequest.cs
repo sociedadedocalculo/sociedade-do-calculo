@@ -12,7 +12,7 @@ public partial class UIPlayerTradeRequest : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // only if there is a request and if not accepted already

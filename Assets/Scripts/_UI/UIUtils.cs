@@ -17,7 +17,7 @@ public class UIUtils
 
         // delete everything that's too much
         // (backwards loop because Destroy changes childCount)
-        for (int i = parent.childCount-1; i >= amount; --i)
+        for (int i = parent.childCount - 1; i >= amount; --i)
             GameObject.Destroy(parent.GetChild(i).gameObject);
     }
 

@@ -17,7 +17,7 @@ public partial class UIInventory : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // hotkey (not while typing in chat, etc.)

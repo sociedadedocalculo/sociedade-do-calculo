@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 644f8f76e6ad54018a17405aa08191ee, type: 3}
+  m_Name: Missao 2
+  m_EditorClassIdentifier: 
+  toolTip: "<b>{NAME}</b>\n\nTendo em vista esse gr\xE1fico, podemos afirmar que...\n\nKill
+    some {KILLTARGET}s\nto prove your strength!\n\nTasks:\n* Kill {KILLTARGET}: {KILLED}/{KILLAMOUNT}\n\nRewards:\n*
+    {REWARDGOLD} Gold\n* {REWARDEXPERIENCE} Experience\n* {REWARDITEM}\n\n{STATUS}"
+  requiredLevel: 3
+  predecessor: {fileID: 11400000, guid: 1ea6fa225f25c4bb7a3dd4166675a80b, type: 2}
+  rewardGold: 100
+  rewardExperience: 70
+  rewardItem: {fileID: 11400000, guid: 23bf22ba24d3447968ce8b813ab51fb4, type: 2}
+  killTarget: {fileID: 11474358, guid: 68fb15ce5f2e7eb44a8ac123d853b91a, type: 2}
+  killAmount: 0
+  gatherItem: {fileID: 0}
+  gatherAmount: 0

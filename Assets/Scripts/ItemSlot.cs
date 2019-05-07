@@ -53,4 +53,10 @@ public partial struct ItemSlot
     }
 }
 
-public class SyncListItemSlot : SyncListSTRUCT<ItemSlot> {}
+public class SyncListItemSlot : SyncListSTRUCT<ItemSlot>
+{
+    internal int FindIndex(Func<object, object> p)
+    {
+        throw new NotImplementedException();
+    }
+}

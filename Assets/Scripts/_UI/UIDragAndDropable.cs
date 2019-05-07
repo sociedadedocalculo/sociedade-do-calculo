@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIDragAndDropable : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class UIDragAndDropable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
     // drag options
     public PointerEventData.InputButton button = PointerEventData.InputButton.Left;
@@ -53,16 +53,16 @@ public class UIDragAndDropable : MonoBehaviour , IBeginDragHandler, IDragHandler
         {
             // try destroy if not dragged to a slot (flag will be set by slot)
             // message is sent to drag and drop handler for game specifics
-            // -> only if dropping it into nirvana. do nothing if we just drop
-            //    it on a panel. otherwise item slots are cleared if we
-            //    accidentally drop it on the panel between two slots
-            if (!draggedToSlot && d.pointerEnter == null)
+            // (we also check d.pointerEnter because dropping a slot on itself
+            //  is not detected as a drop. it shouldnt call clear either though)
+            if (!draggedToSlot && d.pointerEnter != gameObject)
             {
                 // send a drag and clear message like
                 // OnDragAndClear_Skillbar({index})
-                Player.localPlayer.SendMessage("OnDragAndClear_" + tag,
-                                               name.ToInt(),
-                                               SendMessageOptions.DontRequireReceiver);
+                Player player = Utils.ClientLocalPlayer();
+                player.SendMessage("OnDragAndClear_" + tag,
+                                   name.ToInt(),
+                                   SendMessageOptions.DontRequireReceiver);
             }
 
             // reset flag
@@ -79,10 +79,9 @@ public class UIDragAndDropable : MonoBehaviour , IBeginDragHandler, IDragHandler
         // one mouse button is enough for drag and drop
         if (dropable && d.button == button)
         {
-            // was the dropped GameObject a UIDragAndDropable and was it dragable?
-            // (Unity calls OnDrop even if .dragable was false)
+            // was the dropped GameObject a UIDragAndDropable?
             UIDragAndDropable dropDragable = d.pointerDrag.GetComponent<UIDragAndDropable>();
-            if (dropDragable != null && dropDragable.dragable)
+            if (dropDragable)
             {
                 // let the dragable know that it was dropped onto a slot
                 dropDragable.draggedToSlot = true;
@@ -94,11 +93,12 @@ public class UIDragAndDropable : MonoBehaviour , IBeginDragHandler, IDragHandler
                 {
                     // send a drag and drop message like
                     // OnDragAndDrop_Skillbar_Inventory({from, to})
+                    Player player = Utils.ClientLocalPlayer();
                     int from = dropDragable.name.ToInt();
                     int to = name.ToInt();
-                    Player.localPlayer.SendMessage("OnDragAndDrop_" + dropDragable.tag + "_" + tag,
-                                                   new int[]{from, to},
-                                                   SendMessageOptions.DontRequireReceiver);
+                    player.SendMessage("OnDragAndDrop_" + dropDragable.tag + "_" + tag,
+                                       new int[] { from, to },
+                                       SendMessageOptions.DontRequireReceiver);
                 }
             }
         }

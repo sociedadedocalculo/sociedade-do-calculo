@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 
-[CreateAssetMenu(menuName="uMMORPG Item/Monster Scroll", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Item/Monster Scroll", order = 999)]
 public class MonsterScrollItem : UsableItem
 {
     [Serializable]

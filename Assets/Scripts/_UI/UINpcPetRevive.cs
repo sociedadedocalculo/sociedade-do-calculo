@@ -14,7 +14,7 @@ public partial class UINpcPetRevive : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // use collider point(s) to also work with big entities

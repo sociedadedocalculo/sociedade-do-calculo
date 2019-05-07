@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-[CreateAssetMenu(menuName="uMMORPG Item/Pet", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Item/Pet", order = 999)]
 public class PetItem : UsableItem
 {
     [Header("Pet")]

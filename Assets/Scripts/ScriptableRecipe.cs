@@ -18,7 +18,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-[CreateAssetMenu(fileName="New Recipe", menuName="uMMORPG Recipe", order=999)]
+[CreateAssetMenu(fileName = "New Recipe", menuName = "uMMORPG Recipe", order = 999)]
 public class ScriptableRecipe : ScriptableObject
 {
     // fixed ingredient size for all recipes
@@ -27,12 +27,6 @@ public class ScriptableRecipe : ScriptableObject
     // ingredients and result
     public List<ScriptableItem> ingredients = new List<ScriptableItem>(6);
     public ScriptableItem result;
-
-    // crafting time in seconds
-    public float craftingTime = 1;
-
-    // probability of success
-    [Range(0, 1)] public float probability = 1;
 
     // check if the list of items works for this recipe. the list shouldn't
     // contain 'null'.

@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using UnityEngine;
 
-[CreateAssetMenu(menuName="uMMORPG Item/Potion", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Item/Potion", order = 999)]
 public class PotionItem : UsableItem
 {
     [Header("Potion")]

@@ -12,13 +12,14 @@ public partial class UILoot : MonoBehaviour
     public GameObject goldSlot;
     public Text goldText;
     public UILootSlot itemSlotPrefab;
+    public UILootSlot amount;
     public Transform content;
 
     public UILoot() { singleton = this; }
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // use collider point(s) to also work with big entities

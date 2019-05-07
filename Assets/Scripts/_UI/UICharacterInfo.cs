@@ -11,8 +11,6 @@ public partial class UICharacterInfo : MonoBehaviour
     public Text defenseText;
     public Text healthText;
     public Text manaText;
-    public Text criticalChanceText;
-    public Text blockChanceText;
     public Text speedText;
     public Text levelText;
     public Text currentExperienceText;
@@ -25,7 +23,7 @@ public partial class UICharacterInfo : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
         // hotkey (not while typing in chat, etc.)
@@ -39,8 +37,6 @@ public partial class UICharacterInfo : MonoBehaviour
             defenseText.text = player.defense.ToString();
             healthText.text = player.healthMax.ToString();
             manaText.text = player.manaMax.ToString();
-            criticalChanceText.text = (player.criticalChance * 100).ToString("F0") + "%";
-            blockChanceText.text = (player.blockChance * 100).ToString("F0") + "%";
             speedText.text = player.speed.ToString();
             levelText.text = player.level.ToString();
             currentExperienceText.text = player.experience.ToString();

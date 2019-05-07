@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using Mirror;
+using UnityEngine.Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +10,14 @@ using System.Linq;
 public static class Extensions
 {
     // string to int (returns errVal if failed)
-    public static int ToInt(this string value, int errVal=0)
+    public static int ToInt(this string value, int errVal = 0)
     {
         Int32.TryParse(value, out errVal);
         return errVal;
     }
 
     // string to long (returns errVal if failed)
-    public static long ToLong(this string value, long errVal=0)
+    public static long ToLong(this string value, long errVal = 0)
     {
         Int64.TryParse(value, out errVal);
         return errVal;
@@ -89,19 +89,6 @@ public static class Extensions
 
         // nothing worked, don't go anywhere.
         return agent.transform.position;
-    }
-
-    // NavMeshAgent's ResetPath() function clears the path, but doesn't clear
-    // the velocity immediately. This is a nightmare for finite state machines
-    // because we often reset a path, then switch to casting, which would then
-    // receive a movement event because velocity still isn't 0 until a few
-    // frames later.
-    //
-    // We need a function that truly stops all movement.
-    public static void ResetMovement(this NavMeshAgent agent)
-    {
-        agent.ResetPath();
-        agent.velocity = Vector3.zero;
     }
 
     // check if a list has duplicates

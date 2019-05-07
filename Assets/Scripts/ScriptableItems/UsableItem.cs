@@ -19,7 +19,7 @@ public abstract class UsableItem : ScriptableItem
 
     // [Client] OnUse Rpc callback for effects, sounds, etc.
     // -> can't pass slotIndex because .Use might clear it before getting here already
-    public virtual void OnUsed(Player player) {}
+    public virtual void OnUsed(Player player) { }
 
     // tooltip /////////////////////////////////////////////////////////////////
     public override string ToolTip()

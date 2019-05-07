@@ -14,10 +14,11 @@ public class UIPetStatus : MonoBehaviour
 
     void Update()
     {
-        Player player = Player.localPlayer;
+        Player player = Utils.ClientLocalPlayer();
         if (!player) return;
 
-        if (player.activePet != null) {
+        if (player.activePet != null)
+        {
             Pet pet = player.activePet;
             panel.SetActive(true);
 
@@ -44,6 +45,7 @@ public class UIPetStatus : MonoBehaviour
             unsummonButton.onClick.SetListener(() => {
                 if (player.CanUnsummonPet()) player.CmdPetUnsummon();
             });
-        } else panel.SetActive(false);
+        }
+        else panel.SetActive(false);
     }
 }
