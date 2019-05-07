@@ -895,8 +895,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Equipment
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1001 &18592154
 Prefab:
   m_ObjectHideFlags: 0
@@ -1572,11 +1572,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 32623030}
   m_CullTransparentMesh: 0
---- !u!4 &33538028 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 464138, guid: 2009974b441cb4829b4857956f47ad05,
-    type: 2}
-  m_PrefabInternal: {fileID: 1729080847}
 --- !u!1 &36225459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1893,8 +1888,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Guild
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &40835921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2481,7 +2476,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 145, z: 0}
 --- !u!1 &54649881
 GameObject:
@@ -3241,18 +3236,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e614034bc73674146993ff0bd10ead92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 74766660}
-  slotPrefab: {fileID: 114485565904470592, guid: bc446906f45fd4f8fb9703ad2051a076,
-    type: 2}
-  content: {fileID: 1834649041}
-  buySlot: {fileID: 1060475982}
-  buyAmountInput: {fileID: 1321362826}
-  buyCostsText: {fileID: 607218135}
-  buyButton: {fileID: 1261758343}
-  sellSlot: {fileID: 88697200}
-  sellAmountInput: {fileID: 1107373253}
-  sellCostsText: {fileID: 1564042728}
-  sellButton: {fileID: 380856886}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
+  buySlot: {fileID: 0}
+  buyAmountInput: {fileID: 0}
+  buyCostsText: {fileID: 0}
+  buyButton: {fileID: 0}
+  sellSlot: {fileID: 0}
+  sellAmountInput: {fileID: 0}
+  sellCostsText: {fileID: 0}
+  sellButton: {fileID: 0}
   buyIndex: -1
   sellIndex: -1
 --- !u!114 &74766663
@@ -3500,7 +3494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: 0
-  drageePrefab: {fileID: 136608, guid: d3cde8f814cb343c3be7c1a26745221c, type: 2}
+  drageePrefab: {fileID: 0}
   dragable: 1
   dropable: 1
   draggedToSlot: 0
@@ -3515,7 +3509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
+  tooltipPrefab: {fileID: 0}
   text: 
 --- !u!114 &88697202
 MonoBehaviour:
@@ -4158,10 +4152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dcd1585578764547a6340d6bb335ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 104013752}
-  itemSlot: {fileID: 969076111}
-  costsText: {fileID: 1928946940}
-  reviveButton: {fileID: 550559440}
+  panel: {fileID: 0}
+  itemSlot: {fileID: 0}
+  costsText: {fileID: 0}
+  reviveButton: {fileID: 0}
   itemIndex: -1
 --- !u!114 &104013755
 MonoBehaviour:
@@ -4283,11 +4277,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 105382046}
   m_CullTransparentMesh: 0
---- !u!4 &106618008 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 464138, guid: 2009974b441cb4829b4857956f47ad05,
-    type: 2}
-  m_PrefabInternal: {fileID: 686525463}
 --- !u!1 &110134214
 GameObject:
   m_ObjectHideFlags: 0
@@ -7165,26 +7154,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575c8304281ff4c99b82844640b19328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1481071007}
-  inventoryButton: {fileID: 1035226433}
-  inventoryPanel: {fileID: 1394922958}
-  equipmentButton: {fileID: 18503394}
-  equipmentPanel: {fileID: 275289140}
-  skillsButton: {fileID: 1675959845}
-  skillsPanel: {fileID: 357075630}
-  characterInfoButton: {fileID: 489711185}
-  characterInfoPanel: {fileID: 810881030}
-  questsButton: {fileID: 967393681}
-  questsPanel: {fileID: 395391838}
-  craftingButton: {fileID: 1215000662}
-  craftingPanel: {fileID: 1353858376}
-  guildButton: {fileID: 40835921}
-  guildPanel: {fileID: 1036824579}
-  partyButton: {fileID: 1591707438}
-  partyPanel: {fileID: 216953225}
-  itemMallButton: {fileID: 1464521199}
-  itemMallPanel: {fileID: 2018940362}
-  quitButton: {fileID: 1027869628}
+  panel: {fileID: 0}
+  inventoryButton: {fileID: 0}
+  inventoryPanel: {fileID: 0}
+  equipmentButton: {fileID: 0}
+  equipmentPanel: {fileID: 0}
+  skillsButton: {fileID: 0}
+  skillsPanel: {fileID: 0}
+  characterInfoButton: {fileID: 0}
+  characterInfoPanel: {fileID: 0}
+  questsButton: {fileID: 0}
+  questsPanel: {fileID: 0}
+  craftingButton: {fileID: 0}
+  craftingPanel: {fileID: 0}
+  guildButton: {fileID: 0}
+  guildPanel: {fileID: 0}
+  partyButton: {fileID: 0}
+  partyPanel: {fileID: 0}
+  itemMallButton: {fileID: 0}
+  itemMallPanel: {fileID: 0}
+  quitButton: {fileID: 0}
 --- !u!1 &195133542
 GameObject:
   m_ObjectHideFlags: 0
@@ -7375,20 +7364,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 103
-  panel: {fileID: 1036824579}
-  nameText: {fileID: 1290169315}
-  masterText: {fileID: 1783534015}
-  currentCapacityText: {fileID: 1564843374}
-  maximumCapacityText: {fileID: 1902349579}
-  noticeInput: {fileID: 145573797}
-  noticeEditButton: {fileID: 1964576865}
-  noticeSetButton: {fileID: 1631444447}
-  slotPrefab: {fileID: 114611570997501482, guid: 3279375200abc41ccbcd0c262e467616,
-    type: 2}
-  memberContent: {fileID: 472691011}
+  panel: {fileID: 0}
+  nameText: {fileID: 0}
+  masterText: {fileID: 0}
+  currentCapacityText: {fileID: 0}
+  maximumCapacityText: {fileID: 0}
+  noticeInput: {fileID: 0}
+  noticeEditButton: {fileID: 0}
+  noticeSetButton: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  memberContent: {fileID: 0}
   onlineColor: {r: 0, g: 1, b: 1, a: 1}
   offlineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  leaveButton: {fileID: 677700539}
+  leaveButton: {fileID: 0}
 --- !u!1001 &198504327
 Prefab:
   m_ObjectHideFlags: 0
@@ -10149,6 +10137,53 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!1001 &303301964
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1317874929}
+    m_Modifications:
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 637e34030fe3c4ecd9937b25dadad098, type: 3}
+  m_IsPrefabAsset: 0
+--- !u!4 &303301965 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400002, guid: 637e34030fe3c4ecd9937b25dadad098,
+    type: 3}
+  m_PrefabInternal: {fileID: 303301964}
 --- !u!1 &305269653
 GameObject:
   m_ObjectHideFlags: 0
@@ -10757,10 +10792,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: 'This is the trash slot. Drag items here and
-
-    they will be destroyed soon afterwards.'
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &344438991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10859,7 +10892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: 0
-  drageePrefab: {fileID: 136608, guid: d3cde8f814cb343c3be7c1a26745221c, type: 2}
+  drageePrefab: {fileID: 0}
   dragable: 1
   dropable: 1
   draggedToSlot: 0
@@ -11937,8 +11970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98b4cf61d28c495d9341c72c0a2f2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 752718777}
-  button: {fileID: 1659606973}
+  panel: {fileID: 0}
+  button: {fileID: 0}
 --- !u!1 &371918361
 GameObject:
   m_ObjectHideFlags: 0
@@ -12563,11 +12596,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33cfd595aad394fb8812c5c6603647b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1994211459}
-  healthSlider: {fileID: 61592505}
-  healthStatus: {fileID: 1219315711}
-  manaSlider: {fileID: 1511115781}
-  manaStatus: {fileID: 791443837}
 --- !u!1 &404252503
 GameObject:
   m_ObjectHideFlags: 0
@@ -13470,19 +13498,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6989a6eb2c8b44dddbfc6a6eb286ea45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 2077197889}
-  messageInput: {fileID: 2112813031}
-  sendButton: {fileID: 1586570056}
-  content: {fileID: 1378347949}
-  scrollRect: {fileID: 1007531609}
-  textPrefab: {fileID: 193954, guid: 1cd8c9ec0051d4ea0b9a0eda4eb4dc6f, type: 2}
+  panel: {fileID: 0}
+  messageInput: {fileID: 0}
+  sendButton: {fileID: 0}
+  content: {fileID: 0}
+  scrollRect: {fileID: 0}
+  textPrefab: {fileID: 0}
   activationKeys: 0d0000000f010000
   keepHistory: 100
---- !u!4 &447333050 stripped
+--- !u!4 &447333050
 Transform:
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6,
     type: 2}
-  m_PrefabInternal: {fileID: 1310241106}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1846913878}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1179832968}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &451447215
 Prefab:
   m_ObjectHideFlags: 0
@@ -13784,12 +13821,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 177fee0a98c744b8a9c519cb6fd15748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  latencyText: {fileID: 455258407}
-  goodThreshold: 0.3
-  okayThreshold: 2
-  goodColor: {r: 0, g: 1, b: 0, a: 1}
-  okayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  badColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &455258410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13801,8 +13832,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Latency (Ping)
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1 &462040694
 GameObject:
   m_ObjectHideFlags: 0
@@ -14133,7 +14164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 470925449}
   m_Layer: 0
-  m_Name: Environment
+  m_Name: Ambiente
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14539,8 +14570,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Character Info
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1 &489830698
 GameObject:
   m_ObjectHideFlags: 0
@@ -14691,12 +14722,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 490569349}
   m_CullTransparentMesh: 0
---- !u!114 &490986694 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114787814387682402, guid: 9c0d26fac4e634980916e3501b389ef6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1964816447}
-  m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
 --- !u!1 &495538936
 GameObject:
   m_ObjectHideFlags: 0
@@ -14743,10 +14768,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70141d214634b48708cd6e91ffe0cd6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1786126744}
-  slotPrefab: {fileID: 114619415743688204, guid: 292df92c92a7b438992fb0d7a2551615,
-    type: 2}
-  content: {fileID: 1786126745}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
 --- !u!1 &502760451
 GameObject:
   m_ObjectHideFlags: 0
@@ -15030,6 +15054,10 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2009974b441cb4829b4857956f47ad05, type: 2}
   m_IsPrefabAsset: 0
+--- !u!4 &511957576 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 511957575}
 --- !u!1 &512038981
 GameObject:
   m_ObjectHideFlags: 0
@@ -15677,20 +15705,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a015ce8f276b421bb92ec2360340c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiPopup: {fileID: 1165640891}
+  uiPopup: {fileID: 0}
+  uiPopupMessage: {fileID: 0}
   manager: {fileID: 0}
-  panel: {fileID: 1928168833}
-  statusText: {fileID: 647607421}
-  accountInput: {fileID: 541225833}
-  passwordInput: {fileID: 979694262}
-  serverDropdown: {fileID: 463284450}
-  loginButton: {fileID: 13168052}
-  registerButton: {fileID: 1690069403}
+  panel: {fileID: 0}
+  statusText: {fileID: 0}
+  accountInput: {fileID: 0}
+  passwordInput: {fileID: 0}
+  serverDropdown: {fileID: 0}
+  loginButton: {fileID: 0}
+  registerButton: {fileID: 0}
   registerMessage: Primeira vez? Tente criar o seu cadastro para logar-se...
-  hostButton: {fileID: 1696663925}
-  dedicatedButton: {fileID: 2044774449}
-  cancelButton: {fileID: 1605173917}
-  quitButton: {fileID: 347607968}
+  hostButton: {fileID: 0}
+  dedicatedButton: {fileID: 0}
+  cancelButton: {fileID: 0}
+  quitButton: {fileID: 0}
 --- !u!1 &535875471
 GameObject:
   m_ObjectHideFlags: 0
@@ -16453,8 +16482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c753a1294fb57428f9e9d6b9d1ec46c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gizmoColor: {r: 0, g: 1, b: 1, a: 0.25}
-  gizmoWireColor: {r: 1, g: 1, b: 1, a: 0.8}
 --- !u!1 &565553512
 GameObject:
   m_ObjectHideFlags: 0
@@ -19368,10 +19395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79f6ff0ba1cbe42e6a312d40484d3d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 1
-  y: 0
-  z: 1
-  target: {fileID: 0}
 --- !u!20 &655659091
 Camera:
   m_ObjectHideFlags: 0
@@ -19423,7 +19446,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &660228294
 Prefab:
@@ -20249,6 +20272,10 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2009974b441cb4829b4857956f47ad05, type: 2}
   m_IsPrefabAsset: 0
+--- !u!4 &686525464 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 686525463}
 --- !u!1 &688175139
 GameObject:
   m_ObjectHideFlags: 0
@@ -20566,43 +20593,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c341c8bf3e24854b3f3499e33f0636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 331720870}
-  slotPrefab: {fileID: 114384937009616034, guid: ecf6b5e62f4ea4c3c8a98e2ceabe7e50,
-    type: 2}
-  memberContent: {fileID: 155067259}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  memberContent: {fileID: 0}
   alphaCurve:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.0015449524
-      value: 1.0029297
-      inSlope: -0.023211215
-      outSlope: -0.023211215
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.50059867
-      value: 0.99964184
-      inSlope: -0.02527178
-      outSlope: -0.02527178
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.0000906
-      value: -0.00060926005
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 0
+    m_RotationOrder: 4
 --- !u!1 &707273085
 GameObject:
   m_ObjectHideFlags: 0
@@ -20649,13 +20648,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc50cac6f9a354f5db256e68b456c541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiCharacterCreation: {fileID: 1509331272}
-  manager: {fileID: 2072336950}
-  panel: {fileID: 2104791510}
-  startButton: {fileID: 765367087}
-  deleteButton: {fileID: 123319435}
-  createButton: {fileID: 1249496339}
-  quitButton: {fileID: 2145026191}
+  uiCharacterCreation: {fileID: 0}
+  manager: {fileID: 0}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
+  createButton: {fileID: 0}
+  quitButton: {fileID: 0}
 --- !u!1001 &710261267
 Prefab:
   m_ObjectHideFlags: 0
@@ -21280,8 +21279,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: 'Auto Attack: makes the pet automatically attack whoever the owner attacks.'
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &734441055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21482,10 +21481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c8ab39afa9d4e33bed7501dd4e62fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 748428607}
-  slotPrefab: {fileID: 114548606182546652, guid: 9d79077bcc9be4eb9abb9d3b62647b94,
-    type: 2}
-  content: {fileID: 208290123}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
 --- !u!114 &748428610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21854,7 +21852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
+  tooltipPrefab: {fileID: 0}
   text: 
 --- !u!1001 &754663581
 Prefab:
@@ -22949,7 +22947,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &796263320
 GameObject:
@@ -23141,12 +23139,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f152b9a8c73047ffb51d68f3535a668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1279385506}
-  goldSlot: {fileID: 2029673407}
-  goldText: {fileID: 1313941778}
-  itemSlotPrefab: {fileID: 114966492437812626, guid: 21f06ce3de05548839d41be86c65384c,
-    type: 2}
-  content: {fileID: 1184725814}
+  panel: {fileID: 0}
+  goldSlot: {fileID: 0}
+  goldText: {fileID: 0}
+  itemSlotPrefab: {fileID: 0}
+  content: {fileID: 0}
 --- !u!1 &803416863
 GameObject:
   m_ObjectHideFlags: 0
@@ -23226,11 +23223,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 803416863}
   m_CullTransparentMesh: 0
---- !u!4 &803465773 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 464138, guid: 2009974b441cb4829b4857956f47ad05,
-    type: 2}
-  m_PrefabInternal: {fileID: 1072998077}
 --- !u!1 &803604496
 GameObject:
   m_ObjectHideFlags: 0
@@ -23625,14 +23617,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6af25bfba4e94dd1ac63cb698cf89e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 987867654}
-  healthSlider: {fileID: 754024010}
-  experienceSlider: {fileID: 1989863311}
-  nameText: {fileID: 1283746888}
-  levelText: {fileID: 1954463733}
-  autoAttackButton: {fileID: 734441055}
-  defendOwnerButton: {fileID: 1828851005}
-  unsummonButton: {fileID: 2139468069}
+  panel: {fileID: 0}
+  healthSlider: {fileID: 0}
+  experienceSlider: {fileID: 0}
+  nameText: {fileID: 0}
+  levelText: {fileID: 0}
+  autoAttackButton: {fileID: 0}
+  defendOwnerButton: {fileID: 0}
+  unsummonButton: {fileID: 0}
 --- !u!1 &838621059
 GameObject:
   m_ObjectHideFlags: 0
@@ -23770,10 +23762,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1309cf80dc494f7f85761f2a6aecdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 300172878}
-  slider: {fileID: 300172880}
-  skillNameText: {fileID: 590825499}
-  progressText: {fileID: 1340013001}
+  panel: {fileID: 0}
+  slider: {fileID: 0}
+  skillNameText: {fileID: 0}
+  progressText: {fileID: 0}
 --- !u!1 &842828802
 GameObject:
   m_ObjectHideFlags: 0
@@ -23884,20 +23876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1416c792f89e14397ac8f1120d9df2b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  mouseButton: 1
-  distance: 20
-  minDistance: 3
-  maxDistance: 20
-  zoomSpeedMouse: 1
-  zoomSpeedTouch: 0.2
-  rotationSpeed: 2
-  xMinAngle: -40
-  xMaxAngle: 80
-  offset: {x: 0, y: 2, z: 0}
-  viewBlockingLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1001 &847547673
 Prefab:
   m_ObjectHideFlags: 0
@@ -24902,6 +24880,10 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2009974b441cb4829b4857956f47ad05, type: 2}
   m_IsPrefabAsset: 0
+--- !u!4 &873714790 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 873714789}
 --- !u!1 &874577540
 GameObject:
   m_ObjectHideFlags: 0
@@ -25252,10 +25234,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437879809736948e2b08b6b16a18d060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 654413486}
-  nameText: {fileID: 1182944058}
-  acceptButton: {fileID: 2090724750}
-  declineButton: {fileID: 72131319}
+  panel: {fileID: 0}
+  nameText: {fileID: 0}
+  acceptButton: {fileID: 0}
+  declineButton: {fileID: 0}
 --- !u!1 &891819813
 GameObject:
   m_ObjectHideFlags: 0
@@ -26448,7 +26430,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 145, z: 0}
 --- !u!1 &946733364
 GameObject:
@@ -26496,14 +26478,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23cf491dd975e49278951454ecc80175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 52194953}
+  panel: {fileID: 0}
   zoomMin: 5
   zoomMax: 50
   zoomStepSize: 5
-  sceneText: {fileID: 16683761}
-  plusButton: {fileID: 1395593582}
-  minusButton: {fileID: 12933204}
-  minimapCamera: {fileID: 655659091}
+  sceneText: {fileID: 0}
+  plusButton: {fileID: 0}
+  minusButton: {fileID: 0}
+  minimapCamera: {fileID: 0}
 --- !u!1 &946995620
 GameObject:
   m_ObjectHideFlags: 0
@@ -26680,7 +26662,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 145, z: 0}
 --- !u!1 &955827790
 GameObject:
@@ -27651,8 +27633,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Quests
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1 &969076109
 GameObject:
   m_ObjectHideFlags: 0
@@ -27704,7 +27686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: 0
-  drageePrefab: {fileID: 136608, guid: d3cde8f814cb343c3be7c1a26745221c, type: 2}
+  drageePrefab: {fileID: 0}
   dragable: 1
   dropable: 1
   draggedToSlot: 0
@@ -27719,7 +27701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
+  tooltipPrefab: {fileID: 0}
   text: 
 --- !u!114 &969076113
 MonoBehaviour:
@@ -29150,8 +29132,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Quit
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1 &1028880805
 GameObject:
   m_ObjectHideFlags: 0
@@ -29267,12 +29249,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9262e5f3d8204a78aac98758c3618e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1223302936}
-  healthSlider: {fileID: 184455642}
-  nameText: {fileID: 523035709}
-  tradeButton: {fileID: 2077890625}
-  guildInviteButton: {fileID: 1428259854}
-  partyInviteButton: {fileID: 1882316819}
+  panel: {fileID: 0}
+  healthSlider: {fileID: 0}
+  nameText: {fileID: 0}
+  tradeButton: {fileID: 0}
+  guildInviteButton: {fileID: 0}
+  partyInviteButton: {fileID: 0}
 --- !u!1 &1033494713
 GameObject:
   m_ObjectHideFlags: 0
@@ -29480,8 +29462,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Inventory
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1 &1036824579
 GameObject:
   m_ObjectHideFlags: 0
@@ -29892,7 +29874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: 0
-  drageePrefab: {fileID: 136608, guid: d3cde8f814cb343c3be7c1a26745221c, type: 2}
+  drageePrefab: {fileID: 0}
   dragable: 1
   dropable: 1
   draggedToSlot: 0
@@ -29907,7 +29889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
+  tooltipPrefab: {fileID: 0}
   text: 
 --- !u!114 &1060475984
 MonoBehaviour:
@@ -30199,22 +30181,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 116
-  panel: {fileID: 810881030}
-  damageText: {fileID: 1788625611}
-  defenseText: {fileID: 803604498}
-  healthText: {fileID: 1918257265}
-  manaText: {fileID: 1533050733}
-  criticalChanceText: {fileID: 55624006}
-  blockChanceText: {fileID: 1835195722}
-  speedText: {fileID: 1407378630}
-  levelText: {fileID: 1455519018}
-  currentExperienceText: {fileID: 960751089}
-  maximumExperienceText: {fileID: 591013032}
-  skillExperienceText: {fileID: 700060484}
-  strengthText: {fileID: 1143558162}
-  intelligenceText: {fileID: 1995667811}
-  strengthButton: {fileID: 1763247112}
-  intelligenceButton: {fileID: 1695054993}
+  panel: {fileID: 0}
+  damageText: {fileID: 0}
+  defenseText: {fileID: 0}
+  healthText: {fileID: 0}
+  manaText: {fileID: 0}
+  speedText: {fileID: 0}
+  levelText: {fileID: 0}
+  currentExperienceText: {fileID: 0}
+  maximumExperienceText: {fileID: 0}
+  skillExperienceText: {fileID: 0}
+  strengthText: {fileID: 0}
+  intelligenceText: {fileID: 0}
+  strengthButton: {fileID: 0}
+  intelligenceButton: {fileID: 0}
 --- !u!1 &1069344489
 GameObject:
   m_ObjectHideFlags: 0
@@ -30336,6 +30316,10 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2009974b441cb4829b4857956f47ad05, type: 2}
   m_IsPrefabAsset: 0
+--- !u!4 &1072998078 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1072998077}
 --- !u!1 &1074692423
 GameObject:
   m_ObjectHideFlags: 0
@@ -30383,10 +30367,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 101
-  panel: {fileID: 275289140}
-  slotPrefab: {fileID: 114437474404965448, guid: dc39d3162d66c470fa525e646b286bee,
-    type: 2}
-  content: {fileID: 1286002453}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
 --- !u!1 &1076265442
 GameObject:
   m_ObjectHideFlags: 0
@@ -31594,9 +31577,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfdd6e6bbd9745cbac2db2c3fe2b814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 262246798}
-  slider: {fileID: 262246801}
-  statusText: {fileID: 533502637}
+  panel: {fileID: 0}
+  slider: {fileID: 0}
+  statusText: {fileID: 0}
 --- !u!1001 &1124997333
 Prefab:
   m_ObjectHideFlags: 0
@@ -31757,11 +31740,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1125266434}
   m_CullTransparentMesh: 0
---- !u!4 &1127139894 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 464138, guid: 2009974b441cb4829b4857956f47ad05,
-    type: 2}
-  m_PrefabInternal: {fileID: 1173833836}
 --- !u!1 &1128342034
 GameObject:
   m_ObjectHideFlags: 0
@@ -32984,15 +32962,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 105
-  panel: {fileID: 1394922958}
-  slotPrefab: {fileID: 114075261892402862, guid: fe25bab38867c41dd8562025769a8b9c,
-    type: 2}
-  content: {fileID: 2019394836}
-  goldText: {fileID: 859265873}
-  trash: {fileID: 344438995}
-  trashImage: {fileID: 344438993}
-  trashOverlay: {fileID: 1531639758}
-  trashAmountText: {fileID: 1238029174}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
+  goldText: {fileID: 0}
+  trash: {fileID: 0}
+  trashImage: {fileID: 0}
+  trashOverlay: {fileID: 0}
+  trashAmountText: {fileID: 0}
 --- !u!1 &1165640889
 GameObject:
   m_ObjectHideFlags: 0
@@ -33039,8 +33016,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0646f38facc499791c0a3d57a11d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1033494713}
-  messageText: {fileID: 1866286714}
+  panel: {fileID: 0}
+  messageText: {fileID: 0}
 --- !u!1 &1169631726
 GameObject:
   m_ObjectHideFlags: 0
@@ -33316,6 +33293,10 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2009974b441cb4829b4857956f47ad05, type: 2}
   m_IsPrefabAsset: 0
+--- !u!4 &1173833837 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1173833836}
 --- !u!1 &1174578932
 GameObject:
   m_ObjectHideFlags: 0
@@ -33366,17 +33347,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 99
-  panel: {fileID: 1353858376}
-  ingredientSlotPrefab: {fileID: 114041017982653056, guid: f2df70ab9569e4a3caf749ef389fd4dc,
-    type: 2}
-  ingredientContent: {fileID: 1410743952}
-  resultSlotImage: {fileID: 1964816450}
-  resultSlotToolTip: {fileID: 490986694}
-  craftButton: {fileID: 353791866}
-  progressSlider: {fileID: 1143354063}
-  resultText: {fileID: 1142171363}
-  successColor: {r: 0, g: 1, b: 0, a: 1}
-  failedColor: {r: 1, g: 0, b: 0, a: 1}
+  panel: {fileID: 0}
+  ingredientSlotPrefab: {fileID: 0}
+  ingredientContent: {fileID: 0}
+  resultSlotImage: {fileID: 0}
+  resultSlotToolTip: {fileID: 0}
+  craftButton: {fileID: 0}
 --- !u!1 &1179340553
 GameObject:
   m_ObjectHideFlags: 0
@@ -33437,12 +33413,13 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 447333050}
-  - {fileID: 803465773}
-  - {fileID: 33538028}
-  - {fileID: 106618008}
-  - {fileID: 1127139894}
-  - {fileID: 1540276126}
-  - {fileID: 1277784441}
+  - {fileID: 1317874929}
+  - {fileID: 1072998078}
+  - {fileID: 1729080848}
+  - {fileID: 686525464}
+  - {fileID: 1173833837}
+  - {fileID: 873714790}
+  - {fileID: 511957576}
   m_Father: {fileID: 470925449}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -33617,7 +33594,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203674417
 GameObject:
@@ -34037,8 +34014,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Crafting
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &1215000662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34643,18 +34620,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5bdaa1917334f39b20a26baa582bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 856137559}
-  slotPrefab: {fileID: 114469105774977248, guid: 8feede7fef4084a2d8d89e270679e970,
-    type: 2}
-  otherContent: {fileID: 1537139257}
-  otherStatusText: {fileID: 197111750}
-  otherGoldInput: {fileID: 964431471}
-  myContent: {fileID: 141106353}
-  myStatusText: {fileID: 872439507}
-  myGoldInput: {fileID: 606798758}
-  lockButton: {fileID: 149814803}
-  acceptButton: {fileID: 1293800326}
-  cancelButton: {fileID: 1940144742}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  otherContent: {fileID: 0}
+  otherStatusText: {fileID: 0}
+  otherGoldInput: {fileID: 0}
+  myContent: {fileID: 0}
+  myStatusText: {fileID: 0}
+  myGoldInput: {fileID: 0}
+  lockButton: {fileID: 0}
+  acceptButton: {fileID: 0}
+  cancelButton: {fileID: 0}
 --- !u!1 &1225441140
 GameObject:
   m_ObjectHideFlags: 0
@@ -35588,11 +35564,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!4 &1277784441 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 464138, guid: 2009974b441cb4829b4857956f47ad05,
-    type: 2}
-  m_PrefabInternal: {fileID: 511957575}
 --- !u!1 &1279338267
 GameObject:
   m_ObjectHideFlags: 0
@@ -36225,8 +36196,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d407288dbe864feda0a19ac6a428b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotPrefab: {fileID: 114208148314110118, guid: 1050e929fd77c454784d7914631e03a0,
-    type: 2}
+  slotPrefab: {fileID: 0}
 --- !u!222 &1296099468
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -36431,10 +36401,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1305707316}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cd0ebddf0c14b8c87771503e541ecc, type: 3}
+  m_Script: {fileID: 11500000, guid: a9c7031395c157349b647744b9a7afdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 11460454, guid: a0d8d3ee1a9d34deab41d803ad7a6ddf, type: 2}
+  playerPrefab: {fileID: 0}
 --- !u!4 &1305707318
 Transform:
   m_ObjectHideFlags: 0
@@ -36446,7 +36416,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1307310717
 GameObject:
@@ -36598,68 +36568,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1307862412}
   m_CullTransparentMesh: 0
---- !u!1001 &1310241106
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1179832968}
-    m_Modifications:
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 57.91
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 6.5899997
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 93.33
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1030153713937838, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1030153713937838, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784250000912348, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fc47fc9d53ba2408fa39f1bedc7d97b6, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &1310310474
 GameObject:
   m_ObjectHideFlags: 0
@@ -37096,6 +37004,35 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1313941775}
   m_CullTransparentMesh: 0
+--- !u!1 &1317874928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1317874929}
+  m_Layer: 0
+  m_Name: Missing Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1317874929
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1317874928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 303301965}
+  m_Father: {fileID: 1179832968}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1321362824
 GameObject:
   m_ObjectHideFlags: 0
@@ -38060,7 +37997,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 145, z: 0}
 --- !u!1 &1361484854
 GameObject:
@@ -38520,7 +38457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: 0
-  drageePrefab: {fileID: 136608, guid: d3cde8f814cb343c3be7c1a26745221c, type: 2}
+  drageePrefab: {fileID: 0}
   dragable: 1
   dropable: 1
   draggedToSlot: 0
@@ -38535,7 +38472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
+  tooltipPrefab: {fileID: 0}
   text: 
 --- !u!114 &1377993835
 MonoBehaviour:
@@ -38680,7 +38617,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1378347948
 GameObject:
@@ -40301,10 +40238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 113
-  panel: {fileID: 395391838}
-  content: {fileID: 631891283}
-  slotPrefab: {fileID: 114581274115082628, guid: 523341064aa6a4650bc512fe93752b72,
-    type: 2}
+  panel: {fileID: 0}
+  content: {fileID: 0}
+  slotPrefab: {fileID: 0}
   expandPrefix: '[+] '
   hidePrefix: '[-] '
 --- !u!1001 &1446308756
@@ -40827,8 +40763,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Item Mall
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &1464521199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41530,7 +41466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce87adc4f2e40b4e846ac8c7e8eec6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iterations: 5000
+  iterations: 100
 --- !u!114 &1488334802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41542,7 +41478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b60bdef67ca0149ac66e9de1be93a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recommended: 2018.4.4f1
+  recommended: 
   download: https://unity3d.com/unity/qa/lts-releases
 --- !u!4 &1488334803
 Transform:
@@ -41556,7 +41492,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1488448394
 GameObject:
@@ -41823,10 +41759,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4342b65277a427a8dde192094d51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1561206025}
-  nameText: {fileID: 520926580}
-  acceptButton: {fileID: 1554714328}
-  declineButton: {fileID: 913350371}
+  panel: {fileID: 0}
+  nameText: {fileID: 0}
+  acceptButton: {fileID: 0}
+  declineButton: {fileID: 0}
 --- !u!1 &1508693141
 GameObject:
   m_ObjectHideFlags: 0
@@ -41948,12 +41884,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a97bb9e2cee4d41a691829fdcf2419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 2072336950}
-  panel: {fileID: 97829767}
-  nameInput: {fileID: 1097297018}
-  classDropdown: {fileID: 669399647}
-  createButton: {fileID: 1128342036}
-  cancelButton: {fileID: 1955523727}
+  manager: {fileID: 0}
+  panel: {fileID: 0}
+  poppanel: {fileID: 0}
+  nameInput: {fileID: 0}
+  classDropdown: {fileID: 0}
+  createButton: {fileID: 0}
+  cancelButton: {fileID: 0}
 --- !u!1 &1511115779
 GameObject:
   m_ObjectHideFlags: 0
@@ -42164,22 +42101,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 120
-  panel: {fileID: 2018940362}
-  categorySlotPrefab: {fileID: 114211806386149246, guid: 5366cd841abb54e3cb2f47b3bbb7311d,
-    type: 2}
-  categoryContent: {fileID: 1104885755}
-  scrollRect: {fileID: 1603606629}
-  itemSlotPrefab: {fileID: 114795214046327500, guid: 452c0ae85b57b400dbacd2f9743b8daa,
-    type: 2}
-  itemContent: {fileID: 2097594805}
+  panel: {fileID: 0}
+  categorySlotPrefab: {fileID: 0}
+  categoryContent: {fileID: 0}
+  scrollRect: {fileID: 0}
+  itemSlotPrefab: {fileID: 0}
+  itemContent: {fileID: 0}
   buyUrl: http://unity3d.com/
-  nameText: {fileID: 1366239914}
-  levelText: {fileID: 6098262}
-  currencyAmountText: {fileID: 791991083}
-  buyButton: {fileID: 1736891573}
-  couponInput: {fileID: 1428972885}
-  couponButton: {fileID: 259529775}
-  inventoryPanel: {fileID: 1394922958}
+  nameText: {fileID: 0}
+  levelText: {fileID: 0}
+  currencyAmountText: {fileID: 0}
+  buyButton: {fileID: 0}
+  couponInput: {fileID: 0}
+  couponButton: {fileID: 0}
+  inventoryPanel: {fileID: 0}
 --- !u!1 &1518558430
 GameObject:
   m_ObjectHideFlags: 0
@@ -42590,7 +42525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1533767979}
   m_Layer: 0
-  m_Name: to the Field
+  m_Name: Ir para o Campo
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -42824,11 +42759,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1539123834}
   m_CullTransparentMesh: 0
---- !u!4 &1540276126 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 464138, guid: 2009974b441cb4829b4857956f47ad05,
-    type: 2}
-  m_PrefabInternal: {fileID: 873714789}
 --- !u!1001 &1543345517
 Prefab:
   m_ObjectHideFlags: 0
@@ -44429,10 +44359,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0673e170bbde43e79a735ca613da377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 291080573}
-  nameText: {fileID: 1996658982}
-  acceptButton: {fileID: 347582766}
-  declineButton: {fileID: 1105560051}
+  panel: {fileID: 0}
+  nameText: {fileID: 0}
+  acceptButton: {fileID: 0}
+  declineButton: {fileID: 0}
 --- !u!1 &1586570054
 GameObject:
   m_ObjectHideFlags: 0
@@ -44760,8 +44690,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Party
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &1591707438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46002,8 +45932,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb071741575394cd4bc1485e2fcc84c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 512038981}
-  image: {fileID: 404252505}
+  panel: {fileID: 0}
+  image: {fileID: 0}
 --- !u!1 &1643338683
 GameObject:
   m_ObjectHideFlags: 0
@@ -46824,8 +46754,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Skills
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!1 &1676839188
 GameObject:
   m_ObjectHideFlags: 0
@@ -49115,6 +49045,10 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2009974b441cb4829b4857956f47ad05, type: 2}
   m_IsPrefabAsset: 0
+--- !u!4 &1729080848 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1729080847}
 --- !u!1 &1736891571
 GameObject:
   m_ObjectHideFlags: 0
@@ -51899,8 +51833,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: 'Defend Owner: makes the pet attack whoever attacks the owner.'
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &1828851005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52333,6 +52267,21 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1842295997}
   m_CullTransparentMesh: 0
+--- !u!1 &1846913878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 447333050}
+  m_Layer: 0
+  m_Name: Missing Prefab (Dummy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1847768974
 GameObject:
   m_ObjectHideFlags: 0
@@ -52384,11 +52333,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c19373ec23d4613a4810b5ed7317ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1847768974}
-  createPriceText: {fileID: 535875473}
-  createNameInput: {fileID: 1842295999}
-  createButton: {fileID: 172901246}
-  terminateButton: {fileID: 1803169332}
+  panel: {fileID: 0}
+  createPriceText: {fileID: 0}
+  createNameInput: {fileID: 0}
+  createButton: {fileID: 0}
+  terminateButton: {fileID: 0}
 --- !u!114 &1847768977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54511,6 +54460,10 @@ Prefab:
       propertyPath: teleportTo
       value: 
       objectReference: {fileID: 1533767979}
+    - target: {fileID: 145714, guid: cb6bfdff94d0eda49a166f395852564f, type: 2}
+      propertyPath: m_Name
+      value: Gandalf
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb6bfdff94d0eda49a166f395852564f, type: 2}
   m_IsPrefabAsset: 0
@@ -55787,12 +55740,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 224783439902492766, guid: 9c0d26fac4e634980916e3501b389ef6,
     type: 2}
   m_PrefabInternal: {fileID: 1964816447}
---- !u!114 &1964816450 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114135606961330732, guid: 9c0d26fac4e634980916e3501b389ef6,
-    type: 2}
-  m_PrefabInternal: {fileID: 1964816447}
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &1967456672
 GameObject:
   m_ObjectHideFlags: 0
@@ -56229,7 +56176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
+  tooltipPrefab: {fileID: 0}
   text: 
 --- !u!1 &1994211459
 GameObject:
@@ -58213,14 +58160,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 112
-  panel: {fileID: 216953225}
-  currentCapacityText: {fileID: 1588576280}
-  maximumCapacityText: {fileID: 1792618407}
-  slotPrefab: {fileID: 114077505131969210, guid: 9850dc30e88754dccbcb1893899ac8aa,
-    type: 2}
-  memberContent: {fileID: 1434891360}
-  experienceShareToggle: {fileID: 2020778878}
-  goldShareToggle: {fileID: 1670784220}
+  panel: {fileID: 0}
+  currentCapacityText: {fileID: 0}
+  maximumCapacityText: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  memberContent: {fileID: 0}
+  experienceShareToggle: {fileID: 0}
+  goldShareToggle: {fileID: 0}
 --- !u!1001 &2043105117
 Prefab:
   m_ObjectHideFlags: 0
@@ -58740,10 +58686,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2054525386}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cd0ebddf0c14b8c87771503e541ecc, type: 3}
+  m_Script: {fileID: 11500000, guid: a9c7031395c157349b647744b9a7afdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 11448894, guid: eb4d93658e2654e8c9448f27a17f0f9e, type: 2}
+  playerPrefab: {fileID: 0}
 --- !u!4 &2054525388
 Transform:
   m_ObjectHideFlags: 0
@@ -58755,7 +58701,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2059025101
 GameObject:
@@ -59081,37 +59027,79 @@ MonoBehaviour:
   m_NetworkPort: 7777
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
-  m_NetworkAddress: Use a lista de servidores abaixo!!
+  m_NetworkAddress: Use the Server List below!
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
+  m_ScriptCRCCheck: 1
+  m_MaxDelay: 0.01
   m_LogLevel: 2
   m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: 
   m_OnlineScene: 
-  m_SpawnPrefabs:
-  - {fileID: 110258, guid: a0d8d3ee1a9d34deab41d803ad7a6ddf, type: 2}
-  - {fileID: 142034, guid: eb4d93658e2654e8c9448f27a17f0f9e, type: 2}
-  - {fileID: 100000, guid: 3ebbb149fc6e84237ac32a1558ca695a, type: 2}
-  - {fileID: 100000, guid: 05682822ff5a34e3f9ee59133371f266, type: 2}
+  m_SpawnPrefabs: []
+  m_CustomConfig: 0
   m_MaxConnections: 4
+  m_ConnectionConfig:
+    m_PacketSize: 1440
+    m_FragmentSize: 500
+    m_ResendTimeout: 1200
+    m_DisconnectTimeout: 2000
+    m_ConnectTimeout: 2000
+    m_MinUpdateTimeout: 10
+    m_PingTimeout: 500
+    m_ReducedPingTimeout: 100
+    m_AllCostTimeout: 20
+    m_NetworkDropThreshold: 5
+    m_OverflowDropThreshold: 5
+    m_MaxConnectionAttempt: 10
+    m_AckDelay: 33
+    m_SendDelay: 10
+    m_MaxCombinedReliableMessageSize: 100
+    m_MaxCombinedReliableMessageCount: 10
+    m_MaxSentMessageQueueSize: 512
+    m_AcksType: 1
+    m_UsePlatformSpecificProtocols: 0
+    m_InitialBandwidth: 0
+    m_BandwidthPeakFactor: 2
+    m_WebSocketReceiveBufferMaxSize: 0
+    m_UdpSocketReceiveBufferMaxSize: 0
+    m_SSLCertFilePath: 
+    m_SSLPrivateKeyFilePath: 
+    m_SSLCAFilePath: 
+    m_Channels: []
+  m_GlobalConfig:
+    m_ThreadAwakeTimeout: 1
+    m_ReactorModel: 0
+    m_ReactorMaximumReceivedMessages: 1024
+    m_ReactorMaximumSentMessages: 1024
+    m_MaxPacketSize: 2000
+    m_MaxHosts: 16
+    m_ThreadPoolSize: 1
+    m_MinTimerTimeout: 1
+    m_MaxTimerTimeout: 12000
+    m_MinNetSimulatorTimeout: 1
+    m_MaxNetSimulatorTimeout: 12000
+  m_Channels: 
   m_UseWebSockets: 0
+  m_UseSimulator: 0
+  m_SimulatedLatency: 1
+  m_PacketLossPercentage: 0
+  m_MaxBufferedPackets: 16
+  m_AllowFragmentation: 1
+  m_MatchHost: mm.unet.unity3d.com
+  m_MatchPort: 443
+  matchName: default
+  matchSize: 4
   isNetworkActive: 0
-  state: 0
-  uiPopup: {fileID: 1165640891}
+  matchMaker: {fileID: 0}
+  uiPopup: {fileID: 0}
   loginAccount: 
   loginPassword: 
   serverList:
   - name: Local
     ip: localhost
-  selection: -1
-  selectionLocations:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  selectionCameraLocation: {fileID: 0}
   characterLimit: 4
   characterNameMaxLength: 16
   accountMaxLength: 16
@@ -59162,18 +59150,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e76bed78898c4f2f92820822a3ba8b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 224922826}
-  welcomeText: {fileID: 957807157}
-  tradingButton: {fileID: 25562572}
-  teleportButton: {fileID: 1951924722}
-  questsButton: {fileID: 1696780951}
-  guildButton: {fileID: 2036291963}
-  petReviveButton: {fileID: 1959535407}
-  npcTradingPanel: {fileID: 74766660}
-  npcQuestPanel: {fileID: 748428607}
-  npcGuildPanel: {fileID: 1847768974}
-  npcPetRevivePanel: {fileID: 104013752}
-  inventoryPanel: {fileID: 1394922958}
+  panel: {fileID: 0}
+  welcomeText: {fileID: 0}
+  tradingButton: {fileID: 0}
+  teleportButton: {fileID: 0}
+  questsButton: {fileID: 0}
+  guildButton: {fileID: 0}
+  petReviveButton: {fileID: 0}
+  npcTradingPanel: {fileID: 0}
+  npcQuestPanel: {fileID: 0}
+  npcGuildPanel: {fileID: 0}
+  npcPetRevivePanel: {fileID: 0}
+  inventoryPanel: {fileID: 0}
 --- !u!1 &2076157996
 GameObject:
   m_ObjectHideFlags: 0
@@ -59333,8 +59321,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da9b8541e882460c842af8422def45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 2077197891}
-  highlightColor: {r: 0.19215687, g: 0.19215687, b: 0.19215687, a: 0.39215687}
+  image: {fileID: 0}
+  highlightColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2077277034
 GameObject:
   m_ObjectHideFlags: 0
@@ -60744,11 +60732,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotKey: 114
-  panel: {fileID: 357075630}
-  slotPrefab: {fileID: 114763234018988344, guid: 499615dc942954df3a501059adab9262,
-    type: 2}
-  content: {fileID: 1864994415}
-  skillExperienceText: {fileID: 1728566797}
+  panel: {fileID: 0}
+  slotPrefab: {fileID: 0}
+  content: {fileID: 0}
+  skillExperienceText: {fileID: 0}
 --- !u!1 &2128696750
 GameObject:
   m_ObjectHideFlags: 0
@@ -60944,8 +60931,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 171736, guid: f234d5ec9358c46668b3c1b044ba66b8, type: 2}
-  text: Unsummon the pet. Only allowed while not fighting.
+  tooltipPrefab: {fileID: 0}
+  text: 
 --- !u!114 &2139468069
 MonoBehaviour:
   m_ObjectHideFlags: 0

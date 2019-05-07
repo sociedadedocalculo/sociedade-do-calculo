@@ -7,7 +7,7 @@
 using System;
 using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct ItemSlot
@@ -16,7 +16,7 @@ public partial struct ItemSlot
     public int amount;
 
     // constructors
-    public ItemSlot(Item item, int amount=1)
+    public ItemSlot(Item item, int amount = 1)
     {
         this.item = item;
         this.amount = amount;
@@ -53,10 +53,4 @@ public partial struct ItemSlot
     }
 }
 
-public class SyncListItemSlot : SyncListSTRUCT<ItemSlot>
-{
-    internal int FindIndex(Func<object, object> p)
-    {
-        throw new NotImplementedException();
-    }
-}
+public class SyncListItemSlot : SyncListStruct<ItemSlot> { }

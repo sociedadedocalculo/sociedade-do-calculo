@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
 public partial class UIGuild : MonoBehaviour
 {
@@ -56,7 +55,8 @@ public partial class UIGuild : MonoBehaviour
                 noticeInput.interactable = false;
                 if (noticeInput.text.Length > 0 &&
                     !Utils.IsNullOrWhiteSpace(noticeInput.text) &&
-                    noticeInput.text != guild.notice) {
+                    noticeInput.text != guild.notice)
+                {
                     player.CmdSetGuildNotice(noticeInput.text);
                 }
             });

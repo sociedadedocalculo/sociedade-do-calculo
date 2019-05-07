@@ -7,15 +7,11 @@ using UnityEngine.UI;
 
 public partial class UILoot : MonoBehaviour
 {
-    public static UILoot singleton;
     public GameObject panel;
     public GameObject goldSlot;
     public Text goldText;
     public UILootSlot itemSlotPrefab;
-    public UILootSlot amount;
     public Transform content;
-
-    public UILoot() { singleton = this; }
 
     void Update()
     {

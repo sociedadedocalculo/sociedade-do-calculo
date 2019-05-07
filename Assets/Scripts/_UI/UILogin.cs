@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public partial class UILogin : MonoBehaviour
 {
     public UIPopup uiPopup;
-    public NetworkManagerMMO manager; 
+    public UIPopupMessage uiPopupMessage;
+    public NetworkManagerMMO manager; // singleton=null in Start/Awake
     public GameObject panel;
     public Text statusText;
     public InputField accountInput;
@@ -47,7 +48,7 @@ public partial class UILogin : MonoBehaviour
             panel.SetActive(true);
 
             // status
-            statusText.text = manager.IsConnecting() ? "Conectando..." : "";
+            statusText.text = manager.IsConnecting() ? "Connecting..." : "";
 
             // buttons. interactable while network is not active
             // (using IsConnecting is slightly delayed and would allow multiple clicks)

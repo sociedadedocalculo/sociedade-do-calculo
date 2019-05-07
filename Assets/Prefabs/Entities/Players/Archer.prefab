@@ -278,7 +278,6 @@ MonoBehaviour:
   netIdentity: {fileID: 114466173128114766}
   animator: {fileID: 9529560}
   collider: {fileID: 0}
-  audioSource: {fileID: 82304612815829720}
   _state: IDLE
   level: 1
   _healthMax:
@@ -308,20 +307,14 @@ MonoBehaviour:
   _criticalChance:
     baseValue: 0
     bonusPerLevel: 0
-  _speed:
-    baseValue: 5
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 0}
+  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 2}
   skillTemplates: []
   currentSkill: -1
-  _effectMount: {fileID: 0}
+  _effectMount: {fileID: 445608}
   _gold: 0
   nameOverlay: {fileID: 0}
-  stunnedOverlay: {fileID: 0}
-  inSafeZone: 0
   chat: {fileID: 11448894}
   avatarCamera: {fileID: 0}
-  networkNavMeshAgent: {fileID: 114014746068147750}
   guildOverlay: {fileID: 0}
   guildOverlayPrefix: '['
   guildOverlaySuffix: ']'
@@ -342,7 +335,6 @@ MonoBehaviour:
     bonusPerLevel: 10
   skillExperience: 0
   indicatorPrefab: {fileID: 0}
-  indicator: {fileID: 0}
   inventorySize: 30
   defaultItems: []
   inventorySplitKeys: 300100002f010000
@@ -358,35 +350,27 @@ MonoBehaviour:
   - requiredCategory: Weapon
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Head
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Chest
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Legs
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Shield
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Shoulders
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Hands
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   - requiredCategory: Feet
     location: {fileID: 0}
     defaultItem: {fileID: 0}
-    defaultItemAmount: 0
   skillbar:
   - reference: 
     hotKey: 49
@@ -418,8 +402,6 @@ MonoBehaviour:
   tradeStatus: 0
   tradeOfferGold: 0
   craftingIndices: ffffffffffffffffffffffffffffffffffffffffffffffff
-  craftingState: 0
-  craftingTimeEnd: 0
   itemMallCategories: []
   coins: 0
   couponWaitSeconds: 3
@@ -428,7 +410,6 @@ MonoBehaviour:
   guildInviteWaitSeconds: 3
   partyInviteFrom: 
   partyInviteWaitSeconds: 3
-  attackToMoveRangeRatio: 0.8
   deathExperienceLossPercent: 0.05
   nextRiskyActionTime: 0
 --- !u!114 &11481206
@@ -2739,11 +2720,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 142034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6c78b0bee9a9f8468b2a9bfe4946bba, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 19567920}
-  entity: {fileID: 0}
 --- !u!114 &114466173128114766
 MonoBehaviour:
   m_ObjectHideFlags: 1

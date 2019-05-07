@@ -21,9 +21,9 @@
 // Note: make sure to drag all your SkillEffect prefabs into the NetworkManager
 //   spawnable prefabs list.
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
-[RequireComponent(typeof(NetworkProximityChecker))] // only broadcast to observers
+[RequireComponent(typeof(NetworkProximityCheckerCustom))] // only broadcast to observers
 public abstract class SkillEffect : NetworkBehaviour
 {
     // [SyncVar] NetworkIdentity: errors when null
@@ -35,14 +35,14 @@ public abstract class SkillEffect : NetworkBehaviour
     [SyncVar, HideInInspector] GameObject _target;
     public Entity target
     {
-        get { return _target != null  ? _target.GetComponent<Entity>() : null; }
+        get { return _target != null ? _target.GetComponent<Entity>() : null; }
         set { _target = value != null ? value.gameObject : null; }
     }
 
     [SyncVar, HideInInspector] GameObject _caster;
     public Entity caster
     {
-        get { return _caster != null  ? _caster.GetComponent<Entity>() : null; }
+        get { return _caster != null ? _caster.GetComponent<Entity>() : null; }
         set { _caster = value != null ? value.gameObject : null; }
     }
 }

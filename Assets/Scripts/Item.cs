@@ -7,10 +7,9 @@
 // where dynamic stats differ. E.g. two pets with different levels shouldn't be
 // merged.
 using System;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Item
@@ -37,19 +36,7 @@ public partial struct Item
     }
 
     // wrappers for easier access
-    public ScriptableItem data
-    {
-        get
-        {
-            // show a useful error message if the key can't be found
-            // note: ScriptableItem.OnValidate 'is in resource folder' check
-            //       causes Unity SendMessage warnings and false positives.
-            //       this solution is a lot better.
-            if (!ScriptableItem.dict.ContainsKey(hash))
-                throw new KeyNotFoundException("There is no ScriptableItem with hash=" + hash + ". Make sure that all ScriptableItems are in the Resources folder so they are loaded properly.");
-            return ScriptableItem.dict[hash];
-        }
-    }
+    public ScriptableItem data { get { return ScriptableItem.dict[hash]; } }
     public string name { get { return data.name; } }
     public int maxStack { get { return data.maxStack; } }
     public long buyPrice { get { return data.buyPrice; } }

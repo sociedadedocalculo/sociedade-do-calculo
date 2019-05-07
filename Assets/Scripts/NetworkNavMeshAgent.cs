@@ -18,7 +18,7 @@ using UnityEngine.Networking;
 [RequireComponent(typeof(NavMeshAgent))]
 // unreliable is enough and we want
 // to send changes immediately. everything else causes lags.
-[NetworkSettings(channel=Channels.DefaultUnreliable, sendInterval=0)]
+[NetworkSettings(channel = Channels.DefaultUnreliable, sendInterval = 0)]
 public class NetworkNavMeshAgent : NetworkBehaviour
 {
     public NavMeshAgent agent; // assign in Inspector (instead of GetComponent)
@@ -90,13 +90,13 @@ public class NetworkNavMeshAgent : NetworkBehaviour
     // happen. otherwise readstr/readbytes out of range bugs happen.
     public override void OnDeserialize(NetworkReader reader, bool initialState)
     {
-        Vector3 position       = reader.ReadVector3();
-        agent.speed            = reader.ReadSingle();
+        Vector3 position = reader.ReadVector3();
+        agent.speed = reader.ReadSingle();
         agent.stoppingDistance = reader.ReadSingle();
-        Vector3 destination    = reader.ReadVector3();
-        Vector3 velocity       = reader.ReadVector3();
-        bool hasPath           = reader.ReadBoolean();
-        bool warped            = reader.ReadBoolean();
+        Vector3 destination = reader.ReadVector3();
+        Vector3 velocity = reader.ReadVector3();
+        bool hasPath = reader.ReadBoolean();
+        bool warped = reader.ReadBoolean();
 
         // OnDeserialize must always return so that next one is called too
         try
@@ -131,6 +131,7 @@ public class NetworkNavMeshAgent : NetworkBehaviour
                     requiredVelocity = velocity;
                 }
             }
-        } catch {}
+        }
+        catch { }
     }
 }
