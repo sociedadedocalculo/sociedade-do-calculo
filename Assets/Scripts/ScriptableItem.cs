@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-[CreateAssetMenu(menuName="uMMORPG Item/General", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Item/General", order = 999)]
 public partial class ScriptableItem : ScriptableObject
 {
     [Header("Base Stats")]
@@ -33,13 +33,15 @@ public partial class ScriptableItem : ScriptableObject
     public bool sellable;
     public bool tradable;
     public bool destroyable;
-    [SerializeField, TextArea(1, 30)] protected string toolTip; // not public, use ToolTip()
+    [TextArea(1, 30)] public string toolTip;
     public Sprite image;
 
     // tooltip /////////////////////////////////////////////////////////////////
     // fill in all variables into the tooltip
-    // this saves us lots of ugly string concatenation code.
-    // (dynamic ones are filled in Item.cs)
+    // this saves us lots of ugly string concatenation code. we can't do it in
+    // ScriptableItem because some variables can only be replaced here, hence we
+    // would end up with some variables not replaced in the string when calling
+    // Tooltip() from the template.
     // -> note: each tooltip can have any variables, or none if needed
     // -> example usage:
     /*
@@ -86,7 +88,7 @@ public partial class ScriptableItem : ScriptableObject
         }
     }
 
-    // validation //////////////////////////////////////////////////////////////
+    // inspector validation ////////////////////////////////////////////////////
     void OnValidate()
     {
         // make sure that the sell price <= buy price to avoid exploitation
