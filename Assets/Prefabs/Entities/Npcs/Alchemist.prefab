@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 486294}
   - component: {fileID: 9534278}
-  - component: {fileID: 114629997294811322}
+  - component: {fileID: 114575944680791328}
   - component: {fileID: 19585248}
   - component: {fileID: 11495684}
   - component: {fileID: 5476574}
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 19585248}
   proxchecker: {fileID: 11494822}
-  netIdentity: {fileID: 0}
+  netIdentity: {fileID: 114575944680791328}
   animator: {fileID: 9534278}
   collider: {fileID: 0}
   _state: IDLE
@@ -2489,7 +2489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154c0dfb012f4112aa32e81bd75189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114629997294811322
+--- !u!114 &114575944680791328
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2497,13 +2497,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 145714}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 860895539, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneId: 0
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 203
+    i1: 107
+    i2: 253
+    i3: 255
+    i4: 148
+    i5: 208
+    i6: 237
+    i7: 164
+    i8: 154
+    i9: 22
+    i10: 111
+    i11: 57
+    i12: 88
+    i13: 82
+    i14: 86
+    i15: 79
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
-  m_AssetId: cb6bfdff94d0eda49a166f395852564f
 --- !u!136 &136474944382806376
 CapsuleCollider:
   m_ObjectHideFlags: 1

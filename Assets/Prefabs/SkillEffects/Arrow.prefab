@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 417734}
-  - component: {fileID: 114436789321816402}
+  - component: {fileID: 114715707629422250}
   - component: {fileID: 114423741089805692}
   - component: {fileID: 114636640872472150}
   - component: {fileID: 96712638111511072}
@@ -254,21 +254,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.7
   damage: 1
---- !u!114 &114436789321816402
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 109900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 860895539, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
-  m_AssetId: 0f4948efce538432191cef46aef01d26
 --- !u!114 &114636640872472150
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -287,3 +272,35 @@ MonoBehaviour:
   castLayers:
     serializedVersion: 2
     m_Bits: 0
+--- !u!114 &114715707629422250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 15
+    i1: 73
+    i2: 72
+    i3: 239
+    i4: 206
+    i5: 83
+    i6: 132
+    i7: 50
+    i8: 25
+    i9: 28
+    i10: 239
+    i11: 70
+    i12: 174
+    i13: 240
+    i14: 29
+    i15: 38
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0

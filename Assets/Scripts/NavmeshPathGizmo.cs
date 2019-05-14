@@ -22,7 +22,7 @@ public class NavmeshPathGizmo : MonoBehaviour
 
         // draw the path
         for (int i = 1; i < path.corners.Length; ++i)
-            Debug.DrawLine(path.corners[i-1], path.corners[i], color);
+            Debug.DrawLine(path.corners[i - 1], path.corners[i], color);
 
         // draw velocity
         Debug.DrawLine(transform.position, transform.position + agent.velocity, Color.blue, 0, false);

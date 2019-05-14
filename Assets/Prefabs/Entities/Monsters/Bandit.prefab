@@ -408,13 +408,13 @@ GameObject:
   m_Component:
   - component: {fileID: 4149889575556504}
   - component: {fileID: 95116211608577274}
-  - component: {fileID: 114131293541021556}
+  - component: {fileID: 114964935441177652}
   - component: {fileID: 195078255907076894}
   - component: {fileID: 114065500523104884}
   - component: {fileID: 114017215654407868}
-  - component: {fileID: 114507712171080332}
+  - component: {fileID: 114617388764512930}
   - component: {fileID: 54234923717175708}
-  - component: {fileID: 114323414138164698}
+  - component: {fileID: 114142457305644050}
   - component: {fileID: 82226019160903994}
   m_Layer: 9
   m_Name: Bandit
@@ -2432,11 +2432,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 195078255907076894}
-  proxchecker: {fileID: 114323414138164698}
-  netIdentity: {fileID: 114131293541021556}
+  proxchecker: {fileID: 114142457305644050}
+  netIdentity: {fileID: 114964935441177652}
   animator: {fileID: 95116211608577274}
   collider: {fileID: 0}
-  audioSource: {fileID: 82226019160903994}
   _state: IDLE
   level: 1
   _healthMax:
@@ -2466,21 +2465,15 @@ MonoBehaviour:
   _criticalChance:
     baseValue: 0
     bonusPerLevel: 0
-  _speed:
-    baseValue: 5
-    bonusPerLevel: 0
   damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 2}
   skillTemplates: []
   currentSkill: -1
   _effectMount: {fileID: 0}
   _gold: 0
   nameOverlay: {fileID: 0}
-  stunnedOverlay: {fileID: 0}
-  inSafeZone: 0
   moveProbability: 0.1
   moveDistance: 10
   followDistance: 20
-  attackToMoveRangeRatio: 0.8
   rewardExperience: 10
   rewardSkillExperience: 2
   lootGoldMin: 0
@@ -2489,7 +2482,7 @@ MonoBehaviour:
   deathTime: 30
   respawn: 1
   respawnTime: 10
---- !u!114 &114131293541021556
+--- !u!114 &114142457305644050
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2497,13 +2490,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1343586450405366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 860895539, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneId: 0
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
-  m_AssetId: 81ebdfda956904f059c9cb1ad76be819
+  visRange: 50
+  visUpdateInterval: 1
+  checkMethod: 0
+  forceHidden: 0
+  castLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &114266452602413376
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2515,24 +2511,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154c0dfb012f4112aa32e81bd75189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114323414138164698
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1343586450405366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -2084202205, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &114489401360595490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2544,7 +2522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154c0dfb012f4112aa32e81bd75189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114507712171080332
+--- !u!114 &114617388764512930
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2552,10 +2530,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1343586450405366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de01f80273d818f42811093658f44915, type: 3}
+  m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 195078255907076894}
+  agent: {fileID: 0}
 --- !u!114 &114658396659985328
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2568,6 +2546,38 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 114065500523104884}
+--- !u!114 &114964935441177652
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343586450405366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 129
+    i1: 235
+    i2: 223
+    i3: 218
+    i4: 149
+    i5: 105
+    i6: 4
+    i7: 240
+    i8: 89
+    i9: 201
+    i10: 203
+    i11: 26
+    i12: 215
+    i13: 107
+    i14: 232
+    i15: 25
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!135 &135962456698608590
 SphereCollider:
   m_ObjectHideFlags: 1

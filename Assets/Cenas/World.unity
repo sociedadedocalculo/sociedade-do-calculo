@@ -14987,8 +14987,7 @@ AudioSource:
 --- !u!114 &439915061
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114323414138164698, guid: 81ebdfda956904f059c9cb1ad76be819,
-    type: 2}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 439915059}
   m_Enabled: 1
@@ -15022,8 +15021,7 @@ Rigidbody:
 --- !u!114 &439915063
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114507712171080332, guid: 81ebdfda956904f059c9cb1ad76be819,
-    type: 2}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 439915059}
   m_Enabled: 1
@@ -55148,23 +55146,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1731309850}
   proxchecker: {fileID: 1731309846}
-  netIdentity: {fileID: 0}
+  netIdentity: {fileID: 1731309851}
   animator: {fileID: 1731309852}
-  collider: {fileID: 0}
+  collider: {fileID: 1837814601}
   _state: IDLE
   level: 1
   _healthMax:
     baseValue: 100
     bonusPerLevel: 0
   invincible: 0
-  healthRecovery: 1
+  healthRecovery: 0
   _healthRecoveryRate:
     baseValue: 1
     bonusPerLevel: 0
   _manaMax:
     baseValue: 100
     bonusPerLevel: 0
-  manaRecovery: 1
+  manaRecovery: 0
   _manaRecoveryRate:
     baseValue: 1
     bonusPerLevel: 0
@@ -55180,15 +55178,17 @@ MonoBehaviour:
   _criticalChance:
     baseValue: 0
     bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 0}
+  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 2}
   skillTemplates: []
   currentSkill: -1
-  _effectMount: {fileID: 0}
+  _effectMount: {fileID: 210424603}
   _gold: 0
-  nameOverlay: {fileID: 0}
-  questOverlay: {fileID: 0}
-  welcome: 
-  saleItems: []
+  nameOverlay: {fileID: 1994152194}
+  questOverlay: {fileID: 2098586593}
+  welcome: "Como posso ajud\xE1-lo hoje?"
+  saleItems:
+  - {fileID: 0}
+  - {fileID: 0}
   quests: []
   perguntas: []
   teleportTo: {fileID: 1533767979}
@@ -55248,15 +55248,35 @@ NavMeshAgent:
 --- !u!114 &1731309851
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 114629997294811322, guid: cb6bfdff94d0eda49a166f395852564f,
-    type: 2}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1731309844}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 203
+    i1: 107
+    i2: 253
+    i3: 255
+    i4: 148
+    i5: 208
+    i6: 237
+    i7: 164
+    i8: 154
+    i9: 22
+    i10: 111
+    i11: 57
+    i12: 88
+    i13: 82
+    i14: 86
+    i15: 79
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!95 &1731309852
 Animator:
   serializedVersion: 3
