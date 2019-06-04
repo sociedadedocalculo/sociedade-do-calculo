@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - component: {fileID: 467756}
   - component: {fileID: 9557554}
-  - component: {fileID: 114478928265611242}
+  - component: {fileID: 114461871601970980}
   - component: {fileID: 19543452}
   - component: {fileID: 114131598050958936}
   - component: {fileID: 11436562}
@@ -200,12 +200,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 110258}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
+  agent: {fileID: 19543452}
 --- !u!114 &11436562
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -218,9 +218,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 19543452}
-  proxchecker: {fileID: 0}
-  netIdentity: {fileID: 0}
-  animator: {fileID: 0}
+  proxchecker: {fileID: 11466958}
+  netIdentity: {fileID: 114461871601970980}
+  animator: {fileID: 9557554}
   collider: {fileID: 0}
   _state: IDLE
   level: 1
@@ -257,8 +257,8 @@ MonoBehaviour:
   _effectMount: {fileID: 0}
   _gold: 0
   nameOverlay: {fileID: 0}
-  chat: {fileID: 0}
-  avatarCamera: {fileID: 0}
+  chat: {fileID: 11460454}
+  avatarCamera: {fileID: 20985865562952620}
   guildOverlay: {fileID: 0}
   guildOverlayPrefix: '['
   guildOverlaySuffix: ']'
@@ -266,13 +266,13 @@ MonoBehaviour:
   nameOverlayOffenderColor: {r: 1, g: 0, b: 1, a: 1}
   nameOverlayMurdererColor: {r: 1, g: 0, b: 0, a: 1}
   nameOverlayPartyColor: {r: 0.341, g: 0.965, b: 0.702, a: 1}
-  classIcon: {fileID: 0}
-  portraitIcon: {fileID: 0}
+  classIcon: {fileID: 21300000, guid: 6240885ec6da7478b9c359712b5d3bda, type: 3}
+  portraitIcon: {fileID: 21300000, guid: c693d79aa070c43f7a8c3a0da6f72436, type: 3}
   account: 
   className: 
   strength: 0
   intelligence: 0
-  maxLevel: 1
+  maxLevel: 4
   _experience: 0
   _experienceMax:
     baseValue: 10
@@ -378,8 +378,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4fb38f4a79f83428e0392bf023047d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  netIdentity: {fileID: 0}
+  player: {fileID: 11436562}
+  netIdentity: {fileID: 114461871601970980}
   whisper:
     command: /w
     identifierOut: (TO)
@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 10
+  visRange: 50
   visUpdateInterval: 1
   checkMethod: 0
   forceHidden: 0
@@ -2529,7 +2529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154c0dfb012f4112aa32e81bd75189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114478928265611242
+--- !u!114 &114461871601970980
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2537,13 +2537,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 110258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 860895539, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneId: 0
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 160
+    i1: 216
+    i2: 211
+    i3: 238
+    i4: 26
+    i5: 157
+    i6: 52
+    i7: 222
+    i8: 171
+    i9: 65
+    i10: 216
+    i11: 3
+    i12: 173
+    i13: 122
+    i14: 109
+    i15: 223
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
-  m_AssetId: a0d8d3ee1a9d34deab41d803ad7a6ddf
 --- !u!114 &114549291645525742
 MonoBehaviour:
   m_ObjectHideFlags: 1

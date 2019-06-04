@@ -9,15 +9,14 @@ GameObject:
   m_Component:
   - component: {fileID: 445608}
   - component: {fileID: 9529560}
-  - component: {fileID: 114466173128114766}
+  - component: {fileID: 114302241394759158}
   - component: {fileID: 19567920}
   - component: {fileID: 114014746068147750}
   - component: {fileID: 11454242}
   - component: {fileID: 11448894}
-  - component: {fileID: 11481206}
   - component: {fileID: 5484174}
   - component: {fileID: 11487752}
-  - component: {fileID: 11440176}
+  - component: {fileID: 114794399482569598}
   - component: {fileID: 82304612815829720}
   m_Layer: 8
   m_Name: Archer
@@ -205,24 +204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154c0dfb012f4112aa32e81bd75189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11440176
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 142034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -2084202205, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &11448894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -234,8 +215,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4fb38f4a79f83428e0392bf023047d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  netIdentity: {fileID: 114466173128114766}
+  player: {fileID: 11454242}
+  netIdentity: {fileID: 114302241394759158}
   whisper:
     command: /w
     identifierOut: (TO)
@@ -274,8 +255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 19567920}
-  proxchecker: {fileID: 11440176}
-  netIdentity: {fileID: 114466173128114766}
+  proxchecker: {fileID: 114794399482569598}
+  netIdentity: {fileID: 114302241394759158}
   animator: {fileID: 9529560}
   collider: {fileID: 0}
   _state: IDLE
@@ -314,7 +295,7 @@ MonoBehaviour:
   _gold: 0
   nameOverlay: {fileID: 0}
   chat: {fileID: 11448894}
-  avatarCamera: {fileID: 0}
+  avatarCamera: {fileID: 20662726061508384}
   guildOverlay: {fileID: 0}
   guildOverlayPrefix: '['
   guildOverlaySuffix: ']'
@@ -334,7 +315,7 @@ MonoBehaviour:
     baseValue: 10
     bonusPerLevel: 10
   skillExperience: 0
-  indicatorPrefab: {fileID: 0}
+  indicatorPrefab: {fileID: 120922, guid: 41e72cc740b150343af71b434401d675, type: 2}
   inventorySize: 30
   defaultItems: []
   inventorySplitKeys: 300100002f010000
@@ -396,8 +377,8 @@ MonoBehaviour:
   interactionRange: 4
   targetNearestKey: 9
   localPlayerClickThrough: 1
-  offenderBuff: {fileID: 0}
-  murdererBuff: {fileID: 0}
+  offenderBuff: {fileID: 11400000, guid: b8d2834a38f4c411595b27152678ce72, type: 2}
+  murdererBuff: {fileID: 11400000, guid: e806fbf7b375c497790f2f50e57c38d0, type: 2}
   tradeRequestFrom: 
   tradeStatus: 0
   tradeOfferGold: 0
@@ -412,45 +393,6 @@ MonoBehaviour:
   partyInviteWaitSeconds: 3
   deathExperienceLossPercent: 0.05
   nextRiskyActionTime: 0
---- !u!114 &11481206
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 142034}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f98afe75dce041e7a2345a056f73328, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 11448894}
-  netIdentity: {fileID: 114466173128114766}
-  whisper:
-    command: /w
-    identifierOut: (TO)
-    identifierIn: (FROM)
-    color: {r: 1, g: 0, b: 1, a: 1}
-  local:
-    command: 
-    identifierOut: 
-    identifierIn: 
-    color: {r: 1, g: 1, b: 1, a: 1}
-  party:
-    command: /p
-    identifierOut: (Party)
-    identifierIn: (Party)
-    color: {r: 0.341, g: 0.965, b: 0.702, a: 1}
-  guild:
-    command: /g
-    identifierOut: (Guild)
-    identifierIn: (Guild)
-    color: {r: 0, g: 1, b: 1, a: 1}
-  info:
-    command: 
-    identifierOut: (Info)
-    identifierIn: (Info)
-    color: {r: 1, g: 0, b: 0, a: 1}
-  maxLength: 70
 --- !u!114 &11487752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -459,7 +401,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 142034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0eec68d3c38faa4692a79e99d36948f, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ca642bfa7585b049be6a26e13afeb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!195 &19567920
@@ -2724,7 +2666,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 19567920}
---- !u!114 &114466173128114766
+--- !u!114 &114302241394759158
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2732,13 +2674,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 142034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 860895539, guid: 4663afc459f5c4110bc2dffe158fecad, type: 3}
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneId: 0
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 235
+    i1: 77
+    i2: 147
+    i3: 101
+    i4: 142
+    i5: 38
+    i6: 84
+    i7: 232
+    i8: 201
+    i9: 68
+    i10: 143
+    i11: 39
+    i12: 161
+    i13: 127
+    i14: 15
+    i15: 158
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
-  m_AssetId: eb4d93658e2654e8c9448f27a17f0f9e
 --- !u!114 &114780287201850498
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2750,6 +2709,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8154c0dfb012f4112aa32e81bd75189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114794399482569598
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 142034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visRange: 50
+  visUpdateInterval: 1
+  checkMethod: 0
+  forceHidden: 0
+  castLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &114898073836351098
 MonoBehaviour:
   m_ObjectHideFlags: 1
