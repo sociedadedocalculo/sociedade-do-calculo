@@ -30,7 +30,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-public enum TradeStatus { Free, Locked, Accepted };
+public enum TradeStatus {Free, Locked, Accepted};
 
 [Serializable]
 public struct SkillbarEntry
@@ -216,7 +216,7 @@ public partial class Player : Entity
             }
         }
     }
-    [SerializeField] protected LevelBasedLong _experienceMax = new LevelBasedLong { baseValue = 10, bonusPerLevel = 10 };
+    [SerializeField] protected LevelBasedLong _experienceMax = new LevelBasedLong{baseValue=10, bonusPerLevel=10};
     public long experienceMax { get { return _experienceMax.Get(level); } }
 
     [Header("Skill Experience")]
@@ -229,7 +229,7 @@ public partial class Player : Entity
     [Header("Inventory")]
     public int inventorySize = 30;
     public ScriptableItem[] defaultItems;
-    public KeyCode[] inventorySplitKeys = { KeyCode.LeftShift, KeyCode.RightShift };
+    public KeyCode[] inventorySplitKeys = {KeyCode.LeftShift, KeyCode.RightShift};
 
     [Header("Trash")]
     [SyncVar] public ItemSlot trash = new ItemSlot();
@@ -303,7 +303,7 @@ public partial class Player : Entity
     [SyncVar] GameObject _activePet;
     public Pet activePet
     {
-        get { return _activePet != null ? _activePet.GetComponent<Pet>() : null; }
+        get { return _activePet != null  ? _activePet.GetComponent<Pet>() : null; }
         set { _activePet = value != null ? value.gameObject : null; }
     }
     // pet's destination should always be right next to player, not inside him
@@ -335,7 +335,7 @@ public partial class Player : Entity
     [SyncVar] GameObject _nextTarget;
     public Entity nextTarget
     {
-        get { return _nextTarget != null ? _nextTarget.GetComponent<Entity>() : null; }
+        get { return _nextTarget != null  ? _nextTarget.GetComponent<Entity>() : null; }
         set { _nextTarget = value != null ? value.gameObject : null; }
     }
 
@@ -544,17 +544,17 @@ public partial class Player : Entity
     // => we use set.Return to read and clear values
     HashSet<string> cmdEvents = new HashSet<string>();
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdRespawn() { cmdEvents.Add("Respawn"); }
     bool EventRespawn() { return cmdEvents.Remove("Respawn"); }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdCancelAction() { cmdEvents.Add("CancelAction"); }
     bool EventCancelAction() { return cmdEvents.Remove("CancelAction"); }
 
     Vector3 navigatePosition = Vector3.zero;
     float navigateStop = 0;
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     void CmdNavigateDestination(Vector3 position, float stoppingDistance)
     {
         navigatePosition = position; navigateStop = stoppingDistance;
@@ -563,7 +563,7 @@ public partial class Player : Entity
     bool EventNavigateDestination() { return cmdEvents.Remove("NavigateDestination"); }
 
     Vector3 navigateVelocity = Vector3.zero;
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     void CmdNavigateVelocity(Vector3 velocity)
     {
         navigateVelocity = velocity.magnitude > 1 ? velocity.normalized : velocity; // prevent speedhacks
@@ -646,12 +646,12 @@ public partial class Player : Entity
                 return "IDLE";
             }
         }
-        if (EventSkillFinished()) { } // don't care
-        if (EventMoveEnd()) { } // don't care
-        if (EventTradeDone()) { } // don't care
-        if (EventRespawn()) { } // don't care
-        if (EventTargetDied()) { } // don't care
-        if (EventTargetDisappeared()) { } // don't care
+        if (EventSkillFinished()) {} // don't care
+        if (EventMoveEnd()) {} // don't care
+        if (EventTradeDone()) {} // don't care
+        if (EventRespawn()) {} // don't care
+        if (EventTargetDied()) {} // don't care
+        if (EventTargetDisappeared()) {} // don't care
 
         return "IDLE"; // nothing interesting happened
     }
@@ -742,11 +742,11 @@ public partial class Player : Entity
                 return "MOVING";
             }
         }
-        if (EventSkillFinished()) { } // don't care
-        if (EventTradeDone()) { } // don't care
-        if (EventRespawn()) { } // don't care
-        if (EventTargetDied()) { } // don't care
-        if (EventTargetDisappeared()) { } // don't care
+        if (EventSkillFinished()) {} // don't care
+        if (EventTradeDone()) {} // don't care
+        if (EventRespawn()) {} // don't care
+        if (EventTargetDied()) {} // don't care
+        if (EventTargetDisappeared()) {} // don't care
 
         return "MOVING"; // nothing interesting happened
     }
@@ -867,10 +867,10 @@ public partial class Player : Entity
             // go back to IDLE
             return "IDLE";
         }
-        if (EventMoveEnd()) { } // don't care
-        if (EventTradeDone()) { } // don't care
-        if (EventRespawn()) { } // don't care
-        if (EventSkillRequest()) { } // don't care
+        if (EventMoveEnd()) {} // don't care
+        if (EventTradeDone()) {} // don't care
+        if (EventRespawn()) {} // don't care
+        if (EventSkillRequest()) {} // don't care
 
         return "CASTING"; // nothing interesting happened
     }
@@ -911,13 +911,13 @@ public partial class Player : Entity
             TradeCleanup();
             return "IDLE";
         }
-        if (EventMoveEnd()) { } // don't care
-        if (EventSkillFinished()) { } // don't care
-        if (EventRespawn()) { } // don't care
-        if (EventTradeStarted()) { } // don't care
-        if (EventNavigateDestination()) { } // don't care
-        if (EventNavigateVelocity()) { } // don't care
-        if (EventSkillRequest()) { } // don't care
+        if (EventMoveEnd()) {} // don't care
+        if (EventSkillFinished()) {} // don't care
+        if (EventRespawn()) {} // don't care
+        if (EventTradeStarted()) {} // don't care
+        if (EventNavigateDestination()) {} // don't care
+        if (EventNavigateVelocity()) {} // don't care
+        if (EventSkillRequest()) {} // don't care
 
         return "TRADING"; // nothing interesting happened
     }
@@ -934,17 +934,17 @@ public partial class Player : Entity
             Revive(0.5f);
             return "IDLE";
         }
-        if (EventMoveEnd()) { } // don't care
-        if (EventSkillFinished()) { } // don't care
-        if (EventDied()) { } // don't care
-        if (EventCancelAction()) { } // don't care
-        if (EventTradeStarted()) { } // don't care
-        if (EventTradeDone()) { } // don't care
-        if (EventTargetDisappeared()) { } // don't care
-        if (EventTargetDied()) { } // don't care
-        if (EventNavigateDestination()) { } // don't care
-        if (EventNavigateVelocity()) { } // don't care
-        if (EventSkillRequest()) { } // don't care
+        if (EventMoveEnd()) {} // don't care
+        if (EventSkillFinished()) {} // don't care
+        if (EventDied()) {} // don't care
+        if (EventCancelAction()) {} // don't care
+        if (EventTradeStarted()) {} // don't care
+        if (EventTradeDone()) {} // don't care
+        if (EventTargetDisappeared()) {} // don't care
+        if (EventTargetDied()) {} // don't care
+        if (EventNavigateDestination()) {} // don't care
+        if (EventNavigateVelocity()) {} // don't care
+        if (EventSkillRequest()) {} // don't care
 
         return "DEAD"; // nothing interesting happened
     }
@@ -952,11 +952,11 @@ public partial class Player : Entity
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE") return UpdateServer_IDLE();
-        if (state == "MOVING") return UpdateServer_MOVING();
+        if (state == "IDLE")    return UpdateServer_IDLE();
+        if (state == "MOVING")  return UpdateServer_MOVING();
         if (state == "CASTING") return UpdateServer_CASTING();
         if (state == "TRADING") return UpdateServer_TRADING();
-        if (state == "DEAD") return UpdateServer_DEAD();
+        if (state == "DEAD")    return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
     }
@@ -994,8 +994,8 @@ public partial class Player : Entity
                 if (Input.GetKeyDown(KeyCode.Escape)) CmdCancelAction();
             }
         }
-        else if (state == "TRADING") { }
-        else if (state == "DEAD") { }
+        else if (state == "TRADING") {}
+        else if (state == "DEAD") {}
         else Debug.LogError("invalid state:" + state);
 
         if (nameOverlay != null)
@@ -1035,14 +1035,14 @@ public partial class Player : Entity
         return level - (strength + intelligence);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdIncreaseStrength()
     {
         // validate
         if (health > 0 && AttributesSpendable() > 0) ++strength;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdIncreaseIntelligence()
     {
         // validate
@@ -1054,7 +1054,7 @@ public partial class Player : Entity
     public static long CalculatePartyExperienceShare(long total, int memberCount, float bonusPercentagePerMember, int memberLevel, int killedLevel)
     {
         // bonus percentage based on how many members there are
-        float bonusPercentage = (memberCount - 1) * bonusPercentagePerMember;
+        float bonusPercentage = (memberCount-1) * bonusPercentagePerMember;
 
         // calculate the share via ceil, so that uneven numbers still result in
         // at least 'total' in the end.
@@ -1263,7 +1263,7 @@ public partial class Player : Entity
     }
 
     // loot ////////////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTakeLootGold()
     {
         // validate: dead monster and close enough?
@@ -1300,7 +1300,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTakeLootItem(int index)
     {
         // validate: dead monster and close enough and valid loot index?
@@ -1323,7 +1323,7 @@ public partial class Player : Entity
     }
 
     // inventory ///////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdSwapInventoryTrash(int inventoryIndex)
     {
         // dragging an inventory item to the trash always overwrites the trash
@@ -1344,7 +1344,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdSwapTrashInventory(int inventoryIndex)
     {
         if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
@@ -1361,9 +1361,8 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdSwapInventoryInventory(int fromIndex, int toIndex)
-    {
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
+    public void CmdSwapInventoryInventory(int fromIndex, int toIndex) {
         // note: should never send a command with complex types!
         // validate: make sure that the slots actually exist in the inventory
         // and that they are not equal
@@ -1379,7 +1378,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdInventorySplit(int fromIndex, int toIndex)
     {
         // note: should never send a command with complex types!
@@ -1408,7 +1407,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdInventoryMerge(int fromIndex, int toIndex)
     {
         if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
@@ -1438,7 +1437,7 @@ public partial class Player : Entity
         }
     }
 
-    [ClientRpc(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [ClientRpc(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void RpcUsedItem(Item item)
     {
         // validate
@@ -1449,7 +1448,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdUseInventoryItem(int index)
     {
         // validate
@@ -1527,7 +1526,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdSwapInventoryEquip(int inventoryIndex, int equipmentIndex)
     {
         // validate: make sure that the slots actually exist in the inventory
@@ -1571,7 +1570,7 @@ public partial class Player : Entity
                 (entity is Pet && entity != activePet));
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdUseSkill(int skillIndex)
     {
         // validate
@@ -1612,7 +1611,7 @@ public partial class Player : Entity
     }
 
     // -> this is for learning and upgrading!
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdUpgradeSkill(int skillIndex)
     {
         // validate
@@ -1717,7 +1716,7 @@ public partial class Player : Entity
                (quest.predecessor == null || HasCompletedQuest(quest.predecessor.name));
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdAcceptQuest(int npcQuestIndex)
     {
         // validate
@@ -1745,7 +1744,7 @@ public partial class Player : Entity
             // fulfilled?
             Quest quest = quests[index];
             int gathered = quest.gatherItem != null ? InventoryCount(new Item(quest.gatherItem)) : 0;
-            if (quest.IsFulfilled(gathered))
+            if(quest.IsFulfilled(gathered))
             {
                 // enough space for reward item (if any)?
                 return quest.rewardItem == null || InventoryCanAdd(new Item(quest.rewardItem), 1);
@@ -1754,7 +1753,7 @@ public partial class Player : Entity
         return false;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdCompleteQuest(int npcQuestIndex)
     {
         // validate
@@ -1793,7 +1792,7 @@ public partial class Player : Entity
     }
 
     // npc trading /////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdNpcBuyItem(int index, int amount)
     {
         // validate: close enough, npc alive and valid index?
@@ -1822,7 +1821,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdNpcSellItem(int index, int amount)
     {
         // validate: close enough, npc alive and valid index and valid item?
@@ -1852,7 +1851,7 @@ public partial class Player : Entity
     }
 
     // npc teleport ////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdNpcTeleport()
     {
         // validate
@@ -1894,7 +1893,7 @@ public partial class Player : Entity
     }
 
     // request a trade with the target player.
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeRequestSend()
     {
         // validate
@@ -1917,7 +1916,7 @@ public partial class Player : Entity
 
     // accept a trade invitation by simply setting 'requestFrom' for the other
     // person to self
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeRequestAccept()
     {
         Player sender = FindPlayerFromTradeInvitation();
@@ -1933,7 +1932,7 @@ public partial class Player : Entity
     }
 
     // decline a trade invitation
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeRequestDecline()
     {
         tradeRequestFrom = "";
@@ -1949,7 +1948,7 @@ public partial class Player : Entity
         tradeRequestFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeCancel()
     {
         // validate
@@ -1962,7 +1961,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeOfferLock()
     {
         // validate
@@ -1970,7 +1969,7 @@ public partial class Player : Entity
             tradeStatus = TradeStatus.Locked;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeOfferGold(long amount)
     {
         // validate
@@ -1979,7 +1978,7 @@ public partial class Player : Entity
             tradeOfferGold = amount;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeOfferItem(int inventoryIndex, int offerIndex)
     {
         // validate
@@ -1994,7 +1993,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeOfferItemClear(int offerIndex)
     {
         // validate
@@ -2033,7 +2032,7 @@ public partial class Player : Entity
         return 0;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTradeOfferAccept()
     {
         // validate
@@ -2141,7 +2140,7 @@ public partial class Player : Entity
     // realistic option
 
     // craft the current combination of items and put result into inventory
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdCraft(int[] indices)
     {
         // validate: between 1 and 6, all valid, no duplicates?
@@ -2289,7 +2288,7 @@ public partial class Player : Entity
 
     // sending guild notice and members to all observers would be bandwidth
     // overkill, so we use a targetrpc
-    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
+    [TargetRpc(channel=Channels.DefaultUnreliable)] // only send to one client
     public void TargetGuildSync(NetworkConnection target, Guild guild)
     {
         this.guild = guild;
@@ -2314,7 +2313,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdGuildInviteTarget()
     {
         // validate
@@ -2331,7 +2330,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdGuildInviteAccept()
     {
         // valid invitation?
@@ -2356,13 +2355,13 @@ public partial class Player : Entity
         guildInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdGuildInviteDecline()
     {
         guildInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdGuildKick(string memberName)
     {
         // validate
@@ -2381,7 +2380,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdGuildPromote(string memberName)
     {
         // validate
@@ -2396,7 +2395,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdGuildDemote(string memberName)
     {
         // validate
@@ -2411,7 +2410,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdSetGuildNotice(string notice)
     {
         // validate
@@ -2439,7 +2438,7 @@ public partial class Player : Entity
                Utils.ClosestDistance(collider, target.collider) <= interactionRange;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdTerminateGuild()
     {
         // validate
@@ -2453,7 +2452,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdCreateGuild(string newGuildName)
     {
         // validate
@@ -2482,7 +2481,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdLeaveGuild()
     {
         // validate
@@ -2524,7 +2523,7 @@ public partial class Player : Entity
 
     // sending party info to all observers would be bandwidth overkill, so we
     // use a targetrpc
-    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
+    [TargetRpc(channel=Channels.DefaultUnreliable)] // only send to one client
     public void TargetPartySync(NetworkConnection target, Party party)
     {
         this.party = party;
@@ -2552,7 +2551,7 @@ public partial class Player : Entity
 
     // party invite by name (not by target) so that chat commands are possible
     // if needed
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartyInvite(string otherName)
     {
         // validate: is there someone with that name, and not self?
@@ -2573,7 +2572,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartyInviteAccept()
     {
         // valid invitation?
@@ -2590,7 +2589,7 @@ public partial class Player : Entity
                 sender.party.AddMember(name);
                 BroadcastPartyChanges(sender.party);
                 print(sender.name + " added " + name + " to " + sender.party.members[0] + "'s party");
-                // -> or he is not in a party and forms a new one
+            // -> or he is not in a party and forms a new one
             }
             else if (!sender.InParty())
             {
@@ -2605,13 +2604,13 @@ public partial class Player : Entity
         partyInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartyInviteDecline()
     {
         partyInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartyKick(int memberIndex)
     {
         // validate: party master and index exists and not master?
@@ -2674,7 +2673,7 @@ public partial class Player : Entity
             print(name + " left the party");
         }
     }
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartyLeave() { PartyLeave(); }
 
     // version without cmd because we need to call it from the server too
@@ -2692,10 +2691,10 @@ public partial class Player : Entity
             print(name + " dismissed the party");
         }
     }
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartyDismiss() { PartyDismiss(); }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartySetExperienceShare(bool value)
     {
         // validate: is party master?
@@ -2707,7 +2706,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPartySetGoldShare(bool value)
     {
         // validate: is party master?
@@ -2720,7 +2719,7 @@ public partial class Player : Entity
     }
 
     // pet /////////////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPetSetAutoAttack(bool value)
     {
         // validate
@@ -2728,7 +2727,7 @@ public partial class Player : Entity
             activePet.autoAttack = value;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPetSetDefendOwner(bool value)
     {
         // validate
@@ -2741,11 +2740,11 @@ public partial class Player : Entity
     {
         // only while pet and owner aren't fighting
         return activePet != null &&
-               (state == "IDLE" || state == "MOVING") &&
+               (          state == "IDLE" ||           state == "MOVING") &&
                (activePet.state == "IDLE" || activePet.state == "MOVING");
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdPetUnsummon()
     {
         // validate
@@ -2756,7 +2755,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command(channel=Channels.DefaultUnreliable)] // unimportant => unreliable
     public void CmdNpcRevivePet(int index)
     {
         // validate: close enough, npc alive and valid index and valid item?
@@ -2804,7 +2803,7 @@ public partial class Player : Entity
         indicator.transform.position = position;
     }
 
-    [Command(channel = Channels.DefaultReliable)] // important for skills etc.
+    [Command(channel=Channels.DefaultReliable)] // important for skills etc.
     public void CmdSetTarget(NetworkIdentity ni)
     {
         // validate
