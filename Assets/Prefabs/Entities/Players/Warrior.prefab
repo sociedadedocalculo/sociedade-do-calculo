@@ -252,9 +252,13 @@ MonoBehaviour:
     baseValue: 0
     bonusPerLevel: 0
   damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 2}
-  skillTemplates: []
+  skillTemplates:
+  - {fileID: 11400000, guid: 605fccd420d8e495891132829d3ac497, type: 2}
+  - {fileID: 11400000, guid: 88f51d092fdf64bb0bf352cae8c522a0, type: 2}
+  - {fileID: 11400000, guid: 77d6d092d0a8c45a2aec83e9196a2b47, type: 2}
+  - {fileID: 11400000, guid: 073a4171553974a489a856df15a164ce, type: 2}
   currentSkill: -1
-  _effectMount: {fileID: 0}
+  _effectMount: {fileID: 467756}
   _gold: 0
   nameOverlay: {fileID: 0}
   chat: {fileID: 11460454}
@@ -280,7 +284,11 @@ MonoBehaviour:
   skillExperience: 0
   indicatorPrefab: {fileID: 120922, guid: 41e72cc740b150343af71b434401d675, type: 2}
   inventorySize: 30
-  defaultItems: []
+  defaultItems:
+  - {fileID: 11400000, guid: ae0314505b06f4f1280aa735db1c70e8, type: 2}
+  - {fileID: 11400000, guid: ae0314505b06f4f1280aa735db1c70e8, type: 2}
+  - {fileID: 11400000, guid: 2608a09a88215491fbe878f632afe522, type: 2}
+  - {fileID: 11400000, guid: acadbc0e96f8b49299aa1d1a5453f6f0, type: 2}
   inventorySplitKeys: 300100002f010000
   trash:
     item:
@@ -291,21 +299,21 @@ MonoBehaviour:
       petExperience: 0
     amount: 0
   equipmentInfo:
-  - requiredCategory: Weapon
-    location: {fileID: 0}
-    defaultItem: {fileID: 0}
+  - requiredCategory: WeaponSword
+    location: {fileID: 467756}
+    defaultItem: {fileID: 11400000, guid: ebde5c85fd92e499493a5ae898bef3cb, type: 2}
   - requiredCategory: Head
     location: {fileID: 0}
     defaultItem: {fileID: 0}
   - requiredCategory: Chest
-    location: {fileID: 0}
-    defaultItem: {fileID: 0}
+    location: {fileID: 467756}
+    defaultItem: {fileID: 11400000, guid: 4eda55d5000d34ff89fa773edb90c52e, type: 2}
   - requiredCategory: Legs
     location: {fileID: 0}
-    defaultItem: {fileID: 0}
+    defaultItem: {fileID: 11400000, guid: 4eda55d5000d34ff89fa773edb90c52e, type: 2}
   - requiredCategory: Shield
     location: {fileID: 0}
-    defaultItem: {fileID: 0}
+    defaultItem: {fileID: 11400000, guid: 8383cafc85a494a16b426cb11e5efa49, type: 2}
   - requiredCategory: Shoulders
     location: {fileID: 0}
     defaultItem: {fileID: 0}
