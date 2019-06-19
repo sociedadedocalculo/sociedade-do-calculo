@@ -8,6 +8,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: c4a9ed14b73a09742b1f4bea9bf8d31a, type: 3}
   m_Name: Iniciando a Jornada
   m_EditorClassIdentifier: 
+  toolTip: "<b>{NAME}</b>\nA Sociedade do Anel esta sendo atacada pelos ORCs. A muito
+    anos resurgiu a ideia que \xE9 necess\xE1rio estabelecer a uni\xE3o do Anel...\n*\n\nPara
+    que seu golpe seja certeiro e voc\xEA consiga derrotar os {KILLTARGET} \xE9 necess\xE1rio
+    descobrir qual o valor de f(-2) para a fun\xE7\xE3o: f(x)= 2x2 + 5x.\n\nwww.kahoot.com\n\n\n\nMetas:\n*
+    Elemine {KILLTARGET}: {KILLED}/{KILLAMOUNT}\n\nRecopemsas:\n* {REWARDGOLD} Ouro\n*
+    {REWARDEXPERIENCE} Experience\n* {REWARDITEM}\n\n{STATUS}"
+  requiredLevel: 1
+  predecessor: {fileID: 0}
+  rewardGold: 100
+  rewardExperience: 70
+  rewardItem: {fileID: 11400000, guid: 23bf22ba24d3447968ce8b813ab51fb4, type: 2}
+  killTarget: {fileID: 11474358, guid: 68fb15ce5f2e7eb44a8ac123d853b91a, type: 2}
+  killAmount: 2
+  gatherItem: {fileID: 0}
+  gatherAmount: 0

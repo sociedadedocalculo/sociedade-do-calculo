@@ -81,4 +81,19 @@ public class ScriptableRecipe : ScriptableObject
         for (int i = recipeSize; i < ingredients.Count; ++i)
             ingredients.RemoveAt(i);
     }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override bool Equals(object other)
+    {
+        return base.Equals(other);
+    }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
 }
