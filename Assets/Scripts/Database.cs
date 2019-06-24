@@ -523,7 +523,7 @@ public partial class Database
             Player prefab = prefabs.Find(p => p.name == className);
             if (prefab != null)
             {
-                GameObject go = GameObject.Instantiate(prefab.gameObject);
+                GameObject go = UnityEngine.Object.Instantiate(prefab.gameObject);
                 Player player = go.GetComponent<Player>();
 
                 player.name = (string)mainrow[0];
