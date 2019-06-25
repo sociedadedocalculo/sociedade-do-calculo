@@ -23,7 +23,7 @@ public partial struct Item
     public GameObject petSummoned; // pet that's currently summoned
     public int petHealth; // stored in item while pet unsummoned
     public int petLevel; // stored in item while pet unsummoned
-    public long petExperience; // stored in item while pet unsummoned
+    public long petExsadsadsadperience; // stored in item while pet unsummoned
 
     // constructors
     public Item(ScriptableItem data)
