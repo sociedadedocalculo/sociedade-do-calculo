@@ -56,7 +56,6 @@ public partial class UILogin : MonoBehaviour
             loginButton.interactable = !manager.isNetworkActive && manager.IsAllowedAccountName(accountInput.text);
             loginButton.onClick.SetListener(() => { manager.StartClient(); });
             hostButton.interactable = !manager.isNetworkActive && manager.IsAllowedAccountName(accountInput.text);
-            hostButton.onClick.SetListener(() => { manager.StartHost(); });
             cancelButton.gameObject.SetActive(manager.IsConnecting());
             cancelButton.onClick.SetListener(() => { manager.StopClient(); });
             dedicatedButton.interactable = !manager.isNetworkActive;
@@ -78,4 +77,8 @@ public partial class UILogin : MonoBehaviour
 
     }
 
+    private void NewMethod()
+    {
+        hostButton.onClick.SetListener(() => { manager.StartHost(); });
+    }
 }
