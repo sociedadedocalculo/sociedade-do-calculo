@@ -6,5 +6,5 @@ using UnityEngine;
 public class ItemDropChance
 {
     public ScriptableItem item;
-    [Range(0,1)] public float probability;
+    [Range(0, 1)] public float probability;
 }
