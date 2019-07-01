@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [CreateAssetMenu(menuName = "uMMORPG Item/Pet", order = 999)]
 public class PetItem : UsableItem

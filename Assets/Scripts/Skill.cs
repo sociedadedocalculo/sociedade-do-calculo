@@ -13,7 +13,7 @@
 using System;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [Serializable]
 public partial struct Skill

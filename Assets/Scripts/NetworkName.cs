@@ -3,7 +3,8 @@
 //
 // Simply using OnSerialize and OnDeserialize is the easiest way to do it. Using
 // a SyncVar would require Start, Hooks etc.
-using UnityEngine.Networking;
+using System.Collections.Generic;
+using Mirror;
 
 [NetworkSettings(channel=Channels.DefaultUnreliable)] // unreliable is enough
 public class NetworkName : NetworkBehaviour
@@ -29,5 +30,80 @@ public class NetworkName : NetworkBehaviour
     public override void OnDeserialize(NetworkReader reader, bool initialState)
     {
         name = reader.ReadString();
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override bool Equals(object other)
+    {
+        return base.Equals(other);
+    }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
+
+    public override bool InvokeCommand(int cmdHash, NetworkReader reader)
+    {
+        return base.InvokeCommand(cmdHash, reader);
+    }
+
+    public override bool InvokeRPC(int rpcHash, NetworkReader reader)
+    {
+        return base.InvokeRPC(rpcHash, reader);
+    }
+
+    public override bool InvokeSyncEvent(int eventHash, NetworkReader reader)
+    {
+        return base.InvokeSyncEvent(eventHash, reader);
+    }
+
+    public override void OnNetworkDestroy()
+    {
+        base.OnNetworkDestroy();
+    }
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+    }
+
+    public override void OnStartAuthority()
+    {
+        base.OnStartAuthority();
+    }
+
+    public override void OnStopAuthority()
+    {
+        base.OnStopAuthority();
+    }
+
+    public override bool OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
+    {
+        return base.OnRebuildObservers(observers, initialize);
+    }
+
+    public override void OnSetLocalVisibility(bool vis)
+    {
+        base.OnSetLocalVisibility(vis);
+    }
+
+    public override bool OnCheckObserver(NetworkConnection conn)
+    {
+        return base.OnCheckObserver(conn);
     }
 }

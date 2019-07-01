@@ -27,7 +27,7 @@
 // will always be generated randomly. Monsters can also randomly generate loot
 // gold between a minimum and a maximum amount.
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using System.Linq;
 
 [RequireComponent(typeof(Animator))]

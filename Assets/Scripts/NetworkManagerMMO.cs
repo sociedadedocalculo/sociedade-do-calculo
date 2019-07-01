@@ -23,7 +23,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -622,5 +623,140 @@ public partial class NetworkManagerMMO : NetworkManager
         // ip has to be changed in the server list. make it obvious to users.
         if (!Application.isPlaying && networkAddress != "")
             networkAddress = "Use the Server List below!";
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override bool Equals(object other)
+    {
+        return base.Equals(other);
+    }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
+
+    public override void Awake()
+    {
+        base.Awake();
+    }
+
+    public override void Start()
+    {
+        base.Start();
+    }
+
+    public override void LateUpdate()
+    {
+        base.LateUpdate();
+    }
+
+    public override void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+    }
+
+    public override void OnValidate()
+    {
+        base.OnValidate();
+    }
+
+    public override void ConfigureServerFrameRate()
+    {
+        base.ConfigureServerFrameRate();
+    }
+
+    public override void StartHost()
+    {
+        base.StartHost();
+    }
+
+    public override void ServerChangeScene(string newSceneName)
+    {
+        base.ServerChangeScene(newSceneName);
+    }
+
+    public override void ServerChangeScene(string newSceneName, LoadSceneMode sceneMode, LocalPhysicsMode physicsMode)
+    {
+        base.ServerChangeScene(newSceneName, sceneMode, physicsMode);
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
+
+    public override void OnServerConnect(NetworkConnection conn)
+    {
+        base.OnServerConnect(conn);
+    }
+
+    public override void OnServerReady(NetworkConnection conn)
+    {
+        base.OnServerReady(conn);
+    }
+
+    public override void OnServerAddPlayer(NetworkConnection conn, AddPlayerMessage extraMessage)
+    {
+        base.OnServerAddPlayer(conn, extraMessage);
+    }
+
+    public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
+    {
+        base.OnServerRemovePlayer(conn, player);
+    }
+
+    public override void OnServerError(NetworkConnection conn, int errorCode)
+    {
+        base.OnServerError(conn, errorCode);
+    }
+
+    public override void OnServerSceneChanged(string sceneName)
+    {
+        base.OnServerSceneChanged(sceneName);
+    }
+
+    public override void OnClientError(NetworkConnection conn, int errorCode)
+    {
+        base.OnClientError(conn, errorCode);
+    }
+
+    public override void OnClientNotReady(NetworkConnection conn)
+    {
+        base.OnClientNotReady(conn);
+    }
+
+    public override void OnClientChangeScene(string newSceneName)
+    {
+        base.OnClientChangeScene(newSceneName);
+    }
+
+    public override void OnStartHost()
+    {
+        base.OnStartHost();
+    }
+
+    public override void OnStartClient(NetworkClient client)
+    {
+        base.OnStartClient(client);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+    }
+
+    public override void OnStopHost()
+    {
+        base.OnStopHost();
     }
 }

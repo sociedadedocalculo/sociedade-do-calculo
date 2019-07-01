@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [CreateAssetMenu(menuName = "uMMORPG Skill/Target Heal", order = 999)]
 public class TargetHealSkill : HealSkillTemplate

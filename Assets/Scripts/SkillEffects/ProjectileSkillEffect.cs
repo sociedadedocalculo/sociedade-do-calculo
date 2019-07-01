@@ -5,7 +5,7 @@
 // the position to all clients, which is the easy method. But we just move it on
 // the server and the on the client to save bandwidth. Same result.
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 public class ProjectileSkillEffect : SkillEffect
 {

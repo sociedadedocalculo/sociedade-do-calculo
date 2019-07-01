@@ -24,8 +24,7 @@
 // (it doesn't matter if a player has to click the respawn button twice if under
 //  heavy load)
 using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.AI;
+using Mirror;
 using System;
 using System.Linq;
 using System.Collections.Generic;

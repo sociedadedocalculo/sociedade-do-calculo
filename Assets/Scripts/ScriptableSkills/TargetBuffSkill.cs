@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [CreateAssetMenu(menuName = "uMMORPG Skill/Target Buff", order = 999)]
 public class TargetBuffSkill : BuffSkill

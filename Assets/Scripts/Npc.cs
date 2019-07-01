@@ -4,7 +4,7 @@
 // Npcs first show the welcome text and then have options for item trading and
 // quests.
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using System;
 using System.Collections.Generic;
 using System.Linq;

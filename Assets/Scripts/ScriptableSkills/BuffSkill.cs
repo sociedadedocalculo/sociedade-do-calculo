@@ -3,7 +3,7 @@
 //    but they all have to fit into the buffs list
 using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 public abstract class BuffSkill : ScriptableSkill
 {

@@ -1,7 +1,7 @@
 ﻿// Contains all the network messages that we need.
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.Networking;
+using Mirror;
 
 // client to server ////////////////////////////////////////////////////////////
 public partial class LoginMsg : MessageBase

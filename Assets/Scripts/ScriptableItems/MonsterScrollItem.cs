@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using System.Collections.Generic;
 
 [CreateAssetMenu(menuName = "uMMORPG Item/Monster Scroll", order = 999)]

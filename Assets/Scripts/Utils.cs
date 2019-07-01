@@ -1,7 +1,7 @@
 // This class contains some helper functions.
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Networking;
+using Mirror;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;

@@ -13,7 +13,7 @@
 // - We also need the stopping distance, otherwise entities move too far.
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Networking;
+using Mirror;
 
 [RequireComponent(typeof(NavMeshAgent))]
 // unreliable is enough and we want

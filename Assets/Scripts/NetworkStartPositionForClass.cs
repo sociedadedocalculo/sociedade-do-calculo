@@ -1,6 +1,6 @@
 ﻿// Simple script that inherits from NetworkStartPosition to make class based
 // spawns.
-using UnityEngine.Networking;
+using Mirror;
 
 public class NetworkStartPositionForClass : NetworkStartPosition
 {

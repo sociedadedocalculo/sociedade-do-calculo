@@ -68,8 +68,7 @@
 //
 using System.Text;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 // entities ////////////////////////////////////////////////////////////////////
 public partial class Player {

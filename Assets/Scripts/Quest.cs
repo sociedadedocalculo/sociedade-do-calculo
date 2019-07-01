@@ -6,7 +6,7 @@
 // Quests have to be structs in order to work with SyncLists.
 using System;
 using System.Text;
-using UnityEngine.Networking;
+using Mirror;
 
 [Serializable]
 public partial struct Quest
@@ -94,4 +94,4 @@ public partial struct Quest
     }
 }
 
-public class SyncListQuest : SyncListStruct<Quest> { }
+public class SyncListQuest : SyncList<Quest> { }

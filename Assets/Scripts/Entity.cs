@@ -24,11 +24,10 @@
 // enabled. So for now it's important to disable Interpolation - which is a good
 // idea in general to increase performance.
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Networking;
+using Mirror;
 
 public enum DamageType { Normal, Block, Crit };
 
@@ -42,7 +41,9 @@ public abstract partial class Entity : NetworkBehaviour
     [Header("Components")]
     public NavMeshAgent agent;
     public NetworkProximityChecker proxchecker;
+#pragma warning disable CS0108 // O membro oculta o membro herdado; nova palavra-chave ausente
     public NetworkIdentity netIdentity;
+#pragma warning restore CS0108 // O membro oculta o membro herdado; nova palavra-chave ausente
     public Animator animator;
     new public Collider collider;
 

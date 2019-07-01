@@ -21,7 +21,7 @@
 // Note: make sure to drag all your SkillEffect prefabs into the NetworkManager
 //   spawnable prefabs list.
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [RequireComponent(typeof(NetworkProximityCheckerCustom))] // only broadcast to observers
 public abstract class SkillEffect : NetworkBehaviour

@@ -7,7 +7,7 @@
 //
 // Note: requires at least Unity 5.3.5, otherwise there is IL2CPP bug #786499.
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 using System.Collections.Generic;
 
 public class NetworkProximityCheckerCustom : NetworkProximityChecker

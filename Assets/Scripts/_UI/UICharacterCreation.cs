@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking;
+using Mirror;
 using System.Linq;
 
 public partial class UICharacterCreation : MonoBehaviour

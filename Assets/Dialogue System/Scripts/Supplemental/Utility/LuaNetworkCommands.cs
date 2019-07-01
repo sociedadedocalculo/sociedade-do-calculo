@@ -1,6 +1,6 @@
 ﻿#if !(UNITY_4_6 || UNITY_4_7 || UNITY_5_0)
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 namespace PixelCrushers.DialogueSystem
 {

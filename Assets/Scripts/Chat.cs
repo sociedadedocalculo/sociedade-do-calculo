@@ -14,7 +14,7 @@
 // _Note: the channel names, colors and commands can be edited in the Inspector_
 using System;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [Serializable]
 public class ChannelInfo

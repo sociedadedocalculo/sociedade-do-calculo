@@ -4,7 +4,7 @@
 //
 // Based on BuffSkill so it can be added to Buffs list.
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 [CreateAssetMenu(menuName = "uMMORPG Skill/Area Buff", order = 999)]
 public class AreaBuffSkill : BuffSkill
