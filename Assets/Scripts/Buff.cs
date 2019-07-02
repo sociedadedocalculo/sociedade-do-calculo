@@ -59,4 +59,4 @@ public partial struct Buff
     }
 }
 
-public class SyncListBuff : SyncListStruct<Buff> { }
+public class SyncListBuff : SyncListSTRUCT<Buff> { }

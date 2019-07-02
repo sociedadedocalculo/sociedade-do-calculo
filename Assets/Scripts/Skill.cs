@@ -108,4 +108,4 @@ public partial struct Skill
     }
 }
 
-public class SyncListSkill : SyncListStruct<Skill> { }
+public class SyncListSkill : SyncListSTRUCT<Skill> { }
