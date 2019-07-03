@@ -25,10 +25,8 @@ using UnityEngine;
 public abstract partial class ScriptableSkill : ScriptableObject
 {
     [Header("Info")]
-    // we can use the category to decide what to do on use. example categories:
-    // Attack, Stun, Buff, Heal, ...
     public bool followupDefaultAttack;
-    [SerializeField, TextArea(1, 30)] protected string toolTip; // not public because GetToolTip()
+    [SerializeField, TextArea(1, 30)] protected string toolTip; // not public, use ToolTip()
     public Sprite image;
     public bool learnDefault; // normal attack etc.
     public bool showCastBar;
@@ -36,20 +34,32 @@ public abstract partial class ScriptableSkill : ScriptableObject
 
     [Header("Requirements")]
     public ScriptableSkill predecessor; // this skill has to be learned first
-    public bool requiresWeapon; // some might need empty-handed casting
-    public LevelBasedInt requiredLevel;
-    public LevelBasedLong requiredSkillExperience;
+    public int predecessorLevel = 1; // level of predecessor skill that is required
+    public string requiredWeaponCategory = ""; // "" = no weapon needed; "Weapon" = requires a weapon, "WeaponSword" = requires a sword weapon, etc.
+    public LinearInt requiredLevel; // required player level
+    public LinearLong requiredSkillExperience;
 
     [Header("Properties")]
     public int maxLevel = 1;
-    public LevelBasedInt manaCosts;
-    public LevelBasedFloat castTime;
-    public LevelBasedFloat cooldown;
-    public LevelBasedFloat castRange;
+    public LinearInt manaCosts;
+    public LinearFloat castTime;
+    public LinearFloat cooldown;
+    public LinearFloat castRange;
+
+    [Header("Sound")]
+    public AudioClip castSound;
 
     // the skill casting process ///////////////////////////////////////////////
     // 1. self check: alive, enough mana, cooldown ready etc.?
-    // => done in entity.cs
+    // (most skills can only be cast while alive. some maybe while dead or only
+    //  if we have ammo, etc.)
+    public virtual bool CheckSelf(Entity caster, int skillLevel)
+    {
+        // has a weapon (important for projectiles etc.), no cooldown, hp, mp?
+        return caster.health > 0 &&
+               caster.mana >= manaCosts.Get(skillLevel) &&
+               caster.GetEquippedWeaponCategory().StartsWith(requiredWeaponCategory);
+    }
 
     // 2. target check: can we cast this skill 'here' or on this 'target'?
     // => e.g. sword hit checks if target can be attacked
@@ -70,12 +80,24 @@ public abstract partial class ScriptableSkill : ScriptableObject
     // (has corrected target already)
     public abstract void Apply(Entity caster, int skillLevel);
 
+    // events for client sided effects /////////////////////////////////////////
+    // [Client]
+    public virtual void OnCastStarted(Entity caster)
+    {
+        if (caster.audioSource != null && castSound != null)
+            caster.audioSource.PlayOneShot(castSound);
+    }
+
+    // [Client]
+    public virtual void OnCastFinished(Entity caster) { }
+
+    // OnCastCanceled doesn't seem worth the Rpc bandwidth, since skill effects
+    // can check if caster.currentSkill == -1
+
     // tooltip /////////////////////////////////////////////////////////////////
     // fill in all variables into the tooltip
-    // this saves us lots of ugly string concatenation code. we can't do it in
-    // ScriptableSkill because some variables can only be replaced here, hence we
-    // would end up with some variables not replaced in the string when calling
-    // Tooltip() from the template.
+    // this saves us lots of ugly string concatenation code.
+    // (dynamic ones are filled in Skill.cs)
     // -> note: each tooltip can have any variables, or none if needed
     // -> example usage:
     /*
@@ -93,7 +115,7 @@ public abstract partial class ScriptableSkill : ScriptableObject
     {
         StringBuilder tip = new StringBuilder(toolTip);
         tip.Replace("{NAME}", name);
-        tip.Replace("{LEVEL}", Mathf.Max(level, 1).ToString()); // 'Lvl 1' looks better than '0' for unlearned skills
+        tip.Replace("{LEVEL}", level.ToString());
         tip.Replace("{CASTTIME}", Utils.PrettySeconds(castTime.Get(level)));
         tip.Replace("{COOLDOWN}", Utils.PrettySeconds(cooldown.Get(level)));
         tip.Replace("{CASTRANGE}", castRange.Get(level).ToString());
@@ -105,7 +127,7 @@ public abstract partial class ScriptableSkill : ScriptableObject
             tip.Append("\n<b><i>Required Level: " + requiredLevel.Get(1) + "</i></b>\n" +
                        "<b><i>Required Skill Exp.: " + requiredSkillExperience.Get(1) + "</i></b>\n");
             if (predecessor != null)
-                tip.Append("<b><i>Required Skill: " + predecessor.name + " </i></b>\n");
+                tip.Append("<b><i>Required Skill: " + predecessor.name + " Lv. " + predecessorLevel + " </i></b>\n");
         }
 
         return tip.ToString();
@@ -122,10 +144,25 @@ public abstract partial class ScriptableSkill : ScriptableObject
     {
         get
         {
-            // load if not loaded yet
-            return cache ?? (cache = Resources.LoadAll<ScriptableSkill>("").ToDictionary(
-                skill => skill.name.GetStableHashCode(), skill => skill)
-            );
+            // not loaded yet?
+            if (cache == null)
+            {
+                // get all ScriptableSkills in resources
+                ScriptableSkill[] skills = Resources.LoadAll<ScriptableSkill>("");
+
+                // check for duplicates, then add to cache
+                List<string> duplicates = skills.ToList().FindDuplicates(skill => skill.name);
+                if (duplicates.Count == 0)
+                {
+                    cache = skills.ToDictionary(skill => skill.name.GetStableHashCode(), skill => skill);
+                }
+                else
+                {
+                    foreach (string duplicate in duplicates)
+                        Debug.LogError("Resources folder contains multiple ScriptableSkills with the name " + duplicate + ". If you are using subfolders like 'Warrior/NormalAttack' and 'Archer/NormalAttack', then rename them to 'Warrior/(Warrior)NormalAttack' and 'Archer/(Archer)NormalAttack' instead.");
+                }
+            }
+            return cache;
         }
     }
 }

@@ -1,21 +1,14 @@
+using System;
 using UnityEngine;
 using Mirror;
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using TMPro;
 
 [RequireComponent(typeof(Animator))]
-public partial class Pet : Entity
+[RequireComponent(typeof(NetworkNavMeshAgent))]
+public partial class Pet : Summonable
 {
-    [SyncVar] GameObject _owner;
-    public Player owner
-    {
-        get { return _owner != null ? _owner.GetComponent<Player>() : null; }
-        set { _owner = value != null ? value.gameObject : null; }
-    }
-
     [Header("Text Meshes")]
-    public TextMesh ownerNameOverlay;
+    public TextMeshPro ownerNameOverlay;
 
     [Header("Experience")] // note: int is not enough (can have > 2 mil. easily)
     public int maxLevel = 1;
@@ -46,7 +39,7 @@ public partial class Pet : Entity
                     ++level;
 
                     // keep player's pet item up to date
-                    SyncToOwnerPetItem();
+                    SyncToOwnerItem();
 
                     // addon system hooks
                     Utils.InvokeMany(typeof(Pet), this, "OnLevelUp_");
@@ -57,7 +50,9 @@ public partial class Pet : Entity
             }
         }
     }
-    [SerializeField] protected LevelBasedLong _experienceMax = new LevelBasedLong { baseValue = 10, bonusPerLevel = 10 };
+
+    // required experience grows by 10% each level (like Runescape)
+    [SerializeField] protected ExponentialLong _experienceMax = new ExponentialLong { multiplier = 100, baseValue = 1.1f };
     public long experienceMax { get { return _experienceMax.Get(level); } }
 
     [Header("Movement")]
@@ -69,11 +64,15 @@ public partial class Pet : Entity
     public float followDistance = 20;
     // pet should teleport if the owner gets too far away for whatever reason
     public float teleportDistance = 30;
+    [Range(0.1f, 1)] public float attackToMoveRangeRatio = 0.8f; // move as close as 0.8 * attackRange to a target
+
+    // use owner's speed if found, so that the pet can still follow the
+    // owner if he is riding a mount, etc.
+    public override float speed => owner != null ? owner.speed : base.speed;
 
     [Header("Death")]
     public float deathTime = 2; // enough for animation
-    float deathTimeEnd;
-    public long revivePrice = 10;
+    double deathTimeEnd; // double for long term precision
 
     [Header("Behaviour")]
     [SyncVar] public bool defendOwner = true; // attack what attacks the owner
@@ -82,32 +81,13 @@ public partial class Pet : Entity
     // the last skill that was casted, to decide which one to cast next
     int lastSkill = -1;
 
-    // sync with owner's pet item //////////////////////////////////////////////
-    // to save computations we don't sync to it all the time, it's enough to
-    // sync in:
-    // * OnDestroy when unsummoning the pet
-    // * On experience gain so that level ups and exp are saved properly
-    // * OnDeath so that people can't cheat around reviving pets
-    // => after a server crash the health/mana might not be exact, but that's a
-    //    good price to pay to save computations in each Update tick
-    [Server]
-    public void SyncToOwnerPetItem()
+    // sync to item ////////////////////////////////////////////////////////////
+    protected override ItemSlot SyncStateToItemSlot(ItemSlot slot)
     {
-        // owner might be null if server shuts down and owner was destroyed before
-        if (owner != null)
-        {
-            // find the item
-            int index = owner.inventory.FindIndex(slot => slot.amount > 0 && slot.item.petSummoned == gameObject);
-            if (index != -1)
-            {
-                ItemSlot slot = owner.inventory[index];
-                slot.item.petHealth = health;
-                slot.item.petLevel = level;
-                slot.item.petExperience = experience;
-                owner.inventory[index] = slot;
-            }
-            else Debug.LogWarning("Pet(" + name + ") not found in owners(" + owner.name + ") inventory");
-        }
+        // pet also has experience, unlike summonable. sync that too.
+        slot = base.SyncStateToItemSlot(slot);
+        slot.item.summonedExperience = experience;
+        return slot;
     }
 
     // networkbehaviour ////////////////////////////////////////////////////////
@@ -157,6 +137,7 @@ public partial class Pet : Entity
         {
             animator.SetBool("MOVING", state == "MOVING" && agent.velocity != Vector3.zero);
             animator.SetBool("CASTING", state == "CASTING");
+            animator.SetBool("STUNNED", state == "STUNNED");
             animator.SetBool("DEAD", state == "DEAD");
             foreach (Skill skill in skills)
                 animator.SetBool(skill.name, skill.CastTimeRemaining() > 0);
@@ -187,7 +168,7 @@ public partial class Pet : Entity
         if (NetworkServer.active) // isServer
         {
             // keep player's pet item up to date
-            SyncToOwnerPetItem();
+            SyncToOwnerItem();
         }
 
         // addon system hooks
@@ -212,7 +193,7 @@ public partial class Pet : Entity
 
     bool EventDeathTimeElapsed()
     {
-        return state == "DEAD" && Time.time >= deathTimeEnd;
+        return state == "DEAD" && NetworkTime.time >= deathTimeEnd;
     }
 
     bool EventTargetDisappeared()
@@ -236,7 +217,7 @@ public partial class Pet : Entity
     bool EventTargetTooFarToFollow()
     {
         return target != null &&
-               Vector3.Distance(owner.petDestination, target.collider.ClosestPointOnBounds(transform.position)) > followDistance;
+               Vector3.Distance(owner.petDestination, target.collider.ClosestPoint(transform.position)) > followDistance;
     }
 
     bool EventNeedReturnToOwner()
@@ -270,6 +251,11 @@ public partial class Pet : Entity
         return state == "MOVING" && !IsMoving();
     }
 
+    bool EventStunned()
+    {
+        return NetworkTime.time <= stunTimeEnd;
+    }
+
     // finite state machine - server ///////////////////////////////////////////
     [Server]
     string UpdateServer_IDLE()
@@ -285,8 +271,12 @@ public partial class Pet : Entity
         {
             // we died.
             OnDeath();
-            currentSkill = -1; // in case we died while trying to cast
             return "DEAD";
+        }
+        if (EventStunned())
+        {
+            agent.ResetMovement();
+            return "STUNNED";
         }
         if (EventTargetDied())
         {
@@ -323,8 +313,8 @@ public partial class Pet : Entity
         {
             // we had a target before, but it's out of attack range now.
             // follow it. (use collider point(s) to also work with big entities)
-            agent.stoppingDistance = CurrentCastRange() * 0.8f;
-            agent.destination = target.collider.ClosestPointOnBounds(transform.position);
+            agent.stoppingDistance = CurrentCastRange() * attackToMoveRangeRatio;
+            agent.destination = target.collider.ClosestPoint(transform.position);
             return "MOVING";
         }
         if (EventSkillRequest())
@@ -334,9 +324,8 @@ public partial class Pet : Entity
             Skill skill = skills[currentSkill];
             if (CastCheckSelf(skill) && CastCheckTarget(skill))
             {
-                // start casting and set the casting end time
-                skill.castTimeEnd = Time.time + skill.castTime;
-                skills[currentSkill] = skill;
+                // start casting
+                StartCastSkill(skill);
                 return "CASTING";
             }
             else
@@ -376,9 +365,13 @@ public partial class Pet : Entity
         {
             // we died.
             OnDeath();
-            currentSkill = -1; // in case we died while trying to cast
-            agent.ResetPath();
+            agent.ResetMovement();
             return "DEAD";
+        }
+        if (EventStunned())
+        {
+            agent.ResetMovement();
+            return "STUNNED";
         }
         if (EventMoveEnd())
         {
@@ -390,7 +383,7 @@ public partial class Pet : Entity
             // we had a target before, but it died now. clear it.
             target = null;
             currentSkill = -1;
-            agent.ResetPath();
+            agent.ResetMovement();
             return "IDLE";
         }
         if (EventNeedTeleportToOwner())
@@ -412,8 +405,8 @@ public partial class Pet : Entity
         {
             // we had a target before, but it's out of attack range now.
             // follow it. (use collider point(s) to also work with big entities)
-            agent.stoppingDistance = CurrentCastRange() * 0.8f;
-            agent.destination = target.collider.ClosestPointOnBounds(transform.position);
+            agent.stoppingDistance = CurrentCastRange() * attackToMoveRangeRatio;
+            agent.destination = target.collider.ClosestPoint(transform.position);
             return "MOVING";
         }
         if (EventAggro())
@@ -422,7 +415,7 @@ public partial class Pet : Entity
             // (we may get a target while randomly wandering around)
             if (skills.Count > 0) currentSkill = NextSkill();
             else Debug.LogError(name + " has no skills to attack with.");
-            agent.ResetPath();
+            agent.ResetMovement();
             return "IDLE";
         }
         if (EventNeedReturnToOwner()) { } // don't care
@@ -451,8 +444,13 @@ public partial class Pet : Entity
         {
             // we died.
             OnDeath();
-            currentSkill = -1; // in case we died while trying to cast
             return "DEAD";
+        }
+        if (EventStunned())
+        {
+            currentSkill = -1;
+            agent.ResetMovement();
+            return "STUNNED";
         }
         if (EventTargetDisappeared())
         {
@@ -477,7 +475,7 @@ public partial class Pet : Entity
         if (EventSkillFinished())
         {
             // finished casting. apply the skill on the target.
-            CastSkill(skills[currentSkill]);
+            FinishCastSkill(skills[currentSkill]);
 
             // did the target die? then clear it so that the monster doesn't
             // run towards it if the target respawned
@@ -498,6 +496,33 @@ public partial class Pet : Entity
         if (EventSkillRequest()) { } // don't care, that's why we are here
 
         return "CASTING"; // nothing interesting happened
+    }
+
+    [Server]
+    string UpdateServer_STUNNED()
+    {
+        // events sorted by priority (e.g. target doesn't matter if we died)
+        if (EventOwnerDisappeared())
+        {
+            // owner might disconnect or get destroyed for some reason
+            NetworkServer.Destroy(gameObject);
+            return "IDLE";
+        }
+        if (EventDied())
+        {
+            // we died.
+            OnDeath();
+            currentSkill = -1; // in case we died while trying to cast
+            return "DEAD";
+        }
+        if (EventStunned())
+        {
+            return "STUNNED";
+        }
+
+        // go back to idle if we aren't stunned anymore and process all new
+        // events there too
+        return "IDLE";
     }
 
     [Server]
@@ -538,6 +563,7 @@ public partial class Pet : Entity
         if (state == "IDLE") return UpdateServer_IDLE();
         if (state == "MOVING") return UpdateServer_MOVING();
         if (state == "CASTING") return UpdateServer_CASTING();
+        if (state == "STUNNED") return UpdateServer_STUNNED();
         if (state == "DEAD") return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
@@ -553,14 +579,22 @@ public partial class Pet : Entity
             if (target) LookAtY(target.transform.position);
         }
 
+        // addon system hooks
+        Utils.InvokeMany(typeof(Pet), this, "UpdateClient_");
+    }
+
+    // overlays ////////////////////////////////////////////////////////////////
+    protected override void UpdateOverlays()
+    {
+        base.UpdateOverlays();
+
         if (ownerNameOverlay != null)
         {
             if (owner != null)
             {
                 ownerNameOverlay.text = owner.name;
                 // find local player (null while in character selection)
-                Player player = Utils.ClientLocalPlayer();
-                if (player != null)
+                if (Player.localPlayer != null)
                 {
                     // note: murderer has higher priority (a player can be a murderer and an
                     // offender at the same time)
@@ -569,7 +603,7 @@ public partial class Pet : Entity
                     else if (owner.IsOffender())
                         ownerNameOverlay.color = owner.nameOverlayOffenderColor;
                     // member of the same party
-                    else if (player.InParty() && player.party.GetMemberIndex(owner.name) != -1)
+                    else if (Player.localPlayer.InParty() && Player.localPlayer.party.Contains(owner.name))
                         ownerNameOverlay.color = owner.nameOverlayPartyColor;
                     // otherwise default
                     else
@@ -578,19 +612,16 @@ public partial class Pet : Entity
             }
             else ownerNameOverlay.text = "?";
         }
-
-        // addon system hooks
-        Utils.InvokeMany(typeof(Pet), this, "UpdateClient_");
     }
 
     // combat //////////////////////////////////////////////////////////////////
     // custom DealDamageAt function that also rewards experience if we killed
     // the monster
     [Server]
-    public override void DealDamageAt(Entity entity, int amount)
+    public override void DealDamageAt(Entity entity, int amount, float stunChance = 0, float stunTime = 0)
     {
         // deal damage with the default function
-        base.DealDamageAt(entity, amount);
+        base.DealDamageAt(entity, amount, stunChance, stunTime);
 
         // a monster?
         if (entity is Monster)
@@ -663,29 +694,25 @@ public partial class Pet : Entity
         // fine even if a pet isn't updated for a while. so as soon as it's
         // updated again, the death/respawn will happen immediately if current
         // time > end time.
-        deathTimeEnd = Time.time + deathTime;
+        deathTimeEnd = NetworkTime.time + deathTime;
 
         // keep player's pet item up to date
-        SyncToOwnerPetItem();
+        SyncToOwnerItem();
 
         // addon system hooks
         Utils.InvokeMany(typeof(Pet), this, "OnDeath_");
     }
 
     // skills //////////////////////////////////////////////////////////////////
-    // monsters always have a weapon
-    public override bool HasCastWeapon() { return true; }
-
     // CanAttack check
     // we use 'is' instead of 'GetType' so that it works for inherited types too
     public override bool CanAttack(Entity entity)
     {
-        return health > 0 &&
-               entity.health > 0 &&
-               entity != this &&
+        return base.CanAttack(entity) &&
                (entity is Monster ||
                 (entity is Player && entity != owner) ||
-                (entity is Pet && ((Pet)entity).owner != owner));
+                (entity is Pet && ((Pet)entity).owner != owner) ||
+                (entity is Mount && ((Mount)entity).owner != owner));
     }
 
     // helper function to get the current cast range (if casting anything)

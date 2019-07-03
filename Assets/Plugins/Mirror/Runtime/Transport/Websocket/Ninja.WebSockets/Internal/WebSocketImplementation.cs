@@ -21,7 +21,6 @@
 // ---------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net.WebSockets;
@@ -49,8 +48,7 @@ namespace Ninja.WebSockets.Internal
         readonly bool _includeExceptionInCloseResponse;
         readonly bool _isClient;
         readonly string _subProtocol;
-        CancellationTokenSource _internalReadCts;
-        WebSocketState _state;
+        private WebSocketState _state;
         bool _isContinuationFrame;
         WebSocketMessageType _continuationFrameMessageType = WebSocketMessageType.Binary;
         readonly bool _usePerMessageDeflate = false;
@@ -68,7 +66,7 @@ namespace Ninja.WebSockets.Internal
             _stream = stream;
             _isClient = isClient;
             _subProtocol = subProtocol;
-            _internalReadCts = new CancellationTokenSource();
+            InternalReadCts1 = new CancellationTokenSource();
             _state = WebSocketState.Open;
 
             if (secWebSocketExtensions?.IndexOf("permessage-deflate") >= 0)
@@ -97,9 +95,18 @@ namespace Ninja.WebSockets.Internal
                 // the ping pong manager starts a task
                 // but we don't have to keep a reference to it
 #pragma warning disable 0219
-                PingPongManager pingPongManager = new PingPongManager(guid, this, keepAliveInterval, _internalReadCts.Token);
+                PingPongManager pingPongManager = new PingPongManager(guid, this, keepAliveInterval, InternalReadCts1.Token);
 #pragma warning restore 0219
             }
+        }
+
+        public WebSocketImplementation()
+        {
+        }
+
+        public WebSocketImplementation(CancellationTokenSource internalReadCts)
+        {
+            InternalReadCts1 = internalReadCts;
         }
 
         public override WebSocketCloseStatus? CloseStatus => _closeStatus;
@@ -111,6 +118,8 @@ namespace Ninja.WebSockets.Internal
         public override string SubProtocol => _subProtocol;
 
         public TimeSpan KeepAliveInterval { get; private set; }
+        public CancellationTokenSource InternalReadCts { get => InternalReadCts1; set => InternalReadCts1 = value; }
+        public CancellationTokenSource InternalReadCts1 { get; set; }
 
         /// <summary>
         /// Receive web socket result
@@ -126,7 +135,7 @@ namespace Ninja.WebSockets.Internal
                 while (true)
                 {
                     // allow this operation to be cancelled from iniside OR outside this instance
-                    using (CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(_internalReadCts.Token, cancellationToken))
+                    using (CancellationTokenSource linkedCts = CancellationTokenSource.CreateLinkedTokenSource(InternalReadCts1.Token, cancellationToken))
                     {
                         WebSocketFrame frame = null;
                         try
@@ -277,7 +286,7 @@ namespace Ninja.WebSockets.Internal
         public override void Abort()
         {
             _state = WebSocketState.Aborted;
-            _internalReadCts.Cancel();
+            InternalReadCts1.Cancel();
         }
 
         /// <summary>
@@ -327,7 +336,7 @@ namespace Ninja.WebSockets.Internal
             }
 
             // cancel pending reads
-            _internalReadCts.Cancel();
+            InternalReadCts1.Cancel();
         }
 
         /// <summary>
@@ -354,7 +363,7 @@ namespace Ninja.WebSockets.Internal
                 }
 
                 // cancel pending reads - usually does nothing
-                _internalReadCts.Cancel();
+                InternalReadCts1.Cancel();
                 _stream.Close();
             }
             catch (Exception ex)
@@ -517,7 +526,7 @@ namespace Ninja.WebSockets.Internal
         /// Puts data on the wire
         /// </summary>
         /// <param name="stream">The stream to read data from</param>
-        async Task WriteStreamToNetwork(MemoryStream stream, CancellationToken cancellationToken)
+        private async Task WriteStreamToNetwork(MemoryStream stream, CancellationToken cancellationToken)
         {
             ArraySegment<byte> buffer = GetBuffer(stream);
             await _stream.WriteAsync(buffer.Array, buffer.Offset, buffer.Count, cancellationToken).ConfigureAwait(false);

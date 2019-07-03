@@ -1,4 +1,8 @@
-﻿#if !(UNITY_4_6 || UNITY_4_7 || UNITY_5_0)
+﻿// A simple skill effect that follows the target until it ends.
+// -> Can be used for buffs.
+//
+// Note: Particle Systems need Simulation Space = Local for it to work.
+#if !(UNITY_4_6 || UNITY_4_7 || UNITY_5_0)
 using UnityEngine;
 using Mirror;
 

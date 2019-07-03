@@ -212,7 +212,7 @@ namespace Mirror
                 payload = writer.ToArray()
             };
 
-            NetworkServer.SendToReady(netIdentity,message, channelId);
+            NetworkServer.SendToReady(netIdentity, message, channelId);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -553,12 +553,12 @@ namespace Mirror
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual void OnNetworkDestroy() {}
-        public virtual void OnStartServer() {}
-        public virtual void OnStartClient() {}
-        public virtual void OnStartLocalPlayer() {}
-        public virtual void OnStartAuthority() {}
-        public virtual void OnStopAuthority() {}
+        public virtual void OnNetworkDestroy() { }
+        public virtual void OnStartServer() { }
+        public virtual void OnStartClient() { }
+        public virtual void OnStartLocalPlayer() { }
+        public virtual void OnStartAuthority() { }
+        public virtual void OnStopAuthority() { }
 
         // return true when overwriting so that Mirror knows that we wanted to
         // rebuild observers ourselves. otherwise it uses built in rebuild.
@@ -567,7 +567,7 @@ namespace Mirror
             return false;
         }
 
-        public virtual void OnSetLocalVisibility(bool vis) {}
+        public virtual void OnSetLocalVisibility(bool vis) { }
 
         public virtual bool OnCheckObserver(NetworkConnection conn)
         {

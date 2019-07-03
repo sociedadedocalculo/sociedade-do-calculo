@@ -1,7 +1,5 @@
 // This class contains some helper functions.
 using UnityEngine;
-using UnityEngine.Rendering;
-using Mirror;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections.Generic;
@@ -39,21 +37,7 @@ public class Utils
         return keys.Any(k => Input.GetKey(k));
     }
 
-    // detect headless mode (which has graphicsDeviceType Null)
-    public static bool IsHeadless()
-    {
-        return SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
-    }
-
-    // String.IsNullOrWhiteSpace that exists in NET4.5
-    // note: can't be an extension because then it can't detect null strings
-    //       like null.IsNullOrWhitespace
-    public static bool IsNullOrWhiteSpace(string value)
-    {
-        return String.IsNullOrEmpty(value) || value.Trim().Length == 0;
-    }
-
-    // Distance between two ClosestPointOnBounds
+    // Distance between two ClosestPoints
     // this is needed in cases where entites are really big. in those cases,
     // we can't just move to entity.transform.position, because it will be
     // unreachable. instead we have to go the closest point on the boundary.
@@ -73,8 +57,17 @@ public class Utils
     //
     public static float ClosestDistance(Collider a, Collider b)
     {
-        return Vector3.Distance(a.ClosestPointOnBounds(b.transform.position),
-                                b.ClosestPointOnBounds(a.transform.position));
+        // return 0 if both intersect or if one is inside another.
+        // ClosestPoint distance wouldn't be > 0 in those cases otherwise.
+        if (a.bounds.Intersects(b.bounds))
+            return 0;
+
+        // Unity offers ClosestPointOnBounds and ClosestPoint.
+        // ClosestPoint is more accurate. OnBounds often doesn't get <1 because
+        // it uses a point at the top of the player collider, not in the center.
+        // (use Debug.DrawLine here to see the difference)
+        return Vector3.Distance(a.ClosestPoint(b.transform.position),
+                                b.ClosestPoint(a.transform.position));
     }
 
     // raycast while ignoring self (by setting layer to "Ignore Raycasts" first)
@@ -103,10 +96,28 @@ public class Utils
         return result;
     }
 
+    // calculate encapsulating bounds of all child renderers
+    public static Bounds CalculateBoundsForAllRenderers(GameObject go)
+    {
+        Bounds bounds = new Bounds();
+        bool initialized = false;
+        foreach (Renderer rend in go.GetComponentsInChildren<Renderer>())
+        {
+            // initialize or encapsulate
+            if (!initialized)
+            {
+                bounds = rend.bounds;
+                initialized = true;
+            }
+            else bounds.Encapsulate(rend.bounds);
+        }
+        return bounds;
+    }
+
     // pretty print seconds as hours:minutes:seconds(.milliseconds/100)s
     public static string PrettySeconds(float seconds)
     {
-        TimeSpan t = System.TimeSpan.FromSeconds(seconds);
+        TimeSpan t = TimeSpan.FromSeconds(seconds);
         string res = "";
         if (t.Days > 0) res += t.Days + "d";
         if (t.Hours > 0) res += " " + t.Hours + "h";
@@ -161,37 +172,10 @@ public class Utils
     public static float GetZoomUniversal()
     {
         if (Input.mousePresent)
-            return Utils.GetAxisRawScrollUniversal();
+            return GetAxisRawScrollUniversal();
         else if (Input.touchSupported)
             return GetPinch();
         return 0;
-    }
-
-    // find first valid gameobject from player controllers list
-    public static GameObject GetGameObjectFromPlayerControllers(List<PlayerController> controllers)
-    {
-        PlayerController controller = controllers.Find(pc => pc.gameObject != null);
-        return controller != null ? controller.gameObject : null;
-    }
-
-    // find local player (clientsided)
-    public static Player ClientLocalPlayer()
-    {
-        // note: ClientScene.localPlayers.Count cant be used as check because
-        // nothing is removed from that list, even after disconnect. It still
-        // contains entries like: ID=0 NetworkIdentity NetID=null Player=null
-        // (which might be a UNET bug)
-        GameObject go = GetGameObjectFromPlayerControllers(ClientScene.localPlayers);
-        return go != null ? go.GetComponent<Player>() : null;
-    }
-
-    // parse first upper cased noun from a string, e.g.
-    //   EquipmentWeaponBow => Equipment
-    //   EquipmentShield => Equipment
-    public static string ParseFirstNoun(string text)
-    {
-        MatchCollection matches = new Regex(@"([A-Z][a-z]*)").Matches(text);
-        return matches.Count > 0 ? matches[0].Value : "";
     }
 
     // parse last upper cased noun from a string, e.g.
@@ -235,7 +219,6 @@ public class Utils
     // invoke multiple functions by prefix via reflection.
     // -> works for static classes too if object = null
     // -> cache it so it's fast enough for Update calls
-    // -> C# only has Tuple support in 4.6, so we use KeyValuePair instead
     static Dictionary<KeyValuePair<Type, string>, MethodInfo[]> lookup = new Dictionary<KeyValuePair<Type, string>, MethodInfo[]>();
     public static MethodInfo[] GetMethodsByPrefix(Type type, string methodPrefix)
     {

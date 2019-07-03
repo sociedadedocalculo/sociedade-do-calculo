@@ -85,8 +85,7 @@ public class CameraMMO : MonoBehaviour
         transform.position = targetPos - (transform.rotation * Vector3.forward * distance);
 
         // avoid view blocking (disabled, see comment at the top)
-        RaycastHit hit;
-        if (Physics.Linecast(targetPos, transform.position, out hit, viewBlockingLayers))
+        if (Physics.Linecast(targetPos, transform.position, out RaycastHit hit, viewBlockingLayers))
         {
             // calculate a better distance (with some space between it)
             float d = Vector3.Distance(targetPos, hit.point) - 0.1f;

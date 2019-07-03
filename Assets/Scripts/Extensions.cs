@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
-using Mirror;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,22 +20,6 @@ public static class Extensions
     {
         Int64.TryParse(value, out errVal);
         return errVal;
-    }
-
-    // transform.Find only finds direct children, no grandchildren etc.
-    public static Transform FindRecursively(this Transform transform, string name)
-    {
-        return Array.Find(transform.GetComponentsInChildren<Transform>(true),
-                          t => t.name == name);
-    }
-
-    // FindIndex function for synclists
-    public static int FindIndex<T>(this SyncList<T> list, Predicate<T> match)
-    {
-        for (int i = 0; i < list.Count; ++i)
-            if (match(list[i]))
-                return i;
-        return -1;
     }
 
     // UI SetListener extension that removes previous and then adds new listener
@@ -82,13 +65,25 @@ public static class Extensions
 
         // otherwise find nearest navmesh position first. we use a radius of
         // speed*2 which works fine. afterwards we find the closest valid point.
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(destination, out hit, agent.speed * 2, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(destination, out NavMeshHit hit, agent.speed * 2, NavMesh.AllAreas))
             if (agent.CalculatePath(hit.position, path))
                 return path.corners[path.corners.Length - 1];
 
         // nothing worked, don't go anywhere.
         return agent.transform.position;
+    }
+
+    // NavMeshAgent's ResetPath() function clears the path, but doesn't clear
+    // the velocity immediately. This is a nightmare for finite state machines
+    // because we often reset a path, then switch to casting, which would then
+    // receive a movement event because velocity still isn't 0 until a few
+    // frames later.
+    //
+    // We need a function that truly stops all movement.
+    public static void ResetMovement(this NavMeshAgent agent)
+    {
+        agent.ResetPath();
+        agent.velocity = Vector3.zero;
     }
 
     // check if a list has duplicates
@@ -100,14 +95,15 @@ public static class Extensions
         return list.Count != list.Distinct().Count();
     }
 
-    // networkmanager GetStartPosition is only for random/roundrobin. we need
-    // nearest too.
-    public static Transform GetNearestStartPosition(this NetworkManager manager, Vector3 from)
+    // find all duplicates in a list
+    public static List<U> FindDuplicates<T, U>(this List<T> list, Func<T, U> keySelector)
     {
-        return manager.startPositions.OrderBy(t => Vector3.Distance(from, t.position)).First();
+        return list.GroupBy(keySelector)
+                   .Where(group => group.Count() > 1)
+                   .Select(group => group.Key).ToList();
     }
 
-    // string.GetHashCode is not quaranteed to be the same on all machines, but
+    // string.GetHashCode is not guaranteed to be the same on all machines, but
     // we need one that is the same on all machines. simple and stupid:
     public static int GetStableHashCode(this string text)
     {

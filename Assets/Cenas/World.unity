@@ -1085,8 +1085,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1001 &18592154
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1234,7 +1232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &23106728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2236,8 +2233,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &40835921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4228,20 +4223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e614034bc73674146993ff0bd10ead92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 74766660}
-  slotPrefab: {fileID: 114485565904470592, guid: bc446906f45fd4f8fb9703ad2051a076,
-    type: 3}
-  content: {fileID: 1834649041}
-  buySlot: {fileID: 1060475982}
-  buyAmountInput: {fileID: 1321362826}
-  buyCostsText: {fileID: 607218135}
-  buyButton: {fileID: 1261758343}
-  sellSlot: {fileID: 88697200}
-  sellAmountInput: {fileID: 1107373253}
-  sellCostsText: {fileID: 1564042728}
-  sellButton: {fileID: 380856886}
-  buyIndex: -1
-  sellIndex: -1
 --- !u!114 &74766663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4833,11 +4814,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb999048c578448a49edc4c9cab34bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: 0
-  drageePrefab: {fileID: 0}
-  dragable: 1
-  dropable: 1
-  draggedToSlot: 0
 --- !u!114 &88697201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4850,8 +4826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &88697202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5585,11 +5559,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dcd1585578764547a6340d6bb335ab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 104013752}
-  itemSlot: {fileID: 969076111}
-  costsText: {fileID: 1928946940}
-  reviveButton: {fileID: 550559440}
-  itemIndex: -1
 --- !u!114 &104013755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9340,7 +9309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &192397761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9564,26 +9532,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575c8304281ff4c99b82844640b19328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1481071007}
-  inventoryButton: {fileID: 1035226433}
-  inventoryPanel: {fileID: 1394922958}
-  equipmentButton: {fileID: 18503394}
-  equipmentPanel: {fileID: 275289140}
-  skillsButton: {fileID: 1675959845}
-  skillsPanel: {fileID: 357075630}
-  characterInfoButton: {fileID: 489711185}
-  characterInfoPanel: {fileID: 0}
-  questsButton: {fileID: 967393681}
-  questsPanel: {fileID: 0}
-  craftingButton: {fileID: 1215000662}
-  craftingPanel: {fileID: 0}
-  guildButton: {fileID: 40835921}
-  guildPanel: {fileID: 0}
-  partyButton: {fileID: 1591707438}
-  partyPanel: {fileID: 0}
-  itemMallButton: {fileID: 1464521199}
-  itemMallPanel: {fileID: 0}
-  quitButton: {fileID: 1027869628}
 --- !u!1 &195133542
 GameObject:
   m_ObjectHideFlags: 0
@@ -9818,21 +9766,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a903f30846e3a4a5aa4f0d366ea993af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 103
-  panel: {fileID: 1036824579}
-  nameText: {fileID: 1290169315}
-  masterText: {fileID: 1783534015}
-  currentCapacityText: {fileID: 1564843374}
-  maximumCapacityText: {fileID: 1902349579}
-  noticeInput: {fileID: 145573797}
-  noticeEditButton: {fileID: 1964576865}
-  noticeSetButton: {fileID: 1631444447}
-  slotPrefab: {fileID: 114611570997501482, guid: 3279375200abc41ccbcd0c262e467616,
-    type: 3}
-  memberContent: {fileID: 472691011}
-  onlineColor: {r: 0, g: 1, b: 1, a: 1}
-  offlineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  leaveButton: {fileID: 677700539}
 --- !u!1001 &198504327
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11526,7 +11459,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &247922875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12744,7 +12676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 286065717}
 --- !u!135 &271374656
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -13451,13 +13382,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &286065714
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13488,7 +13412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 286065718}
 --- !u!114 &286065716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13502,7 +13425,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 286065718}
 --- !u!114 &286065717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13516,57 +13438,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 286065718}
-  proxchecker: {fileID: 286065713}
-  netIdentity: {fileID: 286065719}
-  animator: {fileID: 286065720}
-  collider: {fileID: 533201206}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 1331524037}
-  _gold: 0
-  nameOverlay: {fileID: 1815838019}
-  moveProbability: 0
-  moveDistance: 10
-  followDistance: 20
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &286065718
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -14745,7 +14616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &305269656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14870,7 +14740,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &306799416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15450,7 +15319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 335491393}
 --- !u!135 &328416683
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -15805,13 +15673,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &335491390
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15842,7 +15703,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 335491394}
 --- !u!114 &335491392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15856,7 +15716,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 335491394}
 --- !u!114 &335491393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15870,57 +15729,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 335491394}
-  proxchecker: {fileID: 335491389}
-  netIdentity: {fileID: 335491395}
-  animator: {fileID: 335491396}
-  collider: {fileID: 52769771}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 1855312669}
-  _gold: 0
-  nameOverlay: {fileID: 675385870}
-  moveProbability: 0
-  moveDistance: 10
-  followDistance: 20
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &335491394
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -16387,8 +16195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &344438991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16492,11 +16298,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb999048c578448a49edc4c9cab34bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: 0
-  drageePrefab: {fileID: 0}
-  dragable: 1
-  dropable: 1
-  draggedToSlot: 0
 --- !u!1 &346799625
 GameObject:
   m_ObjectHideFlags: 0
@@ -17777,8 +17578,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98b4cf61d28c495d9341c72c0a2f2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 752718777}
-  button: {fileID: 1659606973}
 --- !u!1 &370395278
 GameObject:
   m_ObjectHideFlags: 0
@@ -18879,11 +18678,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd43e1841258c149940fc5010ce34b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1994211459}
-  healthSlider: {fileID: 61592505}
-  healthStatus: {fileID: 1219315711}
-  manaSlider: {fileID: 1511115781}
-  manaStatus: {fileID: 791443837}
 --- !u!1 &404252503
 GameObject:
   m_ObjectHideFlags: 0
@@ -19626,7 +19420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &422518212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20335,13 +20128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &439915062
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20371,7 +20157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 439915066}
 --- !u!114 &439915064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20385,7 +20170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 439915066}
 --- !u!114 &439915065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20399,57 +20183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 439915066}
-  proxchecker: {fileID: 439915061}
-  netIdentity: {fileID: 439915067}
-  animator: {fileID: 439915068}
-  collider: {fileID: 1450077151}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 145030356}
-  _gold: 0
-  nameOverlay: {fileID: 1814568190}
-  moveProbability: 0.2
-  moveDistance: 5
-  followDistance: 10
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &439915066
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -20753,14 +20486,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6989a6eb2c8b44dddbfc6a6eb286ea45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 2077197889}
-  messageInput: {fileID: 2112813031}
-  sendButton: {fileID: 1586570056}
-  content: {fileID: 1378347949}
-  scrollRect: {fileID: 1007531609}
-  textPrefab: {fileID: 193954, guid: 1cd8c9ec0051d4ea0b9a0eda4eb4dc6f, type: 3}
-  activationKeys: 0d0000000f010000
-  keepHistory: 100
 --- !u!1 &447986250
 GameObject:
   m_ObjectHideFlags: 0
@@ -20941,7 +20666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &453195434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21372,7 +21096,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 1533037064}
 --- !u!135 &464115609
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -22394,8 +22117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1 &489830698
 GameObject:
   m_ObjectHideFlags: 0
@@ -22699,10 +22420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70141d214634b48708cd6e91ffe0cd6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1786126744}
-  slotPrefab: {fileID: 114619415743688204, guid: 292df92c92a7b438992fb0d7a2551615,
-    type: 3}
-  content: {fileID: 1786126745}
 --- !u!1 &502760451
 GameObject:
   m_ObjectHideFlags: 0
@@ -23861,7 +23578,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &528172345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24368,21 +24084,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a015ce8f276b421bb92ec2360340c03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiPopup: {fileID: 1165640891}
-  uiPopupMessage: {fileID: 1745647473}
-  manager: {fileID: 2072336950}
-  panel: {fileID: 1928168833}
-  statusText: {fileID: 647607421}
-  accountInput: {fileID: 541225833}
-  passwordInput: {fileID: 979694262}
-  serverDropdown: {fileID: 463284450}
-  loginButton: {fileID: 13168052}
-  registerButton: {fileID: 1690069403}
-  registerMessage: Primeira vez? Tente criar o seu cadastro para logar-se...
-  hostButton: {fileID: 1696663925}
-  dedicatedButton: {fileID: 2044774449}
-  cancelButton: {fileID: 1605173917}
-  quitButton: {fileID: 347607968}
 --- !u!82 &535829617
 AudioSource:
   m_ObjectHideFlags: 0
@@ -25314,8 +25015,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05d06bc558a655a4fa52da3e1e0b8b26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gizmoColor: {r: 0, g: 1, b: 1, a: 0.25}
-  gizmoWireColor: {r: 1, g: 1, b: 1, a: 0.8}
 --- !u!1 &566891780
 GameObject:
   m_ObjectHideFlags: 0
@@ -25823,7 +25522,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 1690277220}
 --- !u!135 &581329835
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -26496,9 +26194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b3fef88c591dc47a952b69e3f3f7da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 0}
-  content: {fileID: 0}
-  scrollbar: {fileID: 0}
 --- !u!1 &597591857
 GameObject:
   m_ObjectHideFlags: 0
@@ -27640,7 +27335,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &611738855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29098,7 +28792,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &647871876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29553,10 +29246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 318b7ddf655d27e4fa80a12efe19a9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 1
-  y: 0
-  z: 1
-  target: {fileID: 0}
 --- !u!20 &655659091
 Camera:
   m_ObjectHideFlags: 0
@@ -31065,7 +30754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &691791865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31509,34 +31197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35c341c8bf3e24854b3f3499e33f0636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 331720870}
-  slotPrefab: {fileID: 114384937009616034, guid: ecf6b5e62f4ea4c3c8a98e2ceabe7e50,
-    type: 3}
-  memberContent: {fileID: 155067259}
-  alphaCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1001 &710261267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32416,8 +32076,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &734441055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32654,7 +32312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 1313009606}
 --- !u!135 &741579161
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -32854,10 +32511,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c8ab39afa9d4e33bed7501dd4e62fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 748428607}
-  slotPrefab: {fileID: 114548606182546652, guid: 9d79077bcc9be4eb9abb9d3b62647b94,
-    type: 3}
-  content: {fileID: 208290123}
 --- !u!114 &748428610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33282,8 +32935,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1001 &754663581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34929,12 +34580,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f152b9a8c73047ffb51d68f3535a668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1279385506}
-  goldSlot: {fileID: 2029673407}
-  goldText: {fileID: 1313941778}
-  itemSlotPrefab: {fileID: 114966492437812626, guid: 21f06ce3de05548839d41be86c65384c,
-    type: 3}
-  content: {fileID: 1184725814}
 --- !u!1 &803416863
 GameObject:
   m_ObjectHideFlags: 0
@@ -35956,14 +35601,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6af25bfba4e94dd1ac63cb698cf89e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 987867654}
-  healthSlider: {fileID: 754024010}
-  experienceSlider: {fileID: 1989863311}
-  nameText: {fileID: 1283746888}
-  levelText: {fileID: 1954463733}
-  autoAttackButton: {fileID: 734441055}
-  defendOwnerButton: {fileID: 1828851005}
-  unsummonButton: {fileID: 2139468069}
 --- !u!1 &837454725
 GameObject:
   m_ObjectHideFlags: 0
@@ -36137,10 +35774,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1309cf80dc494f7f85761f2a6aecdbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 300172878}
-  slider: {fileID: 300172880}
-  skillNameText: {fileID: 590825499}
-  progressText: {fileID: 1340013001}
 --- !u!1 &842828802
 GameObject:
   m_ObjectHideFlags: 0
@@ -36246,7 +35879,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed8ebece0e80d4caaa7b14e6afdb04f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: 25
 --- !u!114 &842828811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36259,20 +35891,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a106d5444185be64fb58313acb53605a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  mouseButton: 1
-  distance: 20
-  minDistance: 3
-  maxDistance: 20
-  zoomSpeedMouse: 1
-  zoomSpeedTouch: 0.2
-  rotationSpeed: 2
-  xMinAngle: -40
-  xMaxAngle: 80
-  offset: {x: 0, y: 2, z: 0}
-  viewBlockingLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!1 &844103900
 GameObject:
   m_ObjectHideFlags: 0
@@ -37681,7 +37299,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &884692273
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37768,10 +37385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437879809736948e2b08b6b16a18d060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 654413486}
-  nameText: {fileID: 1182944058}
-  acceptButton: {fileID: 2090724750}
-  declineButton: {fileID: 72131319}
 --- !u!1 &888351631
 GameObject:
   m_ObjectHideFlags: 0
@@ -37803,7 +37416,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &888351633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39572,13 +39184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &928962531
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39609,7 +39214,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 928962535}
 --- !u!114 &928962533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39623,7 +39227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1690277221}
 --- !u!114 &928962534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39637,57 +39240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 928962535}
-  proxchecker: {fileID: 928962530}
-  netIdentity: {fileID: 928962536}
-  animator: {fileID: 928962537}
-  collider: {fileID: 1359872287}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 413832130}
-  _gold: 0
-  nameOverlay: {fileID: 1764163976}
-  moveProbability: 0
-  moveDistance: 10
-  followDistance: 20
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &928962535
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -40291,14 +39843,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23cf491dd975e49278951454ecc80175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 52194953}
-  zoomMin: 5
-  zoomMax: 50
-  zoomStepSize: 5
-  sceneText: {fileID: 16683761}
-  plusButton: {fileID: 1395593582}
-  minusButton: {fileID: 12933204}
-  minimapCamera: {fileID: 655659091}
 --- !u!1 &946957353
 GameObject:
   m_ObjectHideFlags: 0
@@ -41710,8 +41254,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1 &969076109
 GameObject:
   m_ObjectHideFlags: 0
@@ -41765,11 +41307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb999048c578448a49edc4c9cab34bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: 0
-  drageePrefab: {fileID: 0}
-  dragable: 1
-  dropable: 1
-  draggedToSlot: 0
 --- !u!114 &969076112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41782,8 +41319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &969076113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42251,7 +41786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &984127140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43620,8 +43154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1 &1028880805
 GameObject:
   m_ObjectHideFlags: 0
@@ -43879,12 +43411,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9262e5f3d8204a78aac98758c3618e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1223302936}
-  healthSlider: {fileID: 184455642}
-  nameText: {fileID: 523035709}
-  tradeButton: {fileID: 2077890625}
-  guildInviteButton: {fileID: 1428259854}
-  partyInviteButton: {fileID: 1882316819}
 --- !u!1 &1033494713
 GameObject:
   m_ObjectHideFlags: 0
@@ -44170,8 +43696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1 &1036030476
 GameObject:
   m_ObjectHideFlags: 0
@@ -44683,11 +44207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb999048c578448a49edc4c9cab34bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: 0
-  drageePrefab: {fileID: 0}
-  dragable: 1
-  dropable: 1
-  draggedToSlot: 0
 --- !u!114 &1060475983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44700,8 +44219,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &1060475984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45171,21 +44688,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a9570149daf443cab3bd45ff34446c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 41
-  panel: {fileID: 810881030}
-  damageText: {fileID: 1788625611}
-  defenseText: {fileID: 803604498}
-  healthText: {fileID: 1918257265}
-  manaText: {fileID: 1533050733}
-  speedText: {fileID: 1407378630}
-  levelText: {fileID: 1455519018}
-  currentExperienceText: {fileID: 960751089}
-  maximumExperienceText: {fileID: 700060484}
-  skillExperienceText: {fileID: 700060484}
-  strengthText: {fileID: 1143558162}
-  intelligenceText: {fileID: 1995667811}
-  strengthButton: {fileID: 1763247112}
-  intelligenceButton: {fileID: 1695054993}
 --- !u!1 &1069344489
 GameObject:
   m_ObjectHideFlags: 0
@@ -45314,11 +44816,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b3383ce70dc47f0b0ccb5a1f1df376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 101
-  panel: {fileID: 275289140}
-  slotPrefab: {fileID: 114437474404965448, guid: dc39d3162d66c470fa525e646b286bee,
-    type: 3}
-  content: {fileID: 1286002453}
 --- !u!1 &1075047306
 GameObject:
   m_ObjectHideFlags: 0
@@ -47090,13 +46587,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a97bb9e2cee4d41a691829fdcf2419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 2072336950}
-  panel: {fileID: 429499799}
-  poppanel: {fileID: 538226282}
-  nameInput: {fileID: 1614937198}
-  classDropdown: {fileID: 998785701}
-  createButton: {fileID: 1171683957}
-  cancelButton: {fileID: 2018466363}
 --- !u!1 &1120288625
 GameObject:
   m_ObjectHideFlags: 0
@@ -47257,9 +46747,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfdd6e6bbd9745cbac2db2c3fe2b814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 262246798}
-  slider: {fileID: 262246801}
-  statusText: {fileID: 533502637}
 --- !u!1001 &1124997333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47388,7 +46875,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1125266437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48567,7 +48053,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 439915065}
 --- !u!135 &1147129704
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -48777,16 +48262,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cf10881d50ff45ec93655e548223b04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 105
-  panel: {fileID: 1394922958}
-  slotPrefab: {fileID: 114075261892402862, guid: fe25bab38867c41dd8562025769a8b9c,
-    type: 3}
-  content: {fileID: 2019394836}
-  goldText: {fileID: 1301508911}
-  trash: {fileID: 344438995}
-  trashImage: {fileID: 344438993}
-  trashOverlay: {fileID: 1531639758}
-  trashAmountText: {fileID: 1238029174}
 --- !u!1 &1160639635
 GameObject:
   m_ObjectHideFlags: 0
@@ -49033,8 +48508,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0646f38facc499791c0a3d57a11d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1033494713}
-  messageText: {fileID: 1866286714}
 --- !u!1 &1165801062
 GameObject:
   m_ObjectHideFlags: 0
@@ -49554,14 +49027,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5499aa27c44431a8b4cc4920dd013f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 99
-  panel: {fileID: 1353858376}
-  ingredientSlotPrefab: {fileID: 114041017982653056, guid: f2df70ab9569e4a3caf749ef389fd4dc,
-    type: 3}
-  ingredientContent: {fileID: 1410743952}
-  resultSlotImage: {fileID: 1964816450}
-  resultSlotToolTip: {fileID: 1964816449}
-  craftButton: {fileID: 353791866}
 --- !u!1 &1179200583
 GameObject:
   m_ObjectHideFlags: 0
@@ -50895,8 +50360,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &1215000662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51568,18 +51031,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b5bdaa1917334f39b20a26baa582bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 856137559}
-  slotPrefab: {fileID: 114469105774977248, guid: 8feede7fef4084a2d8d89e270679e970,
-    type: 3}
-  otherContent: {fileID: 1537139257}
-  otherStatusText: {fileID: 197111750}
-  otherGoldInput: {fileID: 964431471}
-  myContent: {fileID: 141106353}
-  myStatusText: {fileID: 872439507}
-  myGoldInput: {fileID: 606798758}
-  lockButton: {fileID: 149814803}
-  acceptButton: {fileID: 1293800326}
-  cancelButton: {fileID: 1940144742}
 --- !u!1 &1225441140
 GameObject:
   m_ObjectHideFlags: 0
@@ -53524,7 +52975,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1292820933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53778,8 +53228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d407288dbe864feda0a19ac6a428b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slotPrefab: {fileID: 114208148314110118, guid: 1050e929fd77c454784d7914631e03a0,
-    type: 3}
 --- !u!222 &1296099468
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -54168,7 +53616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c7031395c157349b647744b9a7afdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 11436562, guid: a0d8d3ee1a9d34deab41d803ad7a6ddf, type: 3}
 --- !u!4 &1305707318
 Transform:
   m_ObjectHideFlags: 0
@@ -54668,13 +54115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &1313009603
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -54705,7 +54145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1313009607}
 --- !u!114 &1313009605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54719,7 +54158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1313009607}
 --- !u!114 &1313009606
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54733,57 +54171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1313009607}
-  proxchecker: {fileID: 1313009602}
-  netIdentity: {fileID: 1313009608}
-  animator: {fileID: 1313009609}
-  collider: {fileID: 331403901}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 1607579468}
-  _gold: 0
-  nameOverlay: {fileID: 1421317068}
-  moveProbability: 0
-  moveDistance: 10
-  followDistance: 20
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &1313009607
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -56093,14 +55480,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc50cac6f9a354f5db256e68b456c541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiCharacterCreation: {fileID: 1119927719}
-  manager: {fileID: 2072336950}
-  panel: {fileID: 1010513623}
-  slotPrefab: {fileID: 114420738267157768, guid: 95771927ba22fb74086d58ced2d7532a,
-    type: 3}
-  content: {fileID: 1112945574}
-  createButton: {fileID: 1375042669}
-  quitButton: {fileID: 1212024760}
 --- !u!1 &1337863888
 GameObject:
   m_ObjectHideFlags: 0
@@ -56148,7 +55527,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052a7f11489f1f04398eafea4c51eb6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 928962534}
 --- !u!135 &1337863891
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -56373,7 +55751,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1340620819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57994,11 +57371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb999048c578448a49edc4c9cab34bd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: 0
-  drageePrefab: {fileID: 0}
-  dragable: 1
-  dropable: 1
-  draggedToSlot: 0
 --- !u!114 &1377993834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58011,8 +57383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &1377993835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60311,13 +59681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a1a3b254b7ca47d0b49631ddccd27d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 113
-  panel: {fileID: 395391838}
-  content: {fileID: 631891283}
-  slotPrefab: {fileID: 114581274115082628, guid: 523341064aa6a4650bc512fe93752b72,
-    type: 3}
-  expandPrefix: '[+] '
-  hidePrefix: '[-] '
 --- !u!1001 &1446308756
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60924,8 +60287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &1464521199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61961,7 +61322,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce87adc4f2e40b4e846ac8c7e8eec6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iterations: 5000
 --- !u!114 &1488334802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61974,8 +61334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07b60bdef67ca0149ac66e9de1be93a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  recommended: 2017.4.4f1
-  download: https://unity3d.com/unity/qa/lts-releases
 --- !u!4 &1488334803
 Transform:
   m_ObjectHideFlags: 0
@@ -62573,10 +61931,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4342b65277a427a8dde192094d51be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1561206025}
-  nameText: {fileID: 520926580}
-  acceptButton: {fileID: 1554714328}
-  declineButton: {fileID: 913350371}
 --- !u!1 &1508027971
 GameObject:
   m_ObjectHideFlags: 0
@@ -62972,23 +62326,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e11a626ec1854463caa68aaba30ffe2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 120
-  panel: {fileID: 2018940362}
-  categorySlotPrefab: {fileID: 114211806386149246, guid: 5366cd841abb54e3cb2f47b3bbb7311d,
-    type: 3}
-  categoryContent: {fileID: 1104885755}
-  scrollRect: {fileID: 1603606629}
-  itemSlotPrefab: {fileID: 114795214046327500, guid: 452c0ae85b57b400dbacd2f9743b8daa,
-    type: 3}
-  itemContent: {fileID: 2097594805}
-  buyUrl: http://unity3d.com/
-  nameText: {fileID: 1366239914}
-  levelText: {fileID: 6098262}
-  currencyAmountText: {fileID: 791991083}
-  buyButton: {fileID: 1736891573}
-  couponInput: {fileID: 1428972885}
-  couponButton: {fileID: 259529775}
-  inventoryPanel: {fileID: 1394922958}
 --- !u!1 &1518369952
 GameObject:
   m_ObjectHideFlags: 0
@@ -63825,13 +63162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &1533037061
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -63862,7 +63192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1533037065}
 --- !u!114 &1533037063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63876,7 +63205,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1533037065}
 --- !u!114 &1533037064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63890,57 +63218,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1533037065}
-  proxchecker: {fileID: 1533037060}
-  netIdentity: {fileID: 1533037066}
-  animator: {fileID: 1533037067}
-  collider: {fileID: 1118248083}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 483352496}
-  _gold: 0
-  nameOverlay: {fileID: 327331474}
-  moveProbability: 0
-  moveDistance: 10
-  followDistance: 20
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &1533037065
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -66212,7 +65489,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1567685974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66673,10 +65949,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0673e170bbde43e79a735ca613da377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 291080573}
-  nameText: {fileID: 1996658982}
-  acceptButton: {fileID: 347582766}
-  declineButton: {fileID: 1105560051}
 --- !u!1 &1586570054
 GameObject:
   m_ObjectHideFlags: 0
@@ -67022,8 +66294,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &1591707438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67953,7 +67223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1612283385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68934,8 +68203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb071741575394cd4bc1485e2fcc84c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 512038981}
-  image: {fileID: 404252505}
 --- !u!1 &1640523666
 GameObject:
   m_ObjectHideFlags: 0
@@ -70543,8 +69810,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1 &1676839188
 GameObject:
   m_ObjectHideFlags: 0
@@ -70596,7 +69861,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1676839191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71610,13 +70874,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!54 &1690277217
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -71647,7 +70904,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1690277221}
 --- !u!114 &1690277219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71661,7 +70917,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c006c1a21d19e942b89f4fbbf8aef3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1690277221}
 --- !u!114 &1690277220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71675,57 +70930,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294a2fec029dc0846913dbd67c1f8e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1690277221}
-  proxchecker: {fileID: 1690277216}
-  netIdentity: {fileID: 1690277222}
-  animator: {fileID: 1690277223}
-  collider: {fileID: 2098532094}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 1
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 95416743}
-  _gold: 0
-  nameOverlay: {fileID: 1943087041}
-  moveProbability: 0
-  moveDistance: 10
-  followDistance: 20
-  rewardExperience: 10
-  rewardSkillExperience: 2
-  lootGoldMin: 0
-  lootGoldMax: 10
-  dropChances: []
-  deathTime: 30
-  respawn: 1
-  respawnTime: 10
 --- !u!195 &1690277221
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -73950,13 +73154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5f767e899441c47a48f9456e4e6a5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visRange: 50
-  visUpdateInterval: 1
-  checkMethod: 0
-  forceHidden: 0
-  castLayers:
-    serializedVersion: 2
-    m_Bits: 0
 --- !u!114 &1731309847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73970,56 +73167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86f8b47e57e0354dbba62c3d0a20045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1731309850}
-  proxchecker: {fileID: 1731309846}
-  netIdentity: {fileID: 1731309851}
-  animator: {fileID: 1731309852}
-  collider: {fileID: 1837814601}
-  _state: IDLE
-  level: 1
-  _healthMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  invincible: 0
-  healthRecovery: 0
-  _healthRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _manaMax:
-    baseValue: 100
-    bonusPerLevel: 0
-  manaRecovery: 0
-  _manaRecoveryRate:
-    baseValue: 1
-    bonusPerLevel: 0
-  _damage:
-    baseValue: 1
-    bonusPerLevel: 0
-  _defense:
-    baseValue: 1
-    bonusPerLevel: 0
-  _blockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  _criticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  damagePopupPrefab: {fileID: 179236, guid: 9500a8e6836beae42949d2e1eee809c7, type: 3}
-  skillTemplates: []
-  currentSkill: -1
-  _effectMount: {fileID: 210424603}
-  _gold: 0
-  nameOverlay: {fileID: 1994152194}
-  questOverlay: {fileID: 2098586593}
-  welcome: "Como posso ajud\xE1-lo hoje?"
-  saleItems:
-  - {fileID: 0}
-  - {fileID: 0}
-  quests: []
-  perguntas: []
-  teleportTo: {fileID: 1533767979}
-  offersGuildManagement: 1
-  offersPetRevive: 1
 --- !u!54 &1731309848
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -74050,7 +73197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09fdfa5696e94694199b91f92071e43c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1731309850}
 --- !u!195 &1731309850
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -74438,7 +73584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1737570576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74641,8 +73786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e102900f5ffc47240ba396d7695700bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 538226282}
-  messageText: {fileID: 1969533037}
 --- !u!1 &1747096739
 GameObject:
   m_ObjectHideFlags: 0
@@ -77751,7 +76894,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &1808645007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78939,8 +78081,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &1828851005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79529,11 +78669,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c19373ec23d4613a4810b5ed7317ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 1847768974}
-  createPriceText: {fileID: 535875473}
-  createNameInput: {fileID: 1842295999}
-  createButton: {fileID: 172901246}
-  terminateButton: {fileID: 1803169332}
 --- !u!114 &1847768977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84657,30 +83792,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1964816447}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1964816449 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114787814387682402, guid: 9c0d26fac4e634980916e3501b389ef6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1964816447}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1964816450 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114135606961330732, guid: 9c0d26fac4e634980916e3501b389ef6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1964816447}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1969533035
 GameObject:
   m_ObjectHideFlags: 0
@@ -85555,8 +84666,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!1 &1994152191
 GameObject:
   m_ObjectHideFlags: 0
@@ -88246,15 +87355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e36ef4c9155b148f795c9ae085a9e153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 112
-  panel: {fileID: 216953225}
-  currentCapacityText: {fileID: 1588576280}
-  maximumCapacityText: {fileID: 1792618407}
-  slotPrefab: {fileID: 114077505131969210, guid: 9850dc30e88754dccbcb1893899ac8aa,
-    type: 3}
-  memberContent: {fileID: 1434891360}
-  experienceShareToggle: {fileID: 2020778878}
-  goldShareToggle: {fileID: 1670784220}
 --- !u!1 &2039800695
 GameObject:
   m_ObjectHideFlags: 0
@@ -88407,7 +87507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &2043493776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89001,7 +88100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c7031395c157349b647744b9a7afdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 11454242, guid: eb4d93658e2654e8c9448f27a17f0f9e, type: 3}
 --- !u!4 &2054525388
 Transform:
   m_ObjectHideFlags: 0
@@ -89512,94 +88610,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4939d2630abd59438a4dc89171d9bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NetworkPort: 7777
-  m_ServerBindToIP: 0
-  m_ServerBindAddress: 
-  m_NetworkAddress: Use the Server List below!
-  m_DontDestroyOnLoad: 1
-  m_RunInBackground: 1
-  m_ScriptCRCCheck: 1
-  m_MaxDelay: 0.01
-  m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
-  m_AutoCreatePlayer: 0
-  m_PlayerSpawnMethod: 0
-  m_OfflineScene: 
-  m_OnlineScene: 
-  m_SpawnPrefabs:
-  - {fileID: 110258, guid: a0d8d3ee1a9d34deab41d803ad7a6ddf, type: 3}
-  - {fileID: 142034, guid: eb4d93658e2654e8c9448f27a17f0f9e, type: 3}
-  - {fileID: 100000, guid: 3ebbb149fc6e84237ac32a1558ca695a, type: 3}
-  - {fileID: 109900, guid: 0f4948efce538432191cef46aef01d26, type: 3}
-  - {fileID: 1987394715921876, guid: 09a383191462944fbabc9965a1fd8c2b, type: 3}
-  - {fileID: 1861356044303458, guid: f5eb3a5bff7624ecf86cbacca12bc947, type: 3}
-  - {fileID: 1987394715921876, guid: 33fbbf344246446cdb5af70062968b61, type: 3}
-  - {fileID: 100000, guid: 05682822ff5a34e3f9ee59133371f266, type: 3}
-  m_CustomConfig: 1
-  m_MaxConnections: 1000
-  m_ConnectionConfig:
-    m_PacketSize: 1440
-    m_FragmentSize: 500
-    m_ResendTimeout: 1200
-    m_DisconnectTimeout: 2000
-    m_ConnectTimeout: 2000
-    m_MinUpdateTimeout: 10
-    m_PingTimeout: 500
-    m_ReducedPingTimeout: 100
-    m_AllCostTimeout: 20
-    m_NetworkDropThreshold: 5
-    m_OverflowDropThreshold: 5
-    m_MaxConnectionAttempt: 10
-    m_AckDelay: 33
-    m_SendDelay: 10
-    m_MaxCombinedReliableMessageSize: 100
-    m_MaxCombinedReliableMessageCount: 10
-    m_MaxSentMessageQueueSize: 512
-    m_AcksType: 1
-    m_UsePlatformSpecificProtocols: 0
-    m_InitialBandwidth: 0
-    m_BandwidthPeakFactor: 2
-    m_WebSocketReceiveBufferMaxSize: 0
-    m_UdpSocketReceiveBufferMaxSize: 0
-    m_SSLCertFilePath: 
-    m_SSLPrivateKeyFilePath: 
-    m_SSLCAFilePath: 
-    m_Channels: []
-  m_GlobalConfig:
-    m_ThreadAwakeTimeout: 1
-    m_ReactorModel: 0
-    m_ReactorMaximumReceivedMessages: 1024
-    m_ReactorMaximumSentMessages: 1024
-    m_MaxPacketSize: 2000
-    m_MaxHosts: 16
-    m_ThreadPoolSize: 1
-    m_MinTimerTimeout: 1
-    m_MaxTimerTimeout: 12000
-    m_MinNetSimulatorTimeout: 1
-    m_MaxNetSimulatorTimeout: 12000
-  m_Channels: 0400000001000000
-  m_UseWebSockets: 0
-  m_UseSimulator: 0
-  m_SimulatedLatency: 1
-  m_PacketLossPercentage: 0
-  m_MaxBufferedPackets: 16
-  m_AllowFragmentation: 1
-  m_MatchHost: mm.unet.unity3d.com
-  m_MatchPort: 443
-  matchName: default
-  matchSize: 4
-  isNetworkActive: 0
-  matchMaker: {fileID: 0}
-  uiPopup: {fileID: 1165640891}
-  loginAccount: 
-  loginPassword: 
-  serverList:
-  - name: Local
-    ip: localhost
-  characterLimit: 4
-  characterNameMaxLength: 16
-  accountMaxLength: 16
-  saveInterval: 30
 --- !u!1 &2072670412
 GameObject:
   m_ObjectHideFlags: 0
@@ -89682,18 +88692,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e76bed78898c4f2f92820822a3ba8b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panel: {fileID: 224922826}
-  welcomeText: {fileID: 957807157}
-  tradingButton: {fileID: 25562572}
-  teleportButton: {fileID: 1951924722}
-  questsButton: {fileID: 1696780951}
-  guildButton: {fileID: 2036291963}
-  petReviveButton: {fileID: 1959535407}
-  npcTradingPanel: {fileID: 74766660}
-  npcQuestPanel: {fileID: 748428607}
-  npcGuildPanel: {fileID: 1847768974}
-  npcPetRevivePanel: {fileID: 104013752}
-  inventoryPanel: {fileID: 1394922958}
 --- !u!1 &2076157996
 GameObject:
   m_ObjectHideFlags: 0
@@ -89863,8 +88861,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da9b8541e882460c842af8422def45e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  image: {fileID: 2077197891}
-  highlightColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &2077277034
 GameObject:
   m_ObjectHideFlags: 0
@@ -90198,7 +89194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClose: 1
 --- !u!114 &2084586021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91653,12 +90648,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1794c31702a0448e085ef766a2f2a273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hotKey: 114
-  panel: {fileID: 357075630}
-  slotPrefab: {fileID: 114763234018988344, guid: 499615dc942954df3a501059adab9262,
-    type: 3}
-  content: {fileID: 1864994415}
-  skillExperienceText: {fileID: 1728566797}
 --- !u!1 &2128696750
 GameObject:
   m_ObjectHideFlags: 0
@@ -91819,8 +90808,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipPrefab: {fileID: 0}
-  text: 
 --- !u!114 &2139468069
 MonoBehaviour:
   m_ObjectHideFlags: 0

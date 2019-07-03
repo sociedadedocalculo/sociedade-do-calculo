@@ -23,7 +23,7 @@
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(NetworkProximityCheckerCustom))] // only broadcast to observers
+[RequireComponent(typeof(NetworkProximityGridChecker))] // only broadcast to observers
 public abstract class SkillEffect : NetworkBehaviour
 {
     // [SyncVar] NetworkIdentity: errors when null
@@ -32,14 +32,14 @@ public abstract class SkillEffect : NetworkBehaviour
     //           synchronization script (needs NetworkIdentity component!)
     // -> we still wrap it with a property for easier access, so we don't have
     //    to use target.GetComponent<Entity>() everywhere
-    [SyncVar, HideInInspector] GameObject _target;
+    [SyncVar] GameObject _target;
     public Entity target
     {
         get { return _target != null ? _target.GetComponent<Entity>() : null; }
         set { _target = value != null ? value.gameObject : null; }
     }
 
-    [SyncVar, HideInInspector] GameObject _caster;
+    [SyncVar] GameObject _caster;
     public Entity caster
     {
         get { return _caster != null ? _caster.GetComponent<Entity>() : null; }

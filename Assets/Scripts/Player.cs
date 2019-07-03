@@ -18,58 +18,59 @@
 // Animations are not handled by the NetworkAnimator because it's still very
 // buggy and because it can't really react to movement stops fast enough, which
 // results in moonwalking. Not synchronizing animations over the network will
-// also save us bandwidth.
-//
-// Note: unimportant commands should use the Unreliable channel to reduce load.
-// (it doesn't matter if a player has to click the respawn button twice if under
-//  heavy load)
+// also save us bandwidth
 using UnityEngine;
+using UnityEngine.AI;
 using Mirror;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using TMPro;
 
-public enum TradeStatus { Free, Locked, Accepted };
+public enum TradeStatus : byte { Free, Locked, Accepted }
+public enum CraftingState : byte { None, InProgress, Success, Failed }
 
 [Serializable]
-public struct SkillbarEntry
+public partial struct SkillbarEntry
 {
     public string reference;
     public KeyCode hotKey;
-};
-
-[Serializable]
-public struct EquipmentInfo
-{
-    public string requiredCategory;
-    public Transform location;
-    public ScriptableItem defaultItem;
 }
 
 [Serializable]
-public struct ItemMallCategory
+public partial struct EquipmentInfo
+{
+    public string requiredCategory;
+    public Transform location;
+    public ScriptableItemAndAmount defaultItem;
+}
+
+[Serializable]
+public partial struct ItemMallCategory
 {
     public string category;
     public ScriptableItem[] items;
 }
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(Chat))]
+[RequireComponent(typeof(PlayerChat))]
 [RequireComponent(typeof(NetworkName))]
 public partial class Player : Entity
 {
     [Header("Components")]
-    public Chat chat;
+    public PlayerChat chat;
     public Camera avatarCamera;
+    public NetworkNavMeshAgentRubberbanding rubberbanding;
 
     [Header("Text Meshes")]
-    public TextMesh guildOverlay;
-    public string guildOverlayPrefix = "[";
-    public string guildOverlaySuffix = "]";
+    public TextMeshPro nameOverlay;
     public Color nameOverlayDefaultColor = Color.white;
     public Color nameOverlayOffenderColor = Color.magenta;
     public Color nameOverlayMurdererColor = Color.red;
     public Color nameOverlayPartyColor = new Color(0.341f, 0.965f, 0.702f);
+    public TextMeshPro guildOverlay;
+    public string guildOverlayPrefix = "[";
+    public string guildOverlaySuffix = "]";
 
     [Header("Icons")]
     public Sprite classIcon; // for character selection
@@ -78,6 +79,9 @@ public partial class Player : Entity
     // some meta info
     [HideInInspector] public string account = "";
     [HideInInspector] public string className = "";
+
+    // localPlayer singleton for easier access from UI scripts etc.
+    public static Player localPlayer;
 
     // health
     public override int healthMax
@@ -175,6 +179,16 @@ public partial class Player : Entity
         }
     }
 
+    // speed
+    public override float speed
+    {
+        get
+        {
+            // mount speed if mounted, regular speed otherwise
+            return activeMount != null && activeMount.health > 0 ? activeMount.speed : base.speed;
+        }
+    }
+
     [Header("Attributes")]
     [SyncVar] public int strength = 0;
     [SyncVar] public int intelligence = 0;
@@ -215,7 +229,9 @@ public partial class Player : Entity
             }
         }
     }
-    [SerializeField] protected LevelBasedLong _experienceMax = new LevelBasedLong { baseValue = 10, bonusPerLevel = 10 };
+
+    // required experience grows by 10% each level (like Runescape)
+    [SerializeField] protected ExponentialLong _experienceMax = new ExponentialLong { multiplier = 100, baseValue = 1.1f };
     public long experienceMax { get { return _experienceMax.Get(level); } }
 
     [Header("Skill Experience")]
@@ -223,31 +239,30 @@ public partial class Player : Entity
 
     [Header("Indicator")]
     public GameObject indicatorPrefab;
-    GameObject indicator;
+    [HideInInspector] public GameObject indicator;
 
     [Header("Inventory")]
     public int inventorySize = 30;
-    public ScriptableItem[] defaultItems;
+    public ScriptableItemAndAmount[] defaultItems;
     public KeyCode[] inventorySplitKeys = { KeyCode.LeftShift, KeyCode.RightShift };
 
     [Header("Trash")]
-    [SyncVar] public ItemSlot trash = new ItemSlot();
+    [SyncVar] public ItemSlot trash;
 
-    [Header("Equipment")]
-    public EquipmentInfo[] equipmentInfo = new EquipmentInfo[] {
-        new EquipmentInfo{requiredCategory="Weapon", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Head", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Chest", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Legs", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Shield", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Shoulders", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Hands", location=null, defaultItem=null},
-        new EquipmentInfo{requiredCategory="Feet", location=null, defaultItem=null}
+    [Header("Equipment Info")]
+    public EquipmentInfo[] equipmentInfo = {
+        new EquipmentInfo{requiredCategory="Weapon", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Head", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Chest", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Legs", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Shield", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Shoulders", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Hands", location=null, defaultItem=new ScriptableItemAndAmount()},
+        new EquipmentInfo{requiredCategory="Feet", location=null, defaultItem=new ScriptableItemAndAmount()}
     };
-    public SyncListItemSlot equipment = new SyncListItemSlot();
 
     [Header("Skillbar")]
-    public SkillbarEntry[] skillbar = new SkillbarEntry[] {
+    public SkillbarEntry[] skillbar = {
         new SkillbarEntry{reference="", hotKey=KeyCode.Alpha1},
         new SkillbarEntry{reference="", hotKey=KeyCode.Alpha2},
         new SkillbarEntry{reference="", hotKey=KeyCode.Alpha3},
@@ -268,6 +283,7 @@ public partial class Player : Entity
     public float interactionRange = 4;
     public KeyCode targetNearestKey = KeyCode.Tab;
     public bool localPlayerClickThrough = true; // click selection goes through localplayer. feels best.
+    public KeyCode cancelActionKey = KeyCode.Escape;
 
     [Header("PvP")]
     public BuffSkill offenderBuff;
@@ -281,6 +297,8 @@ public partial class Player : Entity
 
     [Header("Crafting")]
     public List<int> craftingIndices = Enumerable.Repeat(-1, ScriptableRecipe.recipeSize).ToList();
+    [HideInInspector] public CraftingState craftingState = CraftingState.None; // // client sided
+    [SyncVar, HideInInspector] public double craftingTimeEnd; // double for long term precision
 
     [Header("Item Mall")]
     public ItemMallCategory[] itemMallCategories; // the items that can be purchased in the item mall
@@ -288,16 +306,18 @@ public partial class Player : Entity
     public float couponWaitSeconds = 3;
 
     [Header("Guild")]
-    [SyncVar, HideInInspector] public string guildName = ""; // syncvar so that all observers see it
     [SyncVar, HideInInspector] public string guildInviteFrom = "";
-    [HideInInspector] public Guild guild; // no syncvar, only owner sees it via TargetRPC (saves lots of bandwidth)
+    [SyncVar, HideInInspector] public Guild guild; // TODO SyncToOwner later
     public float guildInviteWaitSeconds = 3;
 
+    // .party is a copy for easier reading/syncing. Use PartySystem to manage
+    // parties!
     [Header("Party")]
-    [HideInInspector] public Party party;
+    [SyncVar, HideInInspector] public Party party; // TODO SyncToOwner later
     [SyncVar, HideInInspector] public string partyInviteFrom = "";
     public float partyInviteWaitSeconds = 3;
 
+    // 'Pet' can't be SyncVar so we use [SyncVar] GameObject and wrap it
     [Header("Pet")]
     [SyncVar] GameObject _activePet;
     public Pet activePet
@@ -305,6 +325,7 @@ public partial class Player : Entity
         get { return _activePet != null ? _activePet.GetComponent<Pet>() : null; }
         set { _activePet = value != null ? value.gameObject : null; }
     }
+
     // pet's destination should always be right next to player, not inside him
     // -> we use a helper property so we don't have to recalculate it each time
     // -> we offset the position by exactly 1 x bounds to the left because dogs
@@ -318,15 +339,30 @@ public partial class Player : Entity
         }
     }
 
+    [Header("Mount")]
+    public Transform meshToOffsetWhenMounted;
+    public float seatOffsetY = -1;
+
+    // 'Mount' can't be SyncVar so we use [SyncVar] GameObject and wrap it
+    [SyncVar] GameObject _activeMount;
+    public Mount activeMount
+    {
+        get { return _activeMount != null ? _activeMount.GetComponent<Mount>() : null; }
+        set { _activeMount = value != null ? value.gameObject : null; }
+    }
+
+    // when moving into attack range of a target, we always want to move a
+    // little bit closer than necessary to tolerate for latency and other
+    // situations where the target might have moved away a little bit already.
+    [Header("Movement")]
+    [Range(0.1f, 1)] public float attackToMoveRangeRatio = 0.8f;
+
     [Header("Death")]
     public float deathExperienceLossPercent = 0.05f;
 
     // some commands should have delays to avoid DDOS, too much database usage
     // or brute forcing coupons etc. we use one riskyAction timer for all.
-    [SyncVar, HideInInspector] public float nextRiskyActionTime = 0;
-
-    // the next skill to be set if we try to set it while casting
-    int nextSkill = -1;
+    [SyncVar, HideInInspector] public double nextRiskyActionTime = 0; // double for long term precision
 
     // the next target to be set if we try to set it while casting
     // 'Entity' can't be SyncVar and NetworkIdentity causes errors when null,
@@ -344,11 +380,28 @@ public partial class Player : Entity
     // => on client: all observed players
     public static Dictionary<string, Player> onlinePlayers = new Dictionary<string, Player>();
 
+    // first allowed logout time after combat
+    public double allowedLogoutTime => lastCombatTime + ((NetworkManagerMMO)NetworkManager.singleton).combatLogoutDelay;
+    public double remainingLogoutTime => NetworkTime.time < allowedLogoutTime ? (allowedLogoutTime - NetworkTime.time) : 0;
+
+    // helper variable to remember which skill to use when we walked close enough
+    int useSkillWhenCloser = -1;
+
+    // cached SkinnedMeshRenderer bones without equipment, by name
+    Dictionary<string, Transform> skinBones = new Dictionary<string, Transform>();
+
     // networkbehaviour ////////////////////////////////////////////////////////
     protected override void Awake()
     {
         // cache base components
         base.Awake();
+
+        // cache all default SkinnedMeshRenderer bones without equipment
+        // (we might have multiple SkinnedMeshRenderers e.g. on feet, legs, etc.
+        //  so we need GetComponentsInChildren)
+        foreach (SkinnedMeshRenderer skin in GetComponentsInChildren<SkinnedMeshRenderer>())
+            foreach (Transform bone in skin.bones)
+                skinBones[bone.name] = bone;
 
         // addon system hooks
         Utils.InvokeMany(typeof(Player), this, "Awake_");
@@ -356,6 +409,9 @@ public partial class Player : Entity
 
     public override void OnStartLocalPlayer()
     {
+        // set singleton
+        localPlayer = this;
+
         // setup camera targets
         Camera.main.GetComponent<CameraMMO>().target = transform;
         GameObject.FindWithTag("MinimapCamera").GetComponent<CopyPosition>().target = transform;
@@ -392,7 +448,7 @@ public partial class Player : Entity
         // initialize trade item indices
         for (int i = 0; i < 6; ++i) tradeOfferItems.Add(-1);
 
-        InvokeRepeating("ProcessCoinOrders", 5, 5);
+        InvokeRepeating(nameof(ProcessCoinOrders), 5, 5);
 
         // addon system hooks
         Utils.InvokeMany(typeof(Player), this, "OnStartServer_");
@@ -400,6 +456,9 @@ public partial class Player : Entity
 
     protected override void Start()
     {
+        // do nothing if not spawned (=for character selection previews)
+        if (!isServer && !isClient) return;
+
         base.Start();
         onlinePlayers[name] = this;
 
@@ -430,9 +489,12 @@ public partial class Player : Entity
         // => make sure to import all looping animations like idle/run/attack
         //    with 'loop time' enabled, otherwise the client might only play it
         //    once
-        // => only play moving animation while the agent is actually moving. the
-        //    MOVING state might be delayed to due latency or we might be in
-        //    MOVING while a path is still pending, etc.
+        // => MOVING state is set to local IsMovement result directly. otherwise
+        //    we would see animation latencies for rubberband movement if we
+        //    have to wait for MOVING state to be received from the server
+        // => MOVING checks if !CASTING because there is a case in UpdateMOVING
+        //    -> SkillRequest where we still slide to the final position (which
+        //    is good), but we should show the casting animation then.
         // => skill names are assumed to be boolean parameters in animator
         //    so we don't need to worry about an animation number etc.
         if (isClient) // no need for animations on the server
@@ -440,14 +502,20 @@ public partial class Player : Entity
             // now pass parameters after any possible rebinds
             foreach (Animator anim in GetComponentsInChildren<Animator>())
             {
-                anim.SetBool("MOVING", state == "MOVING" && agent.velocity != Vector3.zero);
+                anim.SetBool("MOVING", IsMoving() && state != "CASTING" && !IsMounted());
                 anim.SetBool("CASTING", state == "CASTING");
+                anim.SetBool("STUNNED", state == "STUNNED");
+                anim.SetBool("MOUNTED", IsMounted()); // for seated animation
                 anim.SetBool("DEAD", state == "DEAD");
                 foreach (Skill skill in skills)
-                    if (skill.level > 0)
+                    if (skill.level > 0 && !(skill.data is PassiveSkill))
                         anim.SetBool(skill.name, skill.CastTimeRemaining() > 0);
             }
         }
+
+        // follow mount's seat position if mounted
+        // (on server too, for correct collider position and calculations)
+        ApplyMountSeatOffset();
 
         // addon system hooks
         Utils.InvokeMany(typeof(Player), this, "LateUpdate_");
@@ -455,6 +523,9 @@ public partial class Player : Entity
 
     void OnDestroy()
     {
+        // do nothing if not spawned (=for character selection previews)
+        if (!isServer && !isClient) return;
+
         // Unity bug: isServer is false when called in host mode. only true when
         // called in dedicated mode. so we need a workaround:
         if (NetworkServer.active) // isServer
@@ -463,7 +534,7 @@ public partial class Player : Entity
             if (InParty())
             {
                 // dismiss if master, leave otherwise
-                if (party.members[0] == name)
+                if (party.master == name)
                     PartyDismiss();
                 else
                     PartyLeave();
@@ -477,6 +548,7 @@ public partial class Player : Entity
         {
             Destroy(indicator);
             SaveSkillbar();
+            localPlayer = null;
         }
 
         onlinePlayers.Remove(name);
@@ -485,8 +557,7 @@ public partial class Player : Entity
         Utils.InvokeMany(typeof(Player), this, "OnDestroy_");
     }
 
-    // finite state machine events - status based //////////////////////////////
-    // status based events
+    // finite state machine events /////////////////////////////////////////////
     bool EventDied()
     {
         return health == 0;
@@ -513,15 +584,14 @@ public partial class Player : Entity
                skills[currentSkill].CastTimeRemaining() == 0;
     }
 
-    // setting agent.velocity takes one frame to apply and is still Vector3.zero
-    // immediately after setting it. so we need a little helper to make sure
-    // that EventMoveEnd doesn't fire immediately after.
-    bool velocityPending;
+    bool EventMoveStart()
+    {
+        return state != "MOVING" && IsMoving(); // only fire when started moving
+    }
+
     bool EventMoveEnd()
     {
-        bool result = state == "MOVING" && !velocityPending && !IsMoving();
-        velocityPending = false; // always reset before returning
-        return result;
+        return state == "MOVING" && !IsMoving(); // only fire when stopped moving
     }
 
     bool EventTradeStarted()
@@ -537,38 +607,43 @@ public partial class Player : Entity
         return state == "TRADING" && tradeRequestFrom == "";
     }
 
-    // finite state machine events - command based /////////////////////////////
-    // client calls command, command sets a flag, event reads and resets it
-    // => we use a set so that we don't get ultra long queues etc.
-    // => we use set.Return to read and clear values
-    HashSet<string> cmdEvents = new HashSet<string>();
-
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdRespawn() { cmdEvents.Add("Respawn"); }
-    bool EventRespawn() { return cmdEvents.Remove("Respawn"); }
-
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdCancelAction() { cmdEvents.Add("CancelAction"); }
-    bool EventCancelAction() { return cmdEvents.Remove("CancelAction"); }
-
-    Vector3 navigatePosition = Vector3.zero;
-    float navigateStop = 0;
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    void CmdNavigateDestination(Vector3 position, float stoppingDistance)
+    bool craftingRequested;
+    bool EventCraftingStarted()
     {
-        navigatePosition = position; navigateStop = stoppingDistance;
-        cmdEvents.Add("NavigateDestination");
+        bool result = craftingRequested;
+        craftingRequested = false;
+        return result;
     }
-    bool EventNavigateDestination() { return cmdEvents.Remove("NavigateDestination"); }
 
-    Vector3 navigateVelocity = Vector3.zero;
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    void CmdNavigateVelocity(Vector3 velocity)
+    bool EventCraftingDone()
     {
-        navigateVelocity = velocity.magnitude > 1 ? velocity.normalized : velocity; // prevent speedhacks
-        cmdEvents.Add("NavigateVelocity");
+        return state == "CRAFTING" && NetworkTime.time > craftingTimeEnd;
     }
-    bool EventNavigateVelocity() { return cmdEvents.Remove("NavigateVelocity"); }
+
+    bool EventStunned()
+    {
+        return NetworkTime.time <= stunTimeEnd;
+    }
+
+    [Command]
+    public void CmdRespawn() { respawnRequested = true; }
+    bool respawnRequested;
+    bool EventRespawn()
+    {
+        bool result = respawnRequested;
+        respawnRequested = false; // reset
+        return result;
+    }
+
+    [Command]
+    public void CmdCancelAction() { cancelActionRequested = true; }
+    bool cancelActionRequested;
+    bool EventCancelAction()
+    {
+        bool result = cancelActionRequested;
+        cancelActionRequested = false; // reset
+        return result;
+    }
 
     // finite state machine - server ///////////////////////////////////////////
     [Server]
@@ -579,8 +654,12 @@ public partial class Player : Entity
         {
             // we died.
             OnDeath();
-            currentSkill = nextSkill = -1; // in case we died while trying to cast
             return "DEAD";
+        }
+        if (EventStunned())
+        {
+            rubberbanding.ResetMovement();
+            return "STUNNED";
         }
         if (EventCancelAction())
         {
@@ -591,63 +670,55 @@ public partial class Player : Entity
         if (EventTradeStarted())
         {
             // cancel casting (if any), set target, go to trading
-            currentSkill = nextSkill = -1; // just in case
+            currentSkill = -1; // just in case
             target = FindPlayerFromTradeInvitation();
             return "TRADING";
         }
-        if (EventNavigateDestination())
+        if (EventCraftingStarted())
         {
-            // cancel casting (if any) and start moving
-            currentSkill = nextSkill = -1;
-            agent.stoppingDistance = navigateStop;
-            agent.destination = navigatePosition;
-            return "MOVING";
+            // cancel casting (if any), go to crafting
+            currentSkill = -1; // just in case
+            return "CRAFTING";
         }
-        if (EventNavigateVelocity())
+        if (EventMoveStart())
         {
-            // cancel casting (if any) and start moving
-            currentSkill = nextSkill = -1;
-            agent.ResetPath(); // needed after click movement before we can use .velocity
-            agent.velocity = navigateVelocity * agent.speed;
-            velocityPending = true; // takes 1 frame to apply velocity
+            // cancel casting (if any)
+            currentSkill = -1;
             return "MOVING";
         }
         if (EventSkillRequest())
         {
-            // user wants to cast a skill.
-            // check self (alive, mana, weapon etc.) and target
-            Skill skill = skills[currentSkill];
-            nextTarget = target; // return to this one after any corrections by CastCheckTarget
-            if (CastCheckSelf(skill) && CastCheckTarget(skill))
+            // don't cast while mounted
+            // (no MOUNTED state because we'd need MOUNTED_STUNNED, etc. too)
+            if (!IsMounted())
             {
-                // check distance between self and target
+                // user wants to cast a skill.
+                // check self (alive, mana, weapon etc.) and target and distance
+                Skill skill = skills[currentSkill];
+                nextTarget = target; // return to this one after any corrections by CastCheckTarget
                 Vector3 destination;
-                if (CastCheckDistance(skill, out destination))
+                if (CastCheckSelf(skill) && CastCheckTarget(skill) && CastCheckDistance(skill, out destination))
                 {
-                    // start casting and set the casting end time
-                    skill.castTimeEnd = Time.time + skill.castTime;
-                    skills[currentSkill] = skill;
+                    // start casting and cancel movement in any case
+                    // (player might move into attack range * 0.8 but as soon as we
+                    //  are close enough to cast, we fully commit to the cast.)
+                    rubberbanding.ResetMovement();
+                    StartCastSkill(skill);
                     return "CASTING";
                 }
                 else
                 {
-                    // move to the target first
-                    // (use collider point(s) to also work with big entities)
-                    agent.stoppingDistance = skill.castRange;
-                    agent.destination = destination;
-                    return "MOVING";
+                    // checks failed. stop trying to cast.
+                    currentSkill = -1;
+                    nextTarget = null; // nevermind, clear again (otherwise it's shown in UITarget)
+                    return "IDLE";
                 }
-            }
-            else
-            {
-                // checks failed. stop trying to cast.
-                currentSkill = nextSkill = -1;
-                return "IDLE";
             }
         }
         if (EventSkillFinished()) { } // don't care
         if (EventMoveEnd()) { } // don't care
         if (EventTradeDone()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
         if (EventRespawn()) { } // don't care
         if (EventTargetDied()) { } // don't care
         if (EventTargetDisappeared()) { } // don't care
@@ -658,17 +729,17 @@ public partial class Player : Entity
     [Server]
     string UpdateServer_MOVING()
     {
-        // agent.velocity needs to be set constantly during wasd movement
-        if (navigateVelocity != Vector3.zero)
-            agent.velocity = navigateVelocity * agent.speed;
-
         // events sorted by priority (e.g. target doesn't matter if we died)
         if (EventDied())
         {
             // we died.
             OnDeath();
-            currentSkill = nextSkill = -1; // in case we died while trying to cast
             return "DEAD";
+        }
+        if (EventStunned())
+        {
+            rubberbanding.ResetMovement();
+            return "STUNNED";
         }
         if (EventMoveEnd())
         {
@@ -678,71 +749,58 @@ public partial class Player : Entity
         if (EventCancelAction())
         {
             // cancel casting (if any) and stop moving
-            currentSkill = nextSkill = -1;
-            agent.ResetPath();
+            currentSkill = -1;
+            //rubberbanding.ResetMovement(); <- done locally. doing it here would reset localplayer to the slightly behind server position otherwise
             return "IDLE";
         }
         if (EventTradeStarted())
         {
             // cancel casting (if any), stop moving, set target, go to trading
-            currentSkill = nextSkill = -1;
-            agent.ResetPath();
+            currentSkill = -1;
+            rubberbanding.ResetMovement();
             target = FindPlayerFromTradeInvitation();
             return "TRADING";
         }
-        if (EventNavigateDestination())
+        if (EventCraftingStarted())
         {
-            // cancel casting (if any) and start moving
-            currentSkill = nextSkill = -1;
-            agent.stoppingDistance = navigateStop;
-            agent.destination = navigatePosition;
-            return "MOVING";
+            // cancel casting (if any), stop moving, go to crafting
+            currentSkill = -1;
+            rubberbanding.ResetMovement();
+            return "CRAFTING";
         }
-        if (EventNavigateVelocity())
-        {
-            // cancel casting (if any) and start moving
-            currentSkill = nextSkill = -1;
-            agent.ResetPath(); // needed after click movement before we can use .velocity
-            agent.velocity = navigateVelocity * agent.speed;
-            velocityPending = true; // takes 1 frame to apply velocity
-            return "MOVING";
-        }
+        // SPECIAL CASE: Skill Request while doing rubberband movement
+        // -> we don't really need to react to it
+        // -> we could just wait for move to end, then react to request in IDLE
+        // -> BUT player position on server always lags behind in rubberband movement
+        // -> SO there would be a noticeable delay before we start to cast
+        //
+        // SOLUTION:
+        // -> start casting as soon as we are in range
+        // -> BUT don't ResetMovement. instead let it slide to the final position
+        //    while already starting to cast
+        // -> NavMeshAgentRubberbanding won't accept new positions while casting
+        //    anyway, so this is fine
         if (EventSkillRequest())
         {
-            // if and where we keep moving depends on the skill and the target
-            // check self (alive, mana, weapon etc.) and target
-            Skill skill = skills[currentSkill];
-            nextTarget = target; // return to this one after any corrections by CastCheckTarget
-            if (CastCheckSelf(skill) && CastCheckTarget(skill))
+            // don't cast while mounted
+            // (no MOUNTED state because we'd need MOUNTED_STUNNED, etc. too)
+            if (!IsMounted())
             {
-                // check distance between self and target
                 Vector3 destination;
-                if (CastCheckDistance(skill, out destination))
+                Skill skill = skills[currentSkill];
+                if (CastCheckSelf(skill) && CastCheckTarget(skill) && CastCheckDistance(skill, out destination))
                 {
-                    // stop moving, start casting and set the casting end time
-                    agent.ResetPath();
-                    skill.castTimeEnd = Time.time + skill.castTime;
-                    skills[currentSkill] = skill;
+                    //Debug.Log("MOVING->EventSkillRequest: early cast started while sliding to destination...");
+                    // rubberbanding.ResetMovement(); <- DO NOT DO THIS.
+                    StartCastSkill(skill);
                     return "CASTING";
                 }
-                else
-                {
-                    // keep moving towards the target
-                    // (use collider point(s) to also work with big entities)
-                    agent.stoppingDistance = skill.castRange;
-                    agent.destination = destination;
-                    return "MOVING";
-                }
-            }
-            else
-            {
-                // invalid target. stop trying to cast, but keep moving.
-                currentSkill = nextSkill = -1;
-                return "MOVING";
             }
         }
+        if (EventMoveStart()) { } // don't care
         if (EventSkillFinished()) { } // don't care
         if (EventTradeDone()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
         if (EventRespawn()) { } // don't care
         if (EventTargetDied()) { } // don't care
         if (EventTargetDisappeared()) { } // don't care
@@ -780,41 +838,45 @@ public partial class Player : Entity
         {
             // we died.
             OnDeath();
-            currentSkill = nextSkill = -1; // in case we died while trying to cast
             UseNextTargetIfAny(); // if user selected a new target while casting
             return "DEAD";
         }
-        if (EventNavigateDestination())
+        if (EventStunned())
         {
-            // cancel casting and start moving
-            currentSkill = nextSkill = -1;
-            agent.stoppingDistance = navigateStop;
-            agent.destination = navigatePosition;
-            UseNextTargetIfAny(); // if user selected a new target while casting
-            return "MOVING";
+            currentSkill = -1;
+            rubberbanding.ResetMovement();
+            return "STUNNED";
         }
-        if (EventNavigateVelocity())
+        if (EventMoveStart())
         {
-            // cancel casting (if any) and start moving
-            currentSkill = nextSkill = -1;
-            agent.ResetPath(); // needed after click movement before we can use .velocity
-            agent.velocity = navigateVelocity * agent.speed;
-            velocityPending = true; // takes 1 frame to apply velocity
-            UseNextTargetIfAny(); // if user selected a new target while casting
-            return "MOVING";
+            // we do NOT cancel the cast if the player moved, and here is why:
+            // * local player might move into cast range and then try to cast.
+            // * server then receives the Cmd, goes to CASTING state, then
+            //   receives one of the last movement updates from the local player
+            //   which would cause EventMoveStart and cancel the cast.
+            // * this is the price for rubberband movement.
+            // => if the player wants to cast and got close enough, then we have
+            //    to fully commit to it. there is no more way out except via
+            //    cancel action. any movement in here is to be rejected.
+            //    (many popular MMOs have the same behaviour too)
+            //
+            // we do NOT reset movement either. allow sliding to final position.
+            // (NavMeshAgentRubberbanding doesn't accept new ones while CASTING)
+            //rubberbanding.ResetMovement(); <- DO NOT DO THIS
+            return "CASTING";
         }
         if (EventCancelAction())
         {
             // cancel casting
-            currentSkill = nextSkill = -1;
+            currentSkill = -1;
             UseNextTargetIfAny(); // if user selected a new target while casting
             return "IDLE";
         }
         if (EventTradeStarted())
         {
             // cancel casting (if any), stop moving, set target, go to trading
-            currentSkill = nextSkill = -1;
-            agent.ResetPath();
+            currentSkill = -1;
+            rubberbanding.ResetMovement();
 
             // set target to trade target instead of next target (clear that)
             target = FindPlayerFromTradeInvitation();
@@ -826,7 +888,7 @@ public partial class Player : Entity
             // cancel if the target matters for this skill
             if (skills[currentSkill].cancelCastIfTargetDied)
             {
-                currentSkill = nextSkill = -1;
+                currentSkill = -1;
                 UseNextTargetIfAny(); // if user selected a new target while casting
                 return "IDLE";
             }
@@ -836,7 +898,7 @@ public partial class Player : Entity
             // cancel if the target matters for this skill
             if (skills[currentSkill].cancelCastIfTargetDied)
             {
-                currentSkill = nextSkill = -1;
+                currentSkill = -1;
                 UseNextTargetIfAny(); // if user selected a new target while casting
                 return "IDLE";
             }
@@ -849,16 +911,17 @@ public partial class Player : Entity
             Skill skill = skills[currentSkill];
 
             // apply the skill on the target
-            CastSkill(skill);
+            FinishCastSkill(skill);
 
-            // casting finished for now. user pressed another skill button?
-            if (nextSkill != -1)
-            {
-                currentSkill = nextSkill;
-                nextSkill = -1;
-            }
-            // skill should be followed with default attack? otherwise clear
-            else currentSkill = skill.followupDefaultAttack ? 0 : -1;
+            // clear current skill for now
+            currentSkill = -1;
+
+            // target-based skill and no more valid target? then clear
+            // (otherwise IDLE will get an unnecessary skill request and mess
+            //  with targeting)
+            bool validTarget = target != null && target.health > 0;
+            if (currentSkill != -1 && skills[currentSkill].cancelCastIfTargetDied && !validTarget)
+                currentSkill = -1;
 
             // use next target if the user tried to target another while casting
             UseNextTargetIfAny();
@@ -868,10 +931,32 @@ public partial class Player : Entity
         }
         if (EventMoveEnd()) { } // don't care
         if (EventTradeDone()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
         if (EventRespawn()) { } // don't care
         if (EventSkillRequest()) { } // don't care
 
         return "CASTING"; // nothing interesting happened
+    }
+
+    [Server]
+    string UpdateServer_STUNNED()
+    {
+        // events sorted by priority (e.g. target doesn't matter if we died)
+        if (EventDied())
+        {
+            // we died.
+            OnDeath();
+            return "DEAD";
+        }
+        if (EventStunned())
+        {
+            return "STUNNED";
+        }
+
+        // go back to idle if we aren't stunned anymore and process all new
+        // events there too
+        return "IDLE";
     }
 
     [Server]
@@ -882,9 +967,22 @@ public partial class Player : Entity
         {
             // we died, stop trading. other guy will receive targetdied event.
             OnDeath();
-            currentSkill = nextSkill = -1; // in case we died while trying to cast
             TradeCleanup();
             return "DEAD";
+        }
+        if (EventStunned())
+        {
+            // stop trading
+            currentSkill = -1;
+            rubberbanding.ResetMovement();
+            TradeCleanup();
+            return "STUNNED";
+        }
+        if (EventMoveStart())
+        {
+            // reject movement while trading
+            rubberbanding.ResetMovement();
+            return "TRADING";
         }
         if (EventCancelAction())
         {
@@ -912,13 +1010,55 @@ public partial class Player : Entity
         }
         if (EventMoveEnd()) { } // don't care
         if (EventSkillFinished()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
         if (EventRespawn()) { } // don't care
         if (EventTradeStarted()) { } // don't care
-        if (EventNavigateDestination()) { } // don't care
-        if (EventNavigateVelocity()) { } // don't care
         if (EventSkillRequest()) { } // don't care
 
         return "TRADING"; // nothing interesting happened
+    }
+
+    [Server]
+    string UpdateServer_CRAFTING()
+    {
+        // events sorted by priority (e.g. target doesn't matter if we died)
+        if (EventDied())
+        {
+            // we died, stop crafting
+            OnDeath();
+            return "DEAD";
+        }
+        if (EventStunned())
+        {
+            // stop crafting
+            rubberbanding.ResetMovement();
+            return "STUNNED";
+        }
+        if (EventMoveStart())
+        {
+            // reject movement while crafting
+            rubberbanding.ResetMovement();
+            return "CRAFTING";
+        }
+        if (EventCraftingDone())
+        {
+            // finish crafting
+            Craft();
+            return "IDLE";
+        }
+        if (EventCancelAction()) { } // don't care. user pressed craft, we craft.
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventRespawn()) { } // don't care
+        if (EventTradeStarted()) { } // don't care
+        if (EventTradeDone()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventSkillRequest()) { } // don't care
+
+        return "CRAFTING"; // nothing interesting happened
     }
 
     [Server]
@@ -928,10 +1068,17 @@ public partial class Player : Entity
         if (EventRespawn())
         {
             // revive to closest spawn, with 50% health, then go to idle
-            Transform start = NetworkManager.singleton.GetNearestStartPosition(transform.position);
+            Transform start = NetworkManagerMMO.GetNearestStartPosition(transform.position);
             agent.Warp(start.position); // recommended over transform.position
             Revive(0.5f);
             return "IDLE";
+        }
+        if (EventMoveStart())
+        {
+            // this should never happen, rubberband should prevent from moving
+            // while dead.
+            Debug.LogWarning("Player " + name + " moved while dead. This should not happen.");
+            return "DEAD";
         }
         if (EventMoveEnd()) { } // don't care
         if (EventSkillFinished()) { } // don't care
@@ -939,10 +1086,10 @@ public partial class Player : Entity
         if (EventCancelAction()) { } // don't care
         if (EventTradeStarted()) { } // don't care
         if (EventTradeDone()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
         if (EventTargetDisappeared()) { } // don't care
         if (EventTargetDied()) { } // don't care
-        if (EventNavigateDestination()) { } // don't care
-        if (EventNavigateVelocity()) { } // don't care
         if (EventSkillRequest()) { } // don't care
 
         return "DEAD"; // nothing interesting happened
@@ -954,7 +1101,9 @@ public partial class Player : Entity
         if (state == "IDLE") return UpdateServer_IDLE();
         if (state == "MOVING") return UpdateServer_MOVING();
         if (state == "CASTING") return UpdateServer_CASTING();
+        if (state == "STUNNED") return UpdateServer_STUNNED();
         if (state == "TRADING") return UpdateServer_TRADING();
+        if (state == "CRAFTING") return UpdateServer_CRAFTING();
         if (state == "DEAD") return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
@@ -970,11 +1119,48 @@ public partial class Player : Entity
             {
                 // simply accept input
                 SelectionHandling();
-                WSADHandling();
+                WASDHandling();
                 TargetNearest();
 
-                // canel action if escape key was pressed
-                if (Input.GetKeyDown(KeyCode.Escape)) CmdCancelAction();
+                // cancel action if escape key was pressed
+                if (Input.GetKeyDown(cancelActionKey))
+                {
+                    agent.ResetPath(); // reset locally because we use rubberband movement
+                    CmdCancelAction();
+                }
+
+                // trying to cast a skill on a monster that wasn't in range?
+                // then check if we walked into attack range by now
+                if (useSkillWhenCloser != -1)
+                {
+                    // can we still attack the target? maybe it was switched.
+                    if (CanAttack(target))
+                    {
+                        // in range already?
+                        // -> we don't use CastCheckDistance because we want to
+                        // move a bit closer (attackToMoveRangeRatio)
+                        float range = skills[useSkillWhenCloser].castRange * attackToMoveRangeRatio;
+                        if (Utils.ClosestDistance(collider, target.collider) <= range)
+                        {
+                            // then stop moving and start attacking
+                            CmdUseSkill(useSkillWhenCloser);
+
+                            // reset
+                            useSkillWhenCloser = -1;
+                        }
+                        // otherwise keep walking there. the target might move
+                        // around or run away, so we need to keep adjusting the
+                        // destination all the time
+                        else
+                        {
+                            //Debug.Log("walking closer to target...");
+                            agent.stoppingDistance = range;
+                            agent.destination = target.collider.ClosestPoint(transform.position);
+                        }
+                    }
+                    // otherwise reset
+                    else useSkillWhenCloser = -1;
+                }
             }
         }
         else if (state == "CASTING")
@@ -984,24 +1170,51 @@ public partial class Player : Entity
 
             if (isLocalPlayer)
             {
-                // simply accept input
+                // simply accept input and reset any client sided movement
                 SelectionHandling();
-                WSADHandling();
+                WASDHandling(); // still call this to set pendingVelocity for after cast
                 TargetNearest();
+                agent.ResetMovement();
 
-                // canel action if escape key was pressed
-                if (Input.GetKeyDown(KeyCode.Escape)) CmdCancelAction();
+                // cancel action if escape key was pressed
+                if (Input.GetKeyDown(cancelActionKey)) CmdCancelAction();
+            }
+        }
+        else if (state == "STUNNED")
+        {
+            if (isLocalPlayer)
+            {
+                // simply accept input and reset any client sided movement
+                SelectionHandling();
+                TargetNearest();
+                agent.ResetMovement();
+
+                // cancel action if escape key was pressed
+                if (Input.GetKeyDown(cancelActionKey)) CmdCancelAction();
             }
         }
         else if (state == "TRADING") { }
+        else if (state == "CRAFTING") { }
         else if (state == "DEAD") { }
         else Debug.LogError("invalid state:" + state);
 
+        // addon system hooks
+        Utils.InvokeMany(typeof(Player), this, "UpdateClient_");
+    }
+
+    // overlays ////////////////////////////////////////////////////////////////
+    protected override void UpdateOverlays()
+    {
+        base.UpdateOverlays();
+
         if (nameOverlay != null)
         {
+            // only players need to copy names to name overlay. it never changes
+            // for monsters / npcs.
+            nameOverlay.text = name;
+
             // find local player (null while in character selection)
-            Player player = Utils.ClientLocalPlayer();
-            if (player != null)
+            if (localPlayer != null)
             {
                 // note: murderer has higher priority (a player can be a murderer and an
                 // offender at the same time)
@@ -1010,38 +1223,84 @@ public partial class Player : Entity
                 else if (IsOffender())
                     nameOverlay.color = nameOverlayOffenderColor;
                 // member of the same party
-                else if (player.InParty() && player.party.GetMemberIndex(name) != -1)
+                else if (localPlayer.InParty() && localPlayer.party.Contains(name))
                     nameOverlay.color = nameOverlayPartyColor;
                 // otherwise default
                 else
                     nameOverlay.color = nameOverlayDefaultColor;
             }
         }
-        if (guildOverlay != null)
-            guildOverlay.text = guildName != "" ? guildOverlayPrefix + guildName + guildOverlaySuffix : "";
 
-        // addon system hooks
-        Utils.InvokeMany(typeof(Player), this, "UpdateClient_");
+        if (guildOverlay != null)
+            guildOverlay.text = !string.IsNullOrWhiteSpace(guild.name) ? guildOverlayPrefix + guild.name + guildOverlaySuffix : "";
+    }
+
+    // skill finished event & pending actions //////////////////////////////////
+    // pending actions while casting. to be applied after cast.
+    int pendingSkill = -1;
+    Vector3 pendingDestination;
+    bool pendingDestinationValid;
+    Vector3 pendingVelocity;
+    bool pendingVelocityValid;
+
+    // client event when skill cast finished on server
+    // -> useful for follow up attacks etc.
+    //    (doing those on server won't really work because the target might have
+    //     moved, in which case we need to follow, which we need to do on the
+    //     client)
+    [Client]
+    void OnSkillCastFinished(Skill skill)
+    {
+        if (!isLocalPlayer) return;
+
+        // tried to click move somewhere?
+        if (pendingDestinationValid)
+        {
+            agent.stoppingDistance = 0;
+            agent.destination = pendingDestination;
+        }
+        // tried to wasd move somewhere?
+        else if (pendingVelocityValid)
+        {
+            agent.velocity = pendingVelocity;
+        }
+        // user pressed another skill button?
+        else if (pendingSkill != -1)
+        {
+            TryUseSkill(pendingSkill, true);
+        }
+        // otherwise do follow up attack if no interruptions happened
+        else if (skill.followupDefaultAttack)
+        {
+            TryUseSkill(0, true);
+        }
+
+        // clear pending actions in any case
+        pendingSkill = -1;
+        pendingDestinationValid = false;
+        pendingVelocityValid = false;
     }
 
     // attributes //////////////////////////////////////////////////////////////
+    public static int AttributesSpendablePerLevel = 2;
+
     public int AttributesSpendable()
     {
         // calculate the amount of attribute points that can still be spent
-        // -> one point per level
+        // -> 'AttributesSpendablePerLevel' points per level
         // -> we don't need to store the points in an extra variable, we can
         //    simply decrease the attribute points spent from the level
-        return level - (strength + intelligence);
+        return (level * AttributesSpendablePerLevel) - (strength + intelligence);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdIncreaseStrength()
     {
         // validate
         if (health > 0 && AttributesSpendable() > 0) ++strength;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdIncreaseIntelligence()
     {
         // validate
@@ -1056,8 +1315,10 @@ public partial class Player : Entity
         float bonusPercentage = (memberCount - 1) * bonusPercentagePerMember;
 
         // calculate the share via ceil, so that uneven numbers still result in
-        // at least 'total' in the end.
-        // e.g. 4/2=2 (good); 5/2=2 (1 point got lost)
+        // at least 'total' in the end. for example:
+        //   4/2=2 (good)
+        //   5/2=2 (bad. 1 point got lost)
+        //   ceil(5/(float)2) = 3 (good!)
         long share = (long)Mathf.Ceil(total / (float)memberCount);
 
         // balance experience reward for the receiver's level. this is important
@@ -1123,9 +1384,9 @@ public partial class Player : Entity
             if (InParty())
             {
                 foreach (Player member in closeMembers)
-                    member.IncreaseQuestKillCounterFor(monster.name);
+                    member.QuestsOnKilled(monster);
             }
-            else IncreaseQuestKillCounterFor(monster.name);
+            else QuestsOnKilled(monster);
         }
     }
 
@@ -1160,10 +1421,10 @@ public partial class Player : Entity
     // custom DealDamageAt function that also rewards experience if we killed
     // the monster
     [Server]
-    public override void DealDamageAt(Entity entity, int amount)
+    public override void DealDamageAt(Entity entity, int amount, float stunChance = 0, float stunTime = 0)
     {
         // deal damage with the default function
-        base.DealDamageAt(entity, amount);
+        base.DealDamageAt(entity, amount, stunChance, stunTime);
 
         // a monster?
         if (entity is Monster)
@@ -1227,7 +1488,7 @@ public partial class Player : Entity
     //   BalanceExpReward(31, 20, 100)); =>   0
     public static long BalanceExpReward(long reward, int attackerLevel, int victimLevel)
     {
-        int levelDiff = Mathf.Clamp(victimLevel - attackerLevel, -10, 10);
+        int levelDiff = Mathf.Clamp(victimLevel - attackerLevel, -20, 20);
         float multiplier = 1 + levelDiff * 0.1f;
         return Convert.ToInt64(reward * multiplier);
     }
@@ -1249,20 +1510,22 @@ public partial class Player : Entity
         // take care of entity stuff
         base.OnDeath();
 
+        // rubberbanding needs a custom reset
+        rubberbanding.ResetMovement();
+
         // lose experience
         long loss = Convert.ToInt64(experienceMax * deathExperienceLossPercent);
         experience -= loss;
 
         // send an info chat message
-        string message = "You died and lost " + loss + " experience.";
-        chat.TargetMsgInfo(connectionToClient, message);
+        chat.TargetMsgInfo("You died and lost " + loss + " experience.");
 
         // addon system hooks
         Utils.InvokeMany(typeof(Player), this, "OnDeath_");
     }
 
     // loot ////////////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTakeLootGold()
     {
         // validate: dead monster and close enough?
@@ -1299,7 +1562,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTakeLootItem(int index)
     {
         // validate: dead monster and close enough and valid loot index?
@@ -1322,16 +1585,25 @@ public partial class Player : Entity
     }
 
     // inventory ///////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    // are inventory operations like swap, merge, split allowed at the moment?
+    bool InventoryOperationsAllowed()
+    {
+        return state == "IDLE" ||
+               state == "MOVING" ||
+               state == "CASTING" ||
+               (state == "TRADING" && tradeStatus == TradeStatus.Free);
+    }
+
+    [Command]
     public void CmdSwapInventoryTrash(int inventoryIndex)
     {
         // dragging an inventory item to the trash always overwrites the trash
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if (InventoryOperationsAllowed() &&
             0 <= inventoryIndex && inventoryIndex < inventory.Count)
         {
             // inventory slot has to be valid and destroyable and not summoned
             ItemSlot slot = inventory[inventoryIndex];
-            if (slot.amount > 0 && slot.item.destroyable && !slot.item.petSummoned)
+            if (slot.amount > 0 && slot.item.destroyable && !slot.item.summoned)
             {
                 // overwrite trash
                 trash = slot;
@@ -1343,10 +1615,10 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdSwapTrashInventory(int inventoryIndex)
     {
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if (InventoryOperationsAllowed() &&
             0 <= inventoryIndex && inventoryIndex < inventory.Count)
         {
             // inventory slot has to be empty or destroyable
@@ -1360,13 +1632,13 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdSwapInventoryInventory(int fromIndex, int toIndex)
     {
         // note: should never send a command with complex types!
         // validate: make sure that the slots actually exist in the inventory
         // and that they are not equal
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if (InventoryOperationsAllowed() &&
             0 <= fromIndex && fromIndex < inventory.Count &&
             0 <= toIndex && toIndex < inventory.Count &&
             fromIndex != toIndex)
@@ -1378,13 +1650,13 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdInventorySplit(int fromIndex, int toIndex)
     {
         // note: should never send a command with complex types!
         // validate: make sure that the slots actually exist in the inventory
         // and that they are not equal
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if (InventoryOperationsAllowed() &&
             0 <= fromIndex && fromIndex < inventory.Count &&
             0 <= toIndex && toIndex < inventory.Count &&
             fromIndex != toIndex)
@@ -1407,10 +1679,10 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdInventoryMerge(int fromIndex, int toIndex)
     {
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if (InventoryOperationsAllowed() &&
             0 <= fromIndex && fromIndex < inventory.Count &&
             0 <= toIndex && toIndex < inventory.Count &&
             fromIndex != toIndex)
@@ -1437,7 +1709,7 @@ public partial class Player : Entity
         }
     }
 
-    [ClientRpc(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [ClientRpc]
     public void RpcUsedItem(Item item)
     {
         // validate
@@ -1448,11 +1720,11 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdUseInventoryItem(int index)
     {
         // validate
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if (InventoryOperationsAllowed() &&
             0 <= index && index < inventory.Count && inventory[index].amount > 0 &&
             inventory[index].item.data is UsableItem)
         {
@@ -1471,15 +1743,36 @@ public partial class Player : Entity
     }
 
     // equipment ///////////////////////////////////////////////////////////////
-    public int GetEquipmentIndexByName(string itemName)
-    {
-        return equipment.FindIndex(slot => slot.amount > 0 && slot.item.name == itemName);
-    }
-
-    void OnEquipmentChanged(SyncListItemSlot.Operation op, int index)
+    void OnEquipmentChanged(SyncListItemSlot.Operation op, int index, ItemSlot slot)
     {
         // update the model
         RefreshLocation(index);
+    }
+
+    bool CanReplaceAllBones(SkinnedMeshRenderer equipmentSkin)
+    {
+        // are all equipment SkinnedMeshRenderer bones in the player bones?
+        return equipmentSkin.bones.All(bone => skinBones.ContainsKey(bone.name));
+    }
+
+    // replace all equipment SkinnedMeshRenderer bones with the original player
+    // bones so that the equipment animation works with IK too
+    // (make sure to check CanReplaceAllBones before)
+    void ReplaceAllBones(SkinnedMeshRenderer equipmentSkin)
+    {
+        // get equipment bones
+        Transform[] bones = equipmentSkin.bones;
+
+        // replace each one
+        for (int i = 0; i < bones.Length; ++i)
+        {
+            string boneName = bones[i].name;
+            if (!skinBones.TryGetValue(boneName, out bones[i]))
+                Debug.LogWarning(equipmentSkin.name + " bone " + boneName + " not found in original player bones. Make sure to check CanReplaceAllBones before.");
+        }
+
+        // reassign bones
+        equipmentSkin.bones = bones;
     }
 
     void RebindAnimators()
@@ -1488,7 +1781,7 @@ public partial class Player : Entity
             anim.Rebind();
     }
 
-    void RefreshLocation(int index)
+    public void RefreshLocation(int index)
     {
         ItemSlot slot = equipment[index];
         EquipmentInfo info = equipmentInfo[index];
@@ -1508,9 +1801,31 @@ public partial class Player : Entity
                 {
                     // load the model
                     GameObject go = Instantiate(itemData.modelPrefab);
+                    go.name = itemData.modelPrefab.name; // avoid "(Clone)"
                     go.transform.SetParent(info.location, false);
 
-                    // is it a skinned mesh with an animator?
+                    // skinned mesh and all bones can be be replaced?
+                    // then replace all. this way the equipment can follow IK
+                    // too (if any).
+                    // => this is the RECOMMENDED method for animated equipment.
+                    //    name all equipment bones the same as player bones and
+                    //    everything will work perfectly
+                    // => this is the ONLY way for equipment to follow IK, e.g.
+                    //    in games where arms aim up/down.
+                    // NOTE: uMMORPG doesn't use IK at the moment, but it might
+                    //       need this later.
+                    SkinnedMeshRenderer equipmentSkin = go.GetComponentInChildren<SkinnedMeshRenderer>();
+                    if (equipmentSkin != null && CanReplaceAllBones(equipmentSkin))
+                        ReplaceAllBones(equipmentSkin);
+
+                    // animator? then replace controller to follow player's
+                    // animations
+                    // => this is the ALTERNATIVE method for animated equipment.
+                    //    add the Animator and use the player's avatar. works
+                    //    for animated pants, etc. but not for IK.
+                    // => this is NECESSARY for 'external' equipment like wings,
+                    //    staffs, etc. that should be animated but don't contain
+                    //    the same bones as the player.
                     Animator anim = go.GetComponent<Animator>();
                     if (anim != null)
                     {
@@ -1526,8 +1841,9 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdSwapInventoryEquip(int inventoryIndex, int equipmentIndex)
+    // swap inventory & equipment slots to equip/unequip. used in multiple places
+    [Server]
+    public void SwapInventoryEquip(int inventoryIndex, int equipmentIndex)
     {
         // validate: make sure that the slots actually exist in the inventory
         // and in the equipment
@@ -1535,7 +1851,7 @@ public partial class Player : Entity
             0 <= inventoryIndex && inventoryIndex < inventory.Count &&
             0 <= equipmentIndex && equipmentIndex < equipment.Count)
         {
-            // item slot has to be empty (unequip) or equipabable
+            // item slot has to be empty (unequip) or equipable
             ItemSlot slot = inventory[inventoryIndex];
             if (slot.amount == 0 ||
                 slot.item.data is EquipmentItem &&
@@ -1549,28 +1865,26 @@ public partial class Player : Entity
         }
     }
 
-    // skills //////////////////////////////////////////////////////////////////
-    public override bool HasCastWeapon()
+
+    [Command]
+    public void CmdSwapInventoryEquip(int inventoryIndex, int equipmentIndex)
     {
-        // equipped any 'Weapon...' item?
-        return equipment.FindIndex(slot => slot.amount > 0 &&
-            ((EquipmentItem)slot.item.data).category.StartsWith("Weapon")
-        ) != -1;
+        SwapInventoryEquip(inventoryIndex, equipmentIndex);
     }
 
+    // skills //////////////////////////////////////////////////////////////////
     // CanAttack check
     // we use 'is' instead of 'GetType' so that it works for inherited types too
     public override bool CanAttack(Entity entity)
     {
-        return health > 0 &&
-               entity.health > 0 &&
-               entity != this &&
+        return base.CanAttack(entity) &&
                (entity is Monster ||
                 entity is Player ||
-                (entity is Pet && entity != activePet));
+                (entity is Pet && entity != activePet) ||
+                (entity is Mount && entity != activeMount));
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdUseSkill(int skillIndex)
     {
         // validate
@@ -1580,24 +1894,56 @@ public partial class Player : Entity
             // skill learned and can be casted?
             if (skills[skillIndex].level > 0 && skills[skillIndex].IsReady())
             {
-                // add as current or next skill, unless casting same one already
-                // (some players might hammer the key multiple times, which
-                //  doesn't mean that they want to cast it afterwards again)
-                // => also: always set currentSkill when moving or idle or whatever
-                //  so that the last skill that the player tried to cast while
-                //  moving is the first skill that will be casted when attacking
-                //  the enemy.
-                if (currentSkill == -1 || state != "CASTING")
-                    currentSkill = skillIndex;
-                else if (currentSkill != skillIndex)
-                    nextSkill = skillIndex;
+                currentSkill = skillIndex;
             }
+        }
+    }
+
+    // helper function: try to use a skill and walk into range if necessary
+    [Client]
+    public void TryUseSkill(int skillIndex, bool ignoreState = false)
+    {
+        // only if not casting already
+        // (might need to ignore that when coming from pending skill where
+        //  CASTING is still true)
+        if (state != "CASTING" || ignoreState)
+        {
+            Skill skill = skills[skillIndex];
+            if (CastCheckSelf(skill) && CastCheckTarget(skill))
+            {
+                // check distance between self and target
+                Vector3 destination;
+                if (CastCheckDistance(skill, out destination))
+                {
+                    // cast
+                    CmdUseSkill(skillIndex);
+                }
+                else
+                {
+                    // move to the target first
+                    // (use collider point(s) to also work with big entities)
+                    agent.stoppingDistance = skill.castRange * attackToMoveRangeRatio;
+                    agent.destination = destination;
+
+                    // use skill when there
+                    useSkillWhenCloser = skillIndex;
+                }
+            }
+        }
+        else
+        {
+            pendingSkill = skillIndex;
         }
     }
 
     public bool HasLearnedSkill(string skillName)
     {
         return skills.Any(skill => skill.name == skillName && skill.level > 0);
+    }
+
+    public bool HasLearnedSkillWithLevel(string skillName, int skillLevel)
+    {
+        return skills.Any(skill => skill.name == skillName && skill.level >= skillLevel);
     }
 
     // helper function for command and UI
@@ -1607,11 +1953,11 @@ public partial class Player : Entity
         return skill.level < skill.maxLevel &&
                level >= skill.upgradeRequiredLevel &&
                skillExperience >= skill.upgradeRequiredSkillExperience &&
-               (skill.predecessor == null || HasLearnedSkill(skill.predecessor.name));
+               (skill.predecessor == null || (HasLearnedSkillWithLevel(skill.predecessor.name, skill.predecessorLevel)));
     }
 
     // -> this is for learning and upgrading!
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdUpgradeSkill(int skillIndex)
     {
         // validate
@@ -1652,15 +1998,23 @@ public partial class Player : Entity
         List<Skill> learned = skills.Where(skill => skill.level > 0).ToList();
         for (int i = 0; i < skillbar.Length; ++i)
         {
-            // try loading an existing entry. otherwise fill with default skills
-            // for a better first impression
+            // try loading an existing entry
             if (PlayerPrefs.HasKey(name + "_skillbar_" + i))
             {
-                // only if learned (might be old character's playerprefs etc.)
-                string skillName = PlayerPrefs.GetString(name + "_skillbar_" + i, "");
-                if (HasLearnedSkill(skillName))
-                    skillbar[i].reference = skillName;
+                string entry = PlayerPrefs.GetString(name + "_skillbar_" + i, "");
+
+                // is this a valid item/equipment/learned skill?
+                // (might be an old character's playerprefs)
+                // => only allow learned skills (in case it's an old character's
+                //    skill that we also have, but haven't learned yet)
+                if (HasLearnedSkill(entry) ||
+                    GetInventoryIndexByName(entry) != -1 ||
+                    GetEquipmentIndexByName(entry) != -1)
+                {
+                    skillbar[i].reference = entry;
+                }
             }
+            // otherwise fill with default skills for a better first impression
             else if (i < learned.Count)
             {
                 skillbar[i].reference = learned[i].name;
@@ -1687,18 +2041,21 @@ public partial class Player : Entity
     }
 
     [Server]
-    public void IncreaseQuestKillCounterFor(string monsterName)
+    public void QuestsOnKilled(Entity victim)
     {
+        // call OnKilled in all active (not completed) quests
         for (int i = 0; i < quests.Count; ++i)
-        {
-            // active quest and not completed yet?
-            if (!quests[i].completed && quests[i].killTarget != null && quests[i].killTarget.name == monsterName)
-            {
-                Quest quest = quests[i];
-                quest.killed = Mathf.Min(quest.killed + 1, quest.killAmount);
-                quests[i] = quest;
-            }
-        }
+            if (!quests[i].completed)
+                quests[i].OnKilled(this, i, victim);
+    }
+
+    [Server]
+    public void QuestsOnLocation(Collider location)
+    {
+        // call OnLocation in all active (not completed) quests
+        for (int i = 0; i < quests.Count; ++i)
+            if (!quests[i].completed)
+                quests[i].OnLocation(this, i, location);
     }
 
     // helper function to check if the player can accept a new quest
@@ -1716,7 +2073,7 @@ public partial class Player : Entity
                (quest.predecessor == null || HasCompletedQuest(quest.predecessor.name));
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdAcceptQuest(int npcQuestIndex)
     {
         // validate
@@ -1726,11 +2083,11 @@ public partial class Player : Entity
             target.health > 0 &&
             target is Npc &&
             0 <= npcQuestIndex && npcQuestIndex < ((Npc)target).quests.Length &&
-            Utils.ClosestDistance(collider, target.collider) <= interactionRange &&
-            CanAcceptQuest(((Npc)target).quests[npcQuestIndex]))
+            Utils.ClosestDistance(collider, target.collider) <= interactionRange)
         {
-            ScriptableQuest npcQuest = ((Npc)target).quests[npcQuestIndex];
-            quests.Add(new Quest(npcQuest));
+            ScriptableQuestOffer npcQuest = ((Npc)target).quests[npcQuestIndex];
+            if (npcQuest.acceptHere && CanAcceptQuest(npcQuest.quest))
+                quests.Add(new Quest(npcQuest.quest));
         }
     }
 
@@ -1743,8 +2100,7 @@ public partial class Player : Entity
         {
             // fulfilled?
             Quest quest = quests[index];
-            int gathered = quest.gatherItem != null ? InventoryCount(new Item(quest.gatherItem)) : 0;
-            if (quest.IsFulfilled(gathered))
+            if (quest.IsFulfilled(this))
             {
                 // enough space for reward item (if any)?
                 return quest.rewardItem == null || InventoryCanAdd(new Item(quest.rewardItem), 1);
@@ -1753,7 +2109,7 @@ public partial class Player : Entity
         return false;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdCompleteQuest(int npcQuestIndex)
     {
         // validate
@@ -1765,34 +2121,37 @@ public partial class Player : Entity
             0 <= npcQuestIndex && npcQuestIndex < ((Npc)target).quests.Length &&
             Utils.ClosestDistance(collider, target.collider) <= interactionRange)
         {
-            ScriptableQuest npcQuest = ((Npc)target).quests[npcQuestIndex];
-            int index = GetQuestIndexByName(npcQuest.name);
-            if (index != -1)
+            ScriptableQuestOffer npcQuest = ((Npc)target).quests[npcQuestIndex];
+            if (npcQuest.completeHere)
             {
-                // can complete it? (also checks inventory space for reward, if any)
-                Quest quest = quests[index];
-                if (CanCompleteQuest(quest.name))
+                int index = GetQuestIndexByName(npcQuest.quest.name);
+                if (index != -1)
                 {
-                    // remove gathered items from player's inventory
-                    if (quest.gatherItem != null)
-                        InventoryRemove(new Item(quest.gatherItem), quest.gatherAmount);
+                    // can complete it? (also checks inventory space for reward, if any)
+                    Quest quest = quests[index];
+                    if (CanCompleteQuest(quest.name))
+                    {
+                        // call quest.OnCompleted to remove quest items from
+                        // inventory, etc.
+                        quest.OnCompleted(this);
 
-                    // gain rewards
-                    gold += quest.rewardGold;
-                    experience += quest.rewardExperience;
-                    if (quest.rewardItem != null)
-                        InventoryAdd(new Item(quest.rewardItem), 1);
+                        // gain rewards
+                        gold += quest.rewardGold;
+                        experience += quest.rewardExperience;
+                        if (quest.rewardItem != null)
+                            InventoryAdd(new Item(quest.rewardItem), 1);
 
-                    // complete quest
-                    quest.completed = true;
-                    quests[index] = quest;
+                        // complete quest
+                        quest.completed = true;
+                        quests[index] = quest;
+                    }
                 }
             }
         }
     }
 
     // npc trading /////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdNpcBuyItem(int index, int amount)
     {
         // validate: close enough, npc alive and valid index?
@@ -1821,7 +2180,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdNpcSellItem(int index, int amount)
     {
         // validate: close enough, npc alive and valid index and valid item?
@@ -1835,7 +2194,7 @@ public partial class Player : Entity
         {
             // sellable?
             ItemSlot slot = inventory[index];
-            if (slot.amount > 0 && slot.item.sellable && !slot.item.petSummoned)
+            if (slot.amount > 0 && slot.item.sellable && !slot.item.summoned)
             {
                 // valid amount?
                 if (1 <= amount && amount <= slot.amount)
@@ -1851,7 +2210,7 @@ public partial class Player : Entity
     }
 
     // npc teleport ////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdNpcTeleport()
     {
         // validate
@@ -1865,6 +2224,10 @@ public partial class Player : Entity
             // using agent.Warp is recommended over transform.position
             // (the latter can cause weird bugs when using it with an agent)
             agent.Warp(((Npc)target).teleportTo.position);
+
+            // clear target. no reason to keep targeting the npc after we
+            // teleported away from it
+            target = null;
         }
     }
 
@@ -1893,7 +2256,7 @@ public partial class Player : Entity
     }
 
     // request a trade with the target player.
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeRequestSend()
     {
         // validate
@@ -1916,7 +2279,7 @@ public partial class Player : Entity
 
     // accept a trade invitation by simply setting 'requestFrom' for the other
     // person to self
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeRequestAccept()
     {
         Player sender = FindPlayerFromTradeInvitation();
@@ -1932,7 +2295,7 @@ public partial class Player : Entity
     }
 
     // decline a trade invitation
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeRequestDecline()
     {
         tradeRequestFrom = "";
@@ -1948,7 +2311,7 @@ public partial class Player : Entity
         tradeRequestFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeCancel()
     {
         // validate
@@ -1961,7 +2324,7 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeOfferLock()
     {
         // validate
@@ -1969,7 +2332,7 @@ public partial class Player : Entity
             tradeStatus = TradeStatus.Locked;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeOfferGold(long amount)
     {
         // validate
@@ -1978,7 +2341,7 @@ public partial class Player : Entity
             tradeOfferGold = amount;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeOfferItem(int inventoryIndex, int offerIndex)
     {
         // validate
@@ -1988,12 +2351,12 @@ public partial class Player : Entity
             0 <= inventoryIndex && inventoryIndex < inventory.Count)
         {
             ItemSlot slot = inventory[inventoryIndex];
-            if (slot.amount > 0 && slot.item.tradable && !slot.item.petSummoned)
+            if (slot.amount > 0 && slot.item.tradable && !slot.item.summoned)
                 tradeOfferItems[offerIndex] = inventoryIndex;
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeOfferItemClear(int offerIndex)
     {
         // validate
@@ -2032,7 +2395,7 @@ public partial class Player : Entity
         return 0;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTradeOfferAccept()
     {
         // validate
@@ -2140,37 +2503,109 @@ public partial class Player : Entity
     // realistic option
 
     // craft the current combination of items and put result into inventory
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdCraft(int[] indices)
     {
         // validate: between 1 and 6, all valid, no duplicates?
+        // -> can be IDLE or MOVING (in which case we reset the movement)
         if ((state == "IDLE" || state == "MOVING") &&
-            0 < indices.Length && indices.Length <= ScriptableRecipe.recipeSize &&
-            indices.All(index => 0 <= index && index < inventory.Count && inventory[index].amount > 0) &&
-            !indices.ToList().HasDuplicates())
+            indices.Length == ScriptableRecipe.recipeSize)
         {
+            // find valid indices that are not '-1' and make sure there are no
+            // duplicates
+            List<int> validIndices = indices.Where(index => 0 <= index && index < inventory.Count && inventory[index].amount > 0).ToList();
+            if (validIndices.Count > 0 && !validIndices.HasDuplicates())
+            {
+                // build list of item templates from valid indices
+                List<ItemSlot> items = validIndices.Select(index => inventory[index]).ToList();
 
+                // find recipe
+                ScriptableRecipe recipe = ScriptableRecipe.dict.Values.ToList().Find(r => r.CanCraftWith(items)); // good enough for now
+                if (recipe != null && recipe.result != null)
+                {
+                    // enough space?
+                    Item result = new Item(recipe.result);
+                    if (InventoryCanAdd(result, 1))
+                    {
+                        // store the crafting indices on the server. no need for
+                        // a SyncList and unnecessary broadcasting.
+                        // we already have a 'craftingIndices' variable anyway.
+                        craftingIndices = indices.ToList();
+
+                        // start crafting
+                        craftingRequested = true;
+                        craftingTimeEnd = NetworkTime.time + recipe.craftingTime;
+                    }
+                }
+            }
+        }
+    }
+
+    // finish the crafting
+    [Server]
+    void Craft()
+    {
+        // should only be called while CRAFTING
+        // -> we already validated everything in CmdCraft. let's just craft.
+        if (state == "CRAFTING")
+        {
             // build list of item templates from indices
-            List<ScriptableItem> items = indices.Select(index => inventory[index].item.data).ToList();
+            List<int> validIndices = craftingIndices.Where(index => 0 <= index && index < inventory.Count && inventory[index].amount > 0).ToList();
+            List<ItemSlot> items = validIndices.Select(index => inventory[index]).ToList();
 
             // find recipe
             ScriptableRecipe recipe = ScriptableRecipe.dict.Values.ToList().Find(r => r.CanCraftWith(items)); // good enough for now
             if (recipe != null && recipe.result != null)
             {
-                // try to add result item to inventory (if enough space)
-                if (InventoryAdd(new Item(recipe.result), 1))
+                // enough space?
+                Item result = new Item(recipe.result);
+                if (InventoryCanAdd(result, 1))
                 {
-                    // it worked. remove the ingredients from inventory
-                    foreach (int index in indices)
+                    // remove the ingredients from inventory in any case
+                    foreach (ScriptableItemAndAmount ingredient in recipe.ingredients)
+                        if (ingredient.amount > 0 && ingredient.item != null)
+                            InventoryRemove(new Item(ingredient.item), ingredient.amount);
+
+                    // roll the dice to decide if we add the result or not
+                    // IMPORTANT: we use rand() < probability to decide.
+                    // => UnityEngine.Random.value is [0,1] inclusive:
+                    //    for 0% probability it's fine because it's never '< 0'
+                    //    for 100% probability it's not because it's not always '< 1', it might be == 1
+                    //    and if we use '<=' instead then it won't work for 0%
+                    // => C#'s Random value is [0,1) exclusive like most random
+                    //    functions. this works fine.
+                    if (new System.Random().NextDouble() < recipe.probability)
                     {
-                        // decrease item amount
-                        ItemSlot slot = inventory[index];
-                        slot.DecreaseAmount(1);
-                        inventory[index] = slot;
+                        // add result item to inventory
+                        InventoryAdd(new Item(recipe.result), 1);
+                        TargetCraftingSuccess();
                     }
+                    else
+                    {
+                        TargetCraftingFailed();
+                    }
+
+                    // clear indices afterwards
+                    // note: we set all to -1 instead of calling .Clear because
+                    //       that would clear all the slots in host mode.
+                    for (int i = 0; i < ScriptableRecipe.recipeSize; ++i)
+                        craftingIndices[i] = -1;
                 }
             }
         }
+    }
+
+    // two rpcs for results to save 1 byte for the actual result
+    [TargetRpc] // only send to one client
+    public void TargetCraftingSuccess()
+    {
+        craftingState = CraftingState.Success;
+    }
+
+    [TargetRpc] // only send to one client
+    public void TargetCraftingFailed()
+    {
+        craftingState = CraftingState.Failed;
     }
 
     // pvp murder system ///////////////////////////////////////////////////////
@@ -2207,12 +2642,12 @@ public partial class Player : Entity
     public void CmdEnterCoupon(string coupon)
     {
         // only allow entering one coupon every few seconds to avoid brute force
-        if (Time.time >= nextRiskyActionTime)
+        if (NetworkTime.time >= nextRiskyActionTime)
         {
             // YOUR COUPON VALIDATION CODE HERE
             // coins += ParseCoupon(coupon);
-            Debug.Log("coupon: " + coupon + " => " + name + "@" + Time.time);
-            nextRiskyActionTime = Time.time + couponWaitSeconds;
+            Debug.Log("coupon: " + coupon + " => " + name + "@" + NetworkTime.time);
+            nextRiskyActionTime = NetworkTime.time + couponWaitSeconds;
         }
     }
 
@@ -2233,6 +2668,11 @@ public partial class Player : Entity
                 {
                     coins -= item.itemMallPrice;
                     Debug.Log(name + " unlocked " + item.name);
+
+                    // NOTE: item mall purchases need to be persistent, yet
+                    // resaving the player here is not necessary because if the
+                    // server crashes before next save, then both the inventory
+                    // and the coins will be reverted anyway.
                 }
             }
         }
@@ -2248,184 +2688,103 @@ public partial class Player : Entity
     [Server]
     void ProcessCoinOrders()
     {
-        List<long> orders = Database.GrabCharacterOrders(name);
+        List<long> orders = Database.singleton.GrabCharacterOrders(name);
         foreach (long reward in orders)
         {
             coins += reward;
             Debug.Log("Processed order for: " + name + ";" + reward);
-            string message = "Processed order for: " + reward;
-            chat.TargetMsgInfo(connectionToClient, message);
+            chat.TargetMsgInfo("Processed order for: " + reward);
         }
     }
 
     // guild ///////////////////////////////////////////////////////////////////
     public bool InGuild()
     {
-        // only if both are true, otherwise we might be in the middle of leaving
-        return guildName != "" && guild.GetMemberIndex(name) != -1;
-    }
-
-    [Server]
-    static void BroadcastGuildChanges(string guildName, Guild guild)
-    {
-        // save in database
-        Database.SaveGuild(guildName, guild.notice, guild.members.ToList());
-
-        // copy to every online member. we don't just reload from db because the
-        // online status is only available in the members list
-        // (call TargetRpc on that GameObject for that connection)
-        foreach (GuildMember member in guild.members)
-        {
-            if (onlinePlayers.ContainsKey(member.name))
-            {
-                Player player = onlinePlayers[member.name];
-                player.guildName = guildName;
-                player.guild = guild;
-                player.TargetGuildSync(player.connectionToClient, guild);
-            }
-        }
-    }
-
-    // sending guild notice and members to all observers would be bandwidth
-    // overkill, so we use a targetrpc
-    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
-    public void TargetGuildSync(NetworkConnection target, Guild guild)
-    {
-        this.guild = guild;
-    }
-
-    // helper function to clear guild variables sync for kick/leave/terminate
-    [Server]
-    void ClearGuild()
-    {
-        guildName = "";
-        guild = new Guild();
-        TargetGuildSync(connectionToClient, guild);
+        return !string.IsNullOrWhiteSpace(guild.name);
     }
 
     [Server]
     public void SetGuildOnline(bool online)
     {
+        // validate
         if (InGuild())
-        {
-            guild.SetOnline(name, online);
-            BroadcastGuildChanges(guildName, guild);
-        }
+            GuildSystem.SetGuildOnline(guild.name, name, online);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdGuildInviteTarget()
     {
         // validate
         if (target != null && target is Player &&
             InGuild() && !((Player)target).InGuild() &&
             guild.CanInvite(name, target.name) &&
-            Time.time >= nextRiskyActionTime &&
+            NetworkTime.time >= nextRiskyActionTime &&
             Utils.ClosestDistance(collider, target.collider) <= interactionRange)
         {
             // send a invite and reset risky time
             ((Player)target).guildInviteFrom = name;
-            nextRiskyActionTime = Time.time + guildInviteWaitSeconds;
+            nextRiskyActionTime = NetworkTime.time + guildInviteWaitSeconds;
             print(name + " invited " + target.name + " to guild");
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdGuildInviteAccept()
     {
-        // valid invitation?
+        // valid invitation, sender exists and is in a guild?
         // note: no distance check because sender might be far away already
         if (!InGuild() && guildInviteFrom != "" &&
-            onlinePlayers.ContainsKey(guildInviteFrom))
+            onlinePlayers.TryGetValue(guildInviteFrom, out Player sender) &&
+            sender.InGuild())
         {
-            // can sender actually invite us?
-            Player sender = onlinePlayers[guildInviteFrom];
-            if (sender.InGuild() && sender.guild.CanInvite(sender.name, name))
-            {
-                // add self to sender's guild members list
-                sender.guild.AddMember(name, level);
-
-                // broadcast and save changes from sender to everyone
-                BroadcastGuildChanges(sender.guildName, sender.guild);
-                print(sender.name + " added " + name + " to guild: " + guildName);
-            }
+            // try to add. GuildSystem does all the checks.
+            GuildSystem.AddToGuild(sender.guild.name, sender.name, name, level);
         }
 
         // reset guild invite in any case
         guildInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdGuildInviteDecline()
     {
         guildInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdGuildKick(string memberName)
     {
         // validate
-        if (InGuild() && guild.CanKick(name, memberName))
-        {
-            // remove from member list
-            guild.RemoveMember(memberName);
-
-            // broadcast and save changes
-            BroadcastGuildChanges(guildName, guild);
-
-            // clear variables for the kicked person
-            if (onlinePlayers.ContainsKey(memberName))
-                onlinePlayers[memberName].ClearGuild();
-            print(name + " kicked " + memberName + " from guild: " + guildName);
-        }
+        if (InGuild())
+            GuildSystem.KickFromGuild(guild.name, name, memberName);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdGuildPromote(string memberName)
     {
         // validate
-        if (InGuild() && guild.CanPromote(name, memberName))
-        {
-            // promote the member
-            guild.PromoteMember(memberName);
-
-            // broadcast and save changes
-            BroadcastGuildChanges(guildName, guild);
-            print(name + " promoted " + memberName + " in guild: " + guildName);
-        }
+        if (InGuild())
+            GuildSystem.PromoteMember(guild.name, name, memberName);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdGuildDemote(string memberName)
     {
         // validate
-        if (InGuild() && guild.CanDemote(name, memberName))
-        {
-            // demote the member
-            guild.DemoteMember(memberName);
-
-            // broadcast and save changes
-            BroadcastGuildChanges(guildName, guild);
-            print(name + " demoted " + memberName + " in guild: " + guildName);
-        }
+        if (InGuild())
+            GuildSystem.DemoteMember(guild.name, name, memberName);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdSetGuildNotice(string notice)
     {
         // validate
         // (only allow changes every few seconds to avoid bandwidth issues)
-        if (InGuild() && guild.CanNotify(name) &&
-            notice.Length < Guild.NoticeMaxLength &&
-            Time.time >= nextRiskyActionTime)
+        if (InGuild() && NetworkTime.time >= nextRiskyActionTime)
         {
-            // set notice and reset next time
-            guild.notice = notice;
-            nextRiskyActionTime = Time.time + Guild.NoticeWaitSeconds;
-
-            // broadcast and save changes
-            BroadcastGuildChanges(guildName, guild);
-            print(name + " changed guild notice to: " + guild.notice);
+            // try to set notice. reset time if it worked.
+            if (GuildSystem.SetGuildNotice(guild.name, name, notice))
+                nextRiskyActionTime = NetworkTime.time + GuildSystem.NoticeWaitSeconds;
         }
     }
 
@@ -2438,103 +2797,42 @@ public partial class Player : Entity
                Utils.ClosestDistance(collider, target.collider) <= interactionRange;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdTerminateGuild()
     {
         // validate
-        if (InGuild() && IsGuildManagerNear() && guild.CanTerminate(name))
-        {
-            // remove guild from database
-            Database.RemoveGuild(guildName);
-
-            // clear player variables
-            ClearGuild();
-        }
+        if (InGuild() && IsGuildManagerNear())
+            GuildSystem.TerminateGuild(guild.name, name);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdCreateGuild(string newGuildName)
+    [Command]
+    public void CmdCreateGuild(string guildName)
     {
         // validate
-        if (health > 0 && IsGuildManagerNear() && !InGuild() && gold >= Guild.CreationPrice)
+        if (health > 0 && gold >= GuildSystem.CreationPrice &&
+            !InGuild() && IsGuildManagerNear())
         {
-            if (Guild.IsValidGuildName(newGuildName) &&
-                !Database.GuildExists(newGuildName)) // db check only on server, no Guild.CanCreate function because client has no DB.
-            {
-                // remove gold
-                gold -= Guild.CreationPrice;
-
-                // set guild and add self to members list as highest rank
-                guildName = newGuildName;
-                guild.notice = ""; // avoid null
-                guild.AddMember(name, level, GuildRank.Master);
-
-                // (broadcast and) save changes
-                BroadcastGuildChanges(guildName, guild);
-                print(name + " created guild: " + guildName);
-            }
+            // try to create the guild. pay for it if it worked.
+            if (GuildSystem.CreateGuild(name, level, guildName))
+                gold -= GuildSystem.CreationPrice;
             else
-            {
-                string message = "Guild name invalid!"; // exists or invalid regex
-                chat.TargetMsgInfo(connectionToClient, message);
-            }
+                chat.TargetMsgInfo("Guild name invalid!");
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdLeaveGuild()
     {
         // validate
-        if (InGuild() && guild.CanLeave(name))
-        {
-            // remove self from members list
-            guild.RemoveMember(name);
-
-            // broadcast and save changes
-            BroadcastGuildChanges(guildName, guild);
-
-            // reset guild info and members list for the person that left
-            ClearGuild();
-        }
+        if (InGuild())
+            GuildSystem.LeaveGuild(guild.name, name);
     }
 
     // party ///////////////////////////////////////////////////////////////////
     public bool InParty()
     {
-        return party.members != null && party.members.Length > 0;
-    }
-
-    [Server]
-    static void BroadcastPartyChanges(Party party)
-    {
-        // copy to every online member. we don't just reload from db because the
-        // online status is only available in the members list
-        // (call TargetRpc on that GameObject for that connection)
-        foreach (string member in party.members)
-        {
-            if (onlinePlayers.ContainsKey(member))
-            {
-                Player player = onlinePlayers[member];
-                player.party = party;
-                player.TargetPartySync(player.connectionToClient, party);
-            }
-        }
-    }
-
-    // sending party info to all observers would be bandwidth overkill, so we
-    // use a targetrpc
-    [TargetRpc(channel = Channels.DefaultUnreliable)] // only send to one client
-    public void TargetPartySync(NetworkConnection target, Party party)
-    {
-        this.party = party;
-    }
-
-    // helper function to clear party variables sync for kick/leave/dismiss
-    [Server]
-    void ClearParty()
-    {
-        party = new Party();
-        TargetPartySync(connectionToClient, party);
+        // 0 means no party, because default party struct's partyId is 0.
+        return party.partyId > 0;
     }
 
     // find party members in proximity for item/exp sharing etc.
@@ -2542,8 +2840,9 @@ public partial class Player : Entity
     {
         if (InParty())
         {
-            return netIdentity.observers.Select(conn => Utils.GetGameObjectFromPlayerControllers(conn.playerControllers).GetComponent<Player>())
-                                        .Where(p => party.GetMemberIndex(p.name) != -1)
+            return netIdentity.observers.Values
+                                        .Select(conn => conn.playerController.GetComponent<Player>())
+                                        .Where(p => party.Contains(p.name))
                                         .ToList();
         }
         return new List<Player>();
@@ -2551,28 +2850,28 @@ public partial class Player : Entity
 
     // party invite by name (not by target) so that chat commands are possible
     // if needed
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartyInvite(string otherName)
     {
         // validate: is there someone with that name, and not self?
         if (otherName != name && onlinePlayers.ContainsKey(otherName) &&
-            Time.time >= nextRiskyActionTime)
+            NetworkTime.time >= nextRiskyActionTime)
         {
             Player other = onlinePlayers[otherName];
 
             // can only send invite if no party yet or party isn't full and
             // have invite rights and other guy isn't in party yet
-            if ((!InParty() || party.CanInvite(name)) && !other.InParty())
+            if ((!InParty() || !party.IsFull()) && !other.InParty())
             {
                 // send a invite and reset risky time
                 other.partyInviteFrom = name;
-                nextRiskyActionTime = Time.time + partyInviteWaitSeconds;
+                nextRiskyActionTime = NetworkTime.time + partyInviteWaitSeconds;
                 print(name + " invited " + other.name + " to party");
             }
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartyInviteAccept()
     {
         // valid invitation?
@@ -2580,146 +2879,68 @@ public partial class Player : Entity
         if (!InParty() && partyInviteFrom != "" &&
             onlinePlayers.ContainsKey(partyInviteFrom))
         {
-            // can sender actually invite us?
+            // find sender
             Player sender = onlinePlayers[partyInviteFrom];
 
-            // -> either he is in a party and can still invite someone
-            if (sender.InParty() && sender.party.CanInvite(sender.name))
-            {
-                sender.party.AddMember(name);
-                BroadcastPartyChanges(sender.party);
-                print(sender.name + " added " + name + " to " + sender.party.members[0] + "'s party");
-                // -> or he is not in a party and forms a new one
-            }
-            else if (!sender.InParty())
-            {
-                sender.party.AddMember(sender.name); // master
-                sender.party.AddMember(name);
-                BroadcastPartyChanges(sender.party);
-                print(sender.name + " formed a new party with " + name);
-            }
+            // is in party? then try to add
+            if (sender.InParty())
+                PartySystem.AddToParty(sender.party.partyId, name);
+            // otherwise try to form a new one
+            else
+                PartySystem.FormParty(sender.name, name);
         }
 
         // reset party invite in any case
         partyInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartyInviteDecline()
     {
         partyInviteFrom = "";
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdPartyKick(int memberIndex)
+    [Command]
+    public void CmdPartyKick(string member)
     {
-        // validate: party master and index exists and not master?
-        if (InParty() && party.members[0] == name &&
-            0 < memberIndex && memberIndex < party.members.Length)
-        {
-            string member = party.members[memberIndex];
-
-            // kick
-            party.RemoveMember(member);
-
-            // still enough people in it for a party?
-            if (party.members.Length > 1)
-            {
-                BroadcastPartyChanges(party);
-            }
-            else
-            {
-                // a party requires at least two people, otherwise it's not
-                // really a party anymore. if we'd keep it alive with one player
-                // then he can't be invited to another party until he dismisses
-                // the empty one.
-                ClearParty();
-            }
-
-            // clear for the kicked person too
-            if (onlinePlayers.ContainsKey(member))
-                onlinePlayers[member].ClearParty();
-
-            print(name + " kicked " + member + " from party");
-        }
+        // try to kick. party system will do all the validation.
+        PartySystem.KickFromParty(party.partyId, name, member);
     }
 
     // version without cmd because we need to call it from the server too
     public void PartyLeave()
     {
-        // validate: in party and not master?
-        if (InParty() && party.members[0] != name)
-        {
-            // remove self from party
-            party.RemoveMember(name);
-
-            // still enough people in it for a party?
-            if (party.members.Length > 1)
-            {
-                BroadcastPartyChanges(party);
-            }
-            else
-            {
-                // a party requires at least two people, otherwise it's not
-                // really a party anymore. if we'd keep it alive with one player
-                // then he can't be invited to another party until he dismisses
-                // the empty one.
-                if (onlinePlayers.ContainsKey(party.members[0]))
-                    onlinePlayers[party.members[0]].ClearParty();
-            }
-
-            // clear for self
-            ClearParty();
-            print(name + " left the party");
-        }
+        // try to leave. party system will do all the validation.
+        PartySystem.LeaveParty(party.partyId, name);
     }
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartyLeave() { PartyLeave(); }
 
     // version without cmd because we need to call it from the server too
     public void PartyDismiss()
     {
-        // validate: is master?
-        if (InParty() && party.members[0] == name)
-        {
-            // clear party for everyone
-            foreach (string member in party.members)
-            {
-                if (onlinePlayers.ContainsKey(member))
-                    onlinePlayers[member].ClearParty();
-            }
-            print(name + " dismissed the party");
-        }
+        // try to dismiss. party system will do all the validation.
+        PartySystem.DismissParty(party.partyId, name);
     }
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartyDismiss() { PartyDismiss(); }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartySetExperienceShare(bool value)
     {
-        // validate: is party master?
-        if (InParty() && party.members[0] == name)
-        {
-            // set new value, sync to everyone else
-            party.shareExperience = value;
-            BroadcastPartyChanges(party);
-        }
+        // try to set. party system will do all the validation.
+        PartySystem.SetPartyExperienceShare(party.partyId, name, value);
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPartySetGoldShare(bool value)
     {
-        // validate: is party master?
-        if (InParty() && party.members[0] == name)
-        {
-            // set new value, sync to everyone else
-            party.shareGold = value;
-            BroadcastPartyChanges(party);
-        }
+        // try to set. party system will do all the validation.
+        PartySystem.SetPartyGoldShare(party.partyId, name, value);
     }
 
     // pet /////////////////////////////////////////////////////////////////////
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPetSetAutoAttack(bool value)
     {
         // validate
@@ -2727,7 +2948,7 @@ public partial class Player : Entity
             activePet.autoAttack = value;
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPetSetDefendOwner(bool value)
     {
         // validate
@@ -2744,7 +2965,7 @@ public partial class Player : Entity
                (activePet.state == "IDLE" || activePet.state == "MOVING");
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [Command]
     public void CmdPetUnsummon()
     {
         // validate
@@ -2755,8 +2976,8 @@ public partial class Player : Entity
         }
     }
 
-    [Command(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
-    public void CmdNpcRevivePet(int index)
+    [Command]
+    public void CmdNpcReviveSummonable(int index)
     {
         // validate: close enough, npc alive and valid index and valid item?
         // use collider point(s) to also work with big entities
@@ -2764,23 +2985,23 @@ public partial class Player : Entity
             target != null &&
             target.health > 0 &&
             target is Npc &&
-            ((Npc)target).offersPetRevive &&
+            ((Npc)target).offersSummonableRevive &&
             Utils.ClosestDistance(collider, target.collider) <= interactionRange &&
             0 <= index && index < inventory.Count)
         {
             ItemSlot slot = inventory[index];
-            if (slot.amount > 0 && slot.item.data is PetItem)
+            if (slot.amount > 0 && slot.item.data is SummonableItem)
             {
                 // verify the pet status
-                PetItem itemData = (PetItem)slot.item.data;
-                if (slot.item.petHealth == 0 && itemData.petPrefab != null)
+                SummonableItem itemData = (SummonableItem)slot.item.data;
+                if (slot.item.summonedHealth == 0 && itemData.summonPrefab != null)
                 {
                     // enough gold?
-                    if (gold >= itemData.petPrefab.revivePrice)
+                    if (gold >= itemData.revivePrice)
                     {
                         // pay for it, revive it
-                        gold -= itemData.petPrefab.revivePrice;
-                        slot.item.petHealth = itemData.petPrefab.healthMax;
+                        gold -= itemData.revivePrice;
+                        slot.item.summonedHealth = itemData.summonPrefab.healthMax;
                         inventory[index] = slot;
                     }
                 }
@@ -2788,29 +3009,47 @@ public partial class Player : Entity
         }
     }
 
+    // mounts //////////////////////////////////////////////////////////////////
+    public bool IsMounted()
+    {
+        return activeMount != null && activeMount.health > 0;
+    }
+
+    void ApplyMountSeatOffset()
+    {
+        if (meshToOffsetWhenMounted != null)
+        {
+            // apply seat offset if on mount (not a dead one), reset otherwise
+            if (activeMount != null && activeMount.health > 0)
+                meshToOffsetWhenMounted.transform.position = activeMount.seat.position + Vector3.up * seatOffsetY;
+            else
+                meshToOffsetWhenMounted.transform.localPosition = Vector3.zero;
+        }
+    }
+
     // selection handling //////////////////////////////////////////////////////
-    void SetIndicatorViaParent(Transform parent)
+    public void SetIndicatorViaParent(Transform parent)
     {
         if (!indicator) indicator = Instantiate(indicatorPrefab);
         indicator.transform.SetParent(parent, true);
         indicator.transform.position = parent.position;
     }
 
-    void SetIndicatorViaPosition(Vector3 position)
+    public void SetIndicatorViaPosition(Vector3 position)
     {
         if (!indicator) indicator = Instantiate(indicatorPrefab);
         indicator.transform.parent = null;
         indicator.transform.position = position;
     }
 
-    [Command(channel = Channels.DefaultReliable)] // important for skills etc.
+    [Command]
     public void CmdSetTarget(NetworkIdentity ni)
     {
         // validate
         if (ni != null)
         {
             // can directly change it, or change it after casting?
-            if (state == "IDLE" || state == "MOVING")
+            if (state == "IDLE" || state == "MOVING" || state == "STUNNED")
                 target = ni.GetComponent<Entity>();
             else if (state == "CASTING")
                 nextTarget = ni.GetComponent<Entity>();
@@ -2831,6 +3070,10 @@ public partial class Player : Entity
             bool cast = localPlayerClickThrough ? Utils.RaycastWithout(ray, out hit, gameObject) : Physics.Raycast(ray, out hit);
             if (cast)
             {
+                // clear requested skill in any case because if we clicked
+                // somewhere else then we don't care about it anymore
+                useSkillWhenCloser = -1;
+
                 // valid target?
                 Entity entity = hit.transform.GetComponent<Entity>();
                 if (entity)
@@ -2841,41 +3084,38 @@ public partial class Player : Entity
                     // clicked last target again? and is not self or pet?
                     if (entity == target && entity != this && entity != activePet)
                     {
-                        // attackable? => attack
-                        if (CanAttack(entity))
+                        // attackable and has skills? => attack
+                        if (CanAttack(entity) && skills.Count > 0)
                         {
-                            // cast the first skill (if any, and if ready)
-                            if (skills.Count > 0 && skills[0].IsReady())
-                                CmdUseSkill(0);
-                            // otherwise walk there if still on cooldown etc
-                            // use collider point(s) to also work with big entities
-                            else
-                                CmdNavigateDestination(entity.collider.ClosestPointOnBounds(transform.position), skills.Count > 0 ? skills[0].castRange : 0f);
+                            // then try to use that one
+                            TryUseSkill(0);
                         }
-                        // npc & alive => talk
-                        else if (entity is Npc && entity.health > 0)
+                        // npc, alive, close enough? => talk
+                        // use collider point(s) to also work with big entities
+                        else if (entity is Npc && entity.health > 0 &&
+                                 Utils.ClosestDistance(collider, entity.collider) <= interactionRange)
                         {
-                            // close enough to talk?
-                            // use collider point(s) to also work with big entities
-                            if (Utils.ClosestDistance(collider, entity.collider) <= interactionRange)
-                                FindObjectOfType<UINpcDialogue>().Show();
-                            // otherwise walk there
-                            // use collider point(s) to also work with big entities
-                            else
-                                CmdNavigateDestination(entity.collider.ClosestPointOnBounds(transform.position), interactionRange);
+                            UINpcDialogue.singleton.Show();
                         }
-                        // monster & dead => loot
-                        else if (entity is Monster && entity.health == 0)
+                        // monster, dead, has loot, close enough? => loot
+                        // use collider point(s) to also work with big entities
+                        else if (entity is Monster && entity.health == 0 &&
+                                 Utils.ClosestDistance(collider, entity.collider) <= interactionRange &&
+                                 ((Monster)entity).HasLoot())
                         {
-                            // has loot? and close enough?
+                            UILoot.singleton.Show();
+                        }
+                        // not attackable, lootable, talkable, etc., but it's
+                        // still an entity and double clicking it without doing
+                        // anything would be strange.
+                        // (e.g. if we are in a safe zone and click on a
+                        //  monster. it's not attackable, but we should at least
+                        //  move there, otherwise double click feels broken)
+                        else
+                        {
                             // use collider point(s) to also work with big entities
-                            if (((Monster)entity).HasLoot() &&
-                                Utils.ClosestDistance(collider, entity.collider) <= interactionRange)
-                                FindObjectOfType<UILoot>().Show();
-                            // otherwise walk there
-                            // use collider point(s) to also work with big entities
-                            else
-                                CmdNavigateDestination(entity.collider.ClosestPointOnBounds(transform.position), interactionRange);
+                            agent.stoppingDistance = interactionRange;
+                            agent.destination = entity.collider.ClosestPoint(transform.position);
                         }
 
                         // addon system hooks
@@ -2896,16 +3136,25 @@ public partial class Player : Entity
                     // accidentally in a room without a door etc.
                     Vector3 bestDestination = agent.NearestValidDestination(hit.point);
                     SetIndicatorViaPosition(bestDestination);
-                    CmdNavigateDestination(bestDestination, 0);
+
+                    // casting? then set pending destination
+                    if (state == "CASTING")
+                    {
+                        pendingDestination = bestDestination;
+                        pendingDestinationValid = true;
+                    }
+                    else
+                    {
+                        agent.stoppingDistance = 0;
+                        agent.destination = bestDestination;
+                    }
                 }
             }
         }
     }
 
-    // simple WSAD movement without prediction
-    Vector3 lastDirection;
     [Client]
-    void WSADHandling()
+    void WASDHandling()
     {
         // don't move if currently typing in an input
         // we check this after checking h and v to save computations
@@ -2916,41 +3165,57 @@ public partial class Player : Entity
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
-            // create input vector, normalize in case of diagonal movement
-            Vector3 input = new Vector3(horizontal, 0, vertical);
-            if (input.magnitude > 1) input = input.normalized;
-
-            // get camera rotation without up/down angle, only left/right
-            Vector3 angles = Camera.main.transform.rotation.eulerAngles;
-            angles.x = 0;
-            Quaternion rotation = Quaternion.Euler(angles); // back to quaternion
-
-            // calculate input direction relative to camera rotation
-            Vector3 direction = rotation * input;
-
-            // draw direction for debugging
-            Debug.DrawLine(transform.position, transform.position + direction, Color.green, 0, false);
-
-            // clear indicator if there is one, and if it's not on a target
-            // (simply looks better)
-            if (direction != Vector3.zero && indicator != null && indicator.transform.parent == null)
-                Destroy(indicator);
-
-            // moving with velocity doesn't look at the direction, do it manually
-            LookAtY(transform.position + direction);
-
-            // send to server - if changed since last time to save bandwidth
-            if (direction != lastDirection)
+            if (horizontal != 0 || vertical != 0)
             {
-                CmdNavigateVelocity(direction);
-                lastDirection = direction;
+                // create input vector, normalize in case of diagonal movement
+                Vector3 input = new Vector3(horizontal, 0, vertical);
+                if (input.magnitude > 1) input = input.normalized;
+
+                // get camera rotation without up/down angle, only left/right
+                Vector3 angles = Camera.main.transform.rotation.eulerAngles;
+                angles.x = 0;
+                Quaternion rotation = Quaternion.Euler(angles); // back to quaternion
+
+                // calculate input direction relative to camera rotation
+                Vector3 direction = rotation * input;
+
+                // draw direction for debugging
+                Debug.DrawLine(transform.position, transform.position + direction, Color.green, 0, false);
+
+                // clear indicator if there is one, and if it's not on a target
+                // (simply looks better)
+                if (direction != Vector3.zero && indicator != null && indicator.transform.parent == null)
+                    Destroy(indicator);
+
+                // cancel path if we are already doing click movement, otherwise
+                // we will slide
+                agent.ResetMovement();
+
+                // casting? then set pending velocity
+                if (state == "CASTING")
+                {
+                    pendingVelocity = direction * speed;
+                    pendingVelocityValid = true;
+                }
+                else
+                {
+                    // set velocity
+                    agent.velocity = direction * speed;
+
+                    // moving with velocity doesn't look at the direction, do it manually
+                    LookAtY(transform.position + direction);
+                }
+
+                // clear requested skill in any case because if we clicked
+                // somewhere else then we don't care about it anymore
+                useSkillWhenCloser = -1;
             }
         }
     }
 
     // simple tab targeting
     [Client]
-    void TargetNearest()
+    private void TargetNearest()
     {
         if (Input.GetKeyDown(targetNearestKey))
         {
@@ -2966,6 +3231,17 @@ public partial class Player : Entity
                 CmdSetTarget(sorted[0].netIdentity);
             }
         }
+    }
+
+    // ontrigger ///////////////////////////////////////////////////////////////
+    protected override void OnTriggerEnter(Collider col)
+    {
+        // call base function too
+        base.OnTriggerEnter(col);
+
+        // quest location?
+        if (isServer && col.tag == "QuestLocation")
+            QuestsOnLocation(col);
     }
 
     // drag and drop ///////////////////////////////////////////////////////////
@@ -3013,10 +3289,10 @@ public partial class Player : Entity
     {
         // slotIndices[0] = slotFrom; slotIndices[1] = slotTo
         ItemSlot slot = inventory[slotIndices[0]];
-        if (slot.item.sellable && !slot.item.petSummoned)
+        if (slot.item.sellable && !slot.item.summoned)
         {
-            FindObjectOfType<UINpcTrading>().sellIndex = slotIndices[0];
-            FindObjectOfType<UINpcTrading>().sellAmountInput.text = slot.amount.ToString();
+            UINpcTrading.singleton.sellIndex = slotIndices[0];
+            UINpcTrading.singleton.sellAmountInput.text = slot.amount.ToString();
         }
     }
 
@@ -3030,8 +3306,15 @@ public partial class Player : Entity
     void OnDragAndDrop_InventorySlot_CraftingIngredientSlot(int[] slotIndices)
     {
         // slotIndices[0] = slotFrom; slotIndices[1] = slotTo
-        if (!craftingIndices.Contains(slotIndices[0]))
-            craftingIndices[slotIndices[1]] = slotIndices[0];
+        // only if not crafting right now
+        if (craftingState != CraftingState.InProgress)
+        {
+            if (!craftingIndices.Contains(slotIndices[0]))
+            {
+                craftingIndices[slotIndices[1]] = slotIndices[0];
+                craftingState = CraftingState.None; // reset state
+            }
+        }
     }
 
     void OnDragAndDrop_TrashSlot_InventorySlot(int[] slotIndices)
@@ -3070,17 +3353,22 @@ public partial class Player : Entity
     void OnDragAndDrop_CraftingIngredientSlot_CraftingIngredientSlot(int[] slotIndices)
     {
         // slotIndices[0] = slotFrom; slotIndices[1] = slotTo
-        // just swap them clientsided
-        int temp = craftingIndices[slotIndices[0]];
-        craftingIndices[slotIndices[0]] = craftingIndices[slotIndices[1]];
-        craftingIndices[slotIndices[1]] = temp;
+        // only if not crafting right now
+        if (craftingState != CraftingState.InProgress)
+        {
+            // just swap them clientsided
+            int temp = craftingIndices[slotIndices[0]];
+            craftingIndices[slotIndices[0]] = craftingIndices[slotIndices[1]];
+            craftingIndices[slotIndices[1]] = temp;
+            craftingState = CraftingState.None; // reset state
+        }
     }
 
-    void OnDragAndDrop_InventorySlot_NpcPetReviveSlot(int[] slotIndices)
+    void OnDragAndDrop_InventorySlot_NpcReviveSlot(int[] slotIndices)
     {
         // slotIndices[0] = slotFrom; slotIndices[1] = slotTo
-        if (inventory[slotIndices[0]].item.data is PetItem)
-            FindObjectOfType<UINpcPetRevive>().itemIndex = slotIndices[0];
+        if (inventory[slotIndices[0]].item.data is SummonableItem)
+            UINpcRevive.singleton.itemIndex = slotIndices[0];
     }
 
     void OnDragAndClear_SkillbarSlot(int slotIndex)
@@ -3095,16 +3383,35 @@ public partial class Player : Entity
 
     void OnDragAndClear_NpcSellSlot(int slotIndex)
     {
-        FindObjectOfType<UINpcTrading>().sellIndex = -1;
+        UINpcTrading.singleton.sellIndex = -1;
     }
 
     void OnDragAndClear_CraftingIngredientSlot(int slotIndex)
     {
-        craftingIndices[slotIndex] = -1;
+        // only if not crafting right now
+        if (craftingState != CraftingState.InProgress)
+        {
+            craftingIndices[slotIndex] = -1;
+            craftingState = CraftingState.None; // reset state
+        }
     }
 
-    void OnDragAndClear_NpcPetReviveSlot(int slotIndex)
+    void OnDragAndClear_NpcReviveSlot(int slotIndex)
     {
-        FindObjectOfType<UINpcPetRevive>().itemIndex = -1;
+        UINpcRevive.singleton.itemIndex = -1;
+    }
+
+    // validation //////////////////////////////////////////////////////////////
+    void OnValidate()
+    {
+        // make sure that the NetworkNavMeshAgentRubberbanding component is
+        // ABOVE the player component, so that it gets updated before Player.cs.
+        // -> otherwise it overwrites player's WASD velocity for local player
+        //    hosts
+        // -> there might be away around it, but a warning is good for now
+        Component[] components = GetComponents<Component>();
+        if (Array.IndexOf(components, GetComponent<NetworkNavMeshAgentRubberbanding>()) >
+            Array.IndexOf(components, this))
+            Debug.LogWarning(name + "'s NetworkNavMeshAgentRubberbanding component is below the Player component. Please drag it above the Player component in the Inspector, otherwise there might be WASD movement issues due to the Update order.");
     }
 }

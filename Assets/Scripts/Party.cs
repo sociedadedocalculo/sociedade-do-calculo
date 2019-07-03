@@ -1,60 +1,41 @@
 ﻿// Parties have to be structs in order to work with SyncLists.
-using System;
-using System.Collections.Generic;
 using System.Linq;
 
 public struct Party
 {
-    public string notice;
+    // Guild.Empty for ease of use
+    public static Party Empty = new Party();
+
+    // properties
+    public int partyId;
     public string[] members; // first one == master
     public bool shareExperience;
     public bool shareGold;
-    public bool everyoneCanInvite;
+
+    // helper properties
+    public string master => members != null && members.Length > 0 ? members[0] : "";
 
     // statics
     public static int Capacity = 8;
     public static float BonusExperiencePerMember = 0.1f;
 
-    // helper function to find a member
-    public int GetMemberIndex(string memberName)
+    // if we create a party then always with two initial members
+    public Party(int partyId, string master, string firstMember)
     {
-        return members != null ? Array.IndexOf(members, memberName) : -1;
+        // create members array
+        this.partyId = partyId;
+        members = new string[] { master, firstMember };
+        shareExperience = false;
+        shareGold = false;
+    }
+
+    public bool Contains(string memberName)
+    {
+        return members != null && members.Contains(memberName);
     }
 
     public bool IsFull()
     {
         return members != null && members.Length == Capacity;
-    }
-
-    public void AddMember(string name)
-    {
-        if (members != null)
-        {
-            Array.Resize(ref members, members.Length + 1);
-            members[members.Length - 1] = name;
-        }
-        else
-        {
-            members = new string[]{name};
-        }
-    }
-
-    public void RemoveMember(string name)
-    {
-        List<string> list = members.ToList();
-        list.RemoveAll(member => member == name);
-        members = list.ToArray();
-    }
-
-    // can 'requester' invite someone?
-    public bool CanInvite(string requesterName)
-    {
-        int requesterIndex = GetMemberIndex(requesterName);
-        if (requesterIndex != -1)
-        {
-            // everyone can invite as long as the party isn't full
-            return members.Length < Capacity;
-        }
-        return false;
     }
 }

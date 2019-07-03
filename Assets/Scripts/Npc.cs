@@ -3,16 +3,28 @@
 //
 // Npcs first show the welcome text and then have options for item trading and
 // quests.
-using UnityEngine;
-using Mirror;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
+using Mirror;
+using TMPro;
 
+// talk-to-npc quests work by adding the same quest to two npcs, one with
+// accept=true and complete=false, the other with accept=false and complete=true
+[Serializable]
+public class ScriptableQuestOffer
+{
+    public ScriptableQuest quest;
+    public bool acceptHere = true;
+    public bool completeHere = true;
+}
+
+[RequireComponent(typeof(NetworkNavMeshAgent))]
 public partial class Npc : Entity
 {
     [Header("Text Meshes")]
-    public TextMesh questOverlay;
+    public TextMeshPro questOverlay;
 
     [Header("Welcome Text")]
     [TextArea(1, 30)] public string welcome;
@@ -21,10 +33,7 @@ public partial class Npc : Entity
     public ScriptableItem[] saleItems;
 
     [Header("Quests")]
-    public ScriptableQuest[] quests;
-
-    [Header("Perguntas")]
-    public ScriptableQuest[] perguntas;
+    public ScriptableQuestOffer[] quests;
 
     [Header("Teleportation")]
     public Transform teleportTo;
@@ -32,8 +41,8 @@ public partial class Npc : Entity
     [Header("Guild Management")]
     public bool offersGuildManagement = true;
 
-    [Header("Pets")]
-    public bool offersPetRevive = true;
+    [Header("Summonables")]
+    public bool offersSummonableRevive = true;
 
     // networkbehaviour ////////////////////////////////////////////////////////
     public override void OnStartServer()
@@ -53,27 +62,31 @@ public partial class Npc : Entity
     [Client]
     protected override void UpdateClient()
     {
+        // addon system hooks
+        Utils.InvokeMany(GetType(), this, "UpdateClient_");
+    }
+
+    // overlays ////////////////////////////////////////////////////////////////
+    protected override void UpdateOverlays()
+    {
+        base.UpdateOverlays();
+
         if (questOverlay != null)
         {
             // find local player (null while in character selection)
-            Player player = Utils.ClientLocalPlayer();
-            if (player != null)
+            if (Player.localPlayer != null)
             {
-                if (quests.Any(q => player.CanCompleteQuest(q.name)))
+                if (quests.Any(entry => entry.completeHere && Player.localPlayer.CanCompleteQuest(entry.quest.name)))
                     questOverlay.text = "!";
-                else if (quests.Any(player.CanAcceptQuest))
+                else if (quests.Any(entry => entry.acceptHere && Player.localPlayer.CanAcceptQuest(entry.quest)))
                     questOverlay.text = "?";
                 else
                     questOverlay.text = "";
             }
         }
-
-        // addon system hooks
-        Utils.InvokeMany(GetType(), this, "UpdateClient_");
     }
 
     // skills //////////////////////////////////////////////////////////////////
-    public override bool HasCastWeapon() { return true; }
     public override bool CanAttack(Entity entity) { return false; }
 
     // quests //////////////////////////////////////////////////////////////////
@@ -83,7 +96,9 @@ public partial class Npc : Entity
     //    - or were already started but aren't completed yet
     public List<ScriptableQuest> QuestsVisibleFor(Player player)
     {
-        return quests.Where(q => player.CanAcceptQuest(q) ||
-                                 player.HasActiveQuest(q.name)).ToList();
+        return quests.Where(entry => (entry.acceptHere && player.CanAcceptQuest(entry.quest)) ||
+                                     (entry.completeHere && player.HasActiveQuest(entry.quest.name)))
+                     .Select(entry => entry.quest)
+                     .ToList();
     }
 }

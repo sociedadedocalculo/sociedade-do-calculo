@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
-[RequireComponent(typeof(TextMesh))]
+[RequireComponent(typeof(TextMeshPro))]
 public class TextMeshFadeAlpha : MonoBehaviour
 {
-    public TextMesh textMesh;
+    public TextMeshPro textMesh;
     public float delay = 0;
     public float duration = 1;
     float perSecond;

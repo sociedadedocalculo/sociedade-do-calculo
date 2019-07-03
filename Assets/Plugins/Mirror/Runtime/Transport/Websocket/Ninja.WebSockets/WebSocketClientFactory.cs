@@ -69,7 +69,7 @@ namespace Ninja.WebSockets
         /// <param name="uri">The WebSocket uri to connect to (e.g. ws://example.com or wss://example.com for SSL)</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>A connected web socket instance</returns>
-        public async Task<WebSocket> ConnectAsync(Uri uri, CancellationToken token = default(CancellationToken))
+        public async Task<WebSocket> ConnectAsync(Uri uri, CancellationToken token = default)
         {
             return await ConnectAsync(uri, new WebSocketClientOptions(), token);
         }
@@ -81,13 +81,15 @@ namespace Ninja.WebSockets
         /// <param name="options">The WebSocket client options</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>A connected web socket instance</returns>
-        public async Task<WebSocket> ConnectAsync(Uri uri, WebSocketClientOptions options, CancellationToken token = default(CancellationToken))
+        public async Task<WebSocket> ConnectAsync(Uri uri, WebSocketClientOptions options, CancellationToken token = default)
         {
             Guid guid = Guid.NewGuid();
             string host = uri.Host;
             int port = uri.Port;
-            TcpClient tcpClient = new TcpClient(AddressFamily.InterNetworkV6);
-            tcpClient.NoDelay = options.NoDelay;
+            TcpClient tcpClient = new TcpClient(AddressFamily.InterNetworkV6)
+            {
+                NoDelay = options.NoDelay
+            };
             tcpClient.Client.DualMode = true;
             string uriScheme = uri.Scheme.ToLower();
             bool useSsl = uriScheme == "wss" || uriScheme == "https";
@@ -119,7 +121,7 @@ namespace Ninja.WebSockets
         /// <param name="options">The WebSocket client options</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns></returns>
-        public async Task<WebSocket> ConnectAsync(Stream responseStream, string secWebSocketKey, WebSocketClientOptions options, CancellationToken token = default(CancellationToken))
+        public async Task<WebSocket> ConnectAsync(Stream responseStream, string secWebSocketKey, WebSocketClientOptions options, CancellationToken token = default)
         {
             Guid guid = Guid.NewGuid();
             return await ConnectAsync(guid, responseStream, secWebSocketKey, options.KeepAliveInterval, options.SecWebSocketExtensions, options.IncludeExceptionInCloseResponse, token);
@@ -262,7 +264,7 @@ namespace Ninja.WebSockets
             }
         }
 
-        async Task<WebSocket> PerformHandshake(Guid guid, Uri uri, Stream stream, WebSocketClientOptions options, CancellationToken token)
+        private async Task<WebSocket> PerformHandshake(Guid guid, Uri uri, Stream stream, WebSocketClientOptions options, CancellationToken token)
         {
             Random rand = new Random();
             byte[] keyAsBytes = new byte[16];

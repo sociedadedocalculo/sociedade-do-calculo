@@ -4,33 +4,27 @@
 // We don't use the playerPrefab, instead all available player classes should be
 // dragged into the spawnable objects property.
 //
-// Network Configuration modified parameters:
-// - Max Buffered Packets: 16 => 512. allows to send more data to one connection
-//   without running into errors too soon
-// - Channels:
-//   0: Reliable Fragmented for important messages that have to be delivered
-//   1: Unreliable Fragmented for less important messages
-//   (https://www.youtube.com/watch?v=-_0TtPY5LCc)
-// - Min Update Timeout: 10 => 1. utilize the other thread as much as possible;
-//   also avoids errors at the 200KB/s mark
-// - Connect Timeout: 2000 => 5000. lags happen
-// - Disconnect Timeout: 2000 => 5000. lags happen
-// - Ping Timeout: 500 => 3000. lags happen
-// - Reactor Max Recv/Send Messages: 1024 => 4096 to avoid errors.
-//
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using UnityEngine;
 using Mirror;
-using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
+// we need a clearly defined state to know if we are offline/in world/in lobby
+// otherwise UICharacterSelection etc. never know 100% if they should be visible
+// or not.
+public enum NetworkState { Offline, Handshake, Lobby, World }
+
+[RequireComponent(typeof(Database))]
 public partial class NetworkManagerMMO : NetworkManager
 {
+    // current network manager state on client
+    public NetworkState state = NetworkState.Offline;
+
     // <conn, account> dict for the lobby
     // (people that are still creating or selecting characters)
     Dictionary<NetworkConnection, string> lobby = new Dictionary<NetworkConnection, string>();
@@ -62,11 +56,23 @@ public partial class NetworkManagerMMO : NetworkManager
         new ServerInfo{name="Local", ip="localhost"}
     };
 
+    [Header("Logout")]
+    [Tooltip("Players shouldn't be able to log out instantly to flee combat. There should be a delay.")]
+    public float combatLogoutDelay = 5;
+
+    [Header("Character Selection")]
+    public int selection = -1;
+    public Transform[] selectionLocations;
+    public Transform selectionCameraLocation;
+
     [Header("Database")]
     public int characterLimit = 4;
     public int characterNameMaxLength = 16;
     public int accountMaxLength = 16;
     public float saveInterval = 60f; // in seconds
+
+    [Header("Security")]
+    public string passwordSalt = "at_least_16_byte";
 
     // store characters available message on client so that UI can access it
     [HideInInspector] public CharactersAvailableMsg charactersAvailableMsg;
@@ -90,34 +96,37 @@ public partial class NetworkManagerMMO : NetworkManager
                Regex.IsMatch(characterName, @"^[a-zA-Z0-9_]+$");
     }
 
-    // events //////////////////////////////////////////////////////////////////
-    void Start()
+    // nearest startposition ///////////////////////////////////////////////////
+    public static Transform GetNearestStartPosition(Vector3 from)
     {
-        // headless mode? then automatically start a dedicated server
-        // (because we can't click the button in headless mode)
-        // -> only if not started yet so that addons can also start it if needed
-        //    (e.g. network zones)
-        if (Utils.IsHeadless() && !NetworkServer.active)
-        {
-            print("headless mode detected, starting dedicated server");
-            StartServer();
-        }
+        return startPositions.OrderBy(t => Vector3.Distance(from, t.position)).First();
+    }
+
+    // events //////////////////////////////////////////////////////////////////
+    public override void Start()
+    {
+        base.Start();
 
         // addon system hooks
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "Start_");
     }
 
-    // client popup messages ///////////////////////////////////////////////////
-    void ClientSendPopup(NetworkConnection conn, string error, bool disconnect)
+    void Update()
     {
-        ErrorMsg message = new ErrorMsg { text = error, causesDisconnect = disconnect };
-        conn.Send(ErrorMsg.MsgId, message);
+        // any valid local player? then set state to world
+        if (ClientScene.localPlayer != null)
+            state = NetworkState.World;
     }
 
-    void OnClientReceivePopup(NetworkMessage netMsg)
+    // error messages //////////////////////////////////////////////////////////
+    void ServerSendError(NetworkConnection conn, string error, bool disconnect)
     {
-        ErrorMsg message = netMsg.ReadMessage<ErrorMsg>();
-        print("OnClientReceivePopup: " + message.text);
+        conn.Send(new ErrorMsg { text = error, causesDisconnect = disconnect });
+    }
+
+    void OnClientError(NetworkConnection conn, ErrorMsg message)
+    {
+        print("OnClientError: " + message.text);
 
         // show a popup
         uiPopup.Show(message.text);
@@ -127,7 +136,7 @@ public partial class NetworkManagerMMO : NetworkManager
         //  the client immediately (only after timeout))
         if (message.causesDisconnect)
         {
-            netMsg.conn.Disconnect();
+            conn.Disconnect();
 
             // also stop the host if running as host
             // (host shouldn't start server but disconnect client for invalid
@@ -139,26 +148,16 @@ public partial class NetworkManagerMMO : NetworkManager
     // start & stop ////////////////////////////////////////////////////////////
     public override void OnStartServer()
     {
-        // handshake packet handlers (in OnStartServer so that reconnecting works)
-        NetworkServer.RegisterHandler(LoginMsg.MsgId, OnServerLogin);
-        NetworkServer.RegisterHandler(CharacterCreateMsg.MsgId, OnServerCharacterCreate);
-        NetworkServer.RegisterHandler(CharacterDeleteMsg.MsgId, OnServerCharacterDelete);
+        // connect to database
+        Database.singleton.Connect();
 
-#if !UNITY_EDITOR
-        // server only? not host mode?
-        if (!NetworkClient.active)
-        {
-            // set a fixed tick rate instead of updating as often as possible
-            // -> updating more than 50x/s is just a waste of CPU power that can
-            //    be used by other threads like network transport instead
-            // -> note: doesn't work in the editor
-            Application.targetFrameRate = Mathf.RoundToInt(1f / Time.fixedDeltaTime);
-            print("server tick rate set to: " + Application.targetFrameRate + " (1 / Edit->Project Settings->Time->Fixed Time Step)");
-        }
-#endif
+        // handshake packet handlers (in OnStartServer so that reconnecting works)
+        NetworkServer.RegisterHandler<LoginMsg>(OnServerLogin);
+        NetworkServer.RegisterHandler<CharacterCreateMsg>(OnServerCharacterCreate);
+        NetworkServer.RegisterHandler<CharacterDeleteMsg>(OnServerCharacterDelete);
 
         // invoke saving
-        InvokeRepeating("SavePlayers", saveInterval, saveInterval);
+        InvokeRepeating(nameof(SavePlayers), saveInterval, saveInterval);
 
         // call base function to guarantee proper functionality
         base.OnStartServer();
@@ -170,7 +169,7 @@ public partial class NetworkManagerMMO : NetworkManager
     public override void OnStopServer()
     {
         print("OnStopServer");
-        CancelInvoke("SavePlayers");
+        CancelInvoke(nameof(SavePlayers));
 
         // call base function to guarantee proper functionality
         base.OnStopServer();
@@ -180,18 +179,13 @@ public partial class NetworkManagerMMO : NetworkManager
     }
 
     // handshake: login ////////////////////////////////////////////////////////
-    public bool IsConnecting()
-    {
-        return NetworkClient.active && !ClientScene.ready;
-    }
+    public bool IsConnecting() => NetworkClient.active && !ClientScene.ready;
 
     public override void OnClientConnect(NetworkConnection conn)
     {
-        print("OnClientConnect");
-
         // setup handlers
-        client.RegisterHandler(CharactersAvailableMsg.MsgId, OnClientCharactersAvailable);
-        client.RegisterHandler(ErrorMsg.MsgId, OnClientReceivePopup);
+        NetworkClient.RegisterHandler<CharactersAvailableMsg>(OnClientCharactersAvailable);
+        NetworkClient.RegisterHandler<ErrorMsg>(OnClientError);
 
         // send login packet with hashed password, so that the original one
         // never leaves the player's computer.
@@ -202,10 +196,13 @@ public partial class NetworkManagerMMO : NetworkManager
         //
         // Application.version can be modified under:
         // Edit -> Project Settings -> Player -> Bundle Version
-        string hash = Utils.PBKDF2Hash(loginPassword, "at_least_16_byte" + loginAccount);
+        string hash = Utils.PBKDF2Hash(loginPassword, passwordSalt + loginAccount);
         LoginMsg message = new LoginMsg { account = loginAccount, password = hash, version = Application.version };
-        conn.Send(LoginMsg.MsgId, message);
+        conn.Send(message);
         print("login message was sent");
+
+        // set state
+        state = NetworkState.Handshake;
 
         // addon system hooks
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnClientConnect_", conn);
@@ -235,8 +232,8 @@ public partial class NetworkManagerMMO : NetworkManager
     CharactersAvailableMsg MakeCharactersAvailableMessage(string account)
     {
         // load from database
-        List<Player> characters = Database.CharactersForAccount(account)
-                                    .Select(character => Database.CharacterLoad(character, GetPlayerClasses()))
+        List<Player> characters = Database.singleton.CharactersForAccount(account)
+                                    .Select(character => Database.singleton.CharacterLoad(character, GetPlayerClasses(), true))
                                     .Select(go => go.GetComponent<Player>())
                                     .ToList();
 
@@ -249,11 +246,8 @@ public partial class NetworkManagerMMO : NetworkManager
         return message;
     }
 
-    void OnServerLogin(NetworkMessage netMsg)
+    void OnServerLogin(NetworkConnection conn, LoginMsg message)
     {
-        print("OnServerLogin " + netMsg.conn);
-        LoginMsg message = netMsg.ReadMessage<LoginMsg>();
-
         // correct version?
         if (message.version == Application.version)
         {
@@ -261,19 +255,18 @@ public partial class NetworkManagerMMO : NetworkManager
             if (IsAllowedAccountName(message.account))
             {
                 // validate account info
-                if (Database.IsValidAccount(message.account, message.password))
+                if (Database.singleton.TryLogin(message.account, message.password))
                 {
                     // not in lobby and not in world yet?
                     if (!AccountLoggedIn(message.account))
                     {
-                        print("login successful: " + message.account);
+                        //print("login successful: " + message.account);
 
                         // add to logged in accounts
-                        lobby[netMsg.conn] = message.account;
+                        lobby[conn] = message.account;
 
                         // send necessary data to client
-                        CharactersAvailableMsg reply = MakeCharactersAvailableMessage(message.account);
-                        netMsg.conn.Send(CharactersAvailableMsg.MsgId, reply);
+                        conn.Send(MakeCharactersAvailableMessage(message.account));
 
                         // addon system hooks
                         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerLogin_", message);
@@ -281,69 +274,127 @@ public partial class NetworkManagerMMO : NetworkManager
                     else
                     {
                         print("account already logged in: " + message.account);
-                        ClientSendPopup(netMsg.conn, "already logged in", true);
+                        ServerSendError(conn, "already logged in", true);
 
                         // note: we should disconnect the client here, but we can't as
                         // long as unity has no "SendAllAndThenDisconnect" function,
                         // because then the error message would never be sent.
-                        //netMsg.conn.Disconnect();
+                        //conn.Disconnect();
                     }
                 }
                 else
                 {
                     print("invalid account or password for: " + message.account);
-                    ClientSendPopup(netMsg.conn, "invalid account", true);
+                    ServerSendError(conn, "invalid account", true);
                 }
             }
             else
             {
                 print("account name not allowed: " + message.account);
-                ClientSendPopup(netMsg.conn, "account name not allowed", true);
+                ServerSendError(conn, "account name not allowed", true);
             }
         }
         else
         {
             print("version mismatch: " + message.account + " expected:" + Application.version + " received: " + message.version);
-            ClientSendPopup(netMsg.conn, "outdated version", true);
+            ServerSendError(conn, "outdated version", true);
         }
     }
 
     // handshake: character selection //////////////////////////////////////////
-    void OnClientCharactersAvailable(NetworkMessage netMsg)
+    void LoadPreview(GameObject prefab, Transform location, int selectionIndex, CharactersAvailableMsg.CharacterPreview character)
     {
-        charactersAvailableMsg = netMsg.ReadMessage<CharactersAvailableMsg>();
+        // instantiate the prefab
+        GameObject preview = Instantiate(prefab.gameObject, location.position, location.rotation);
+        preview.transform.parent = location;
+        Player player = preview.GetComponent<Player>();
+
+        // assign basic preview values like name and equipment
+        player.name = character.name;
+        for (int i = 0; i < character.equipment.Length; ++i)
+        {
+            ItemSlot slot = character.equipment[i];
+            player.equipment.Add(slot);
+            if (slot.amount > 0)
+            {
+                // OnEquipmentChanged won't be called unless spawned, we
+                // need to refresh manually
+                player.RefreshLocation(i);
+            }
+        }
+
+        // add selection script
+        preview.AddComponent<SelectableCharacter>();
+        preview.GetComponent<SelectableCharacter>().index = selectionIndex;
+    }
+
+    public void ClearPreviews()
+    {
+        selection = -1;
+        foreach (Transform location in selectionLocations)
+            if (location.childCount > 0)
+                Destroy(location.GetChild(0).gameObject);
+    }
+
+    void OnClientCharactersAvailable(NetworkConnection conn, CharactersAvailableMsg message)
+    {
+        charactersAvailableMsg = message;
         print("characters available:" + charactersAvailableMsg.characters.Length);
+
+        // set state
+        state = NetworkState.Lobby;
+
+        // clear previous previews in any case
+        ClearPreviews();
+
+        // load previews for 3D character selection
+        for (int i = 0; i < charactersAvailableMsg.characters.Length; ++i)
+        {
+            CharactersAvailableMsg.CharacterPreview character = charactersAvailableMsg.characters[i];
+
+            // find the prefab for that class
+            Player prefab = GetPlayerClasses().Find(p => p.name == character.className);
+            if (prefab != null)
+                LoadPreview(prefab.gameObject, selectionLocations[i], i, character);
+            else
+                Debug.LogWarning("Character Selection: no prefab found for class " + character.className);
+        }
+
+        // setup camera
+        Camera.main.transform.position = selectionCameraLocation.position;
+        Camera.main.transform.rotation = selectionCameraLocation.rotation;
 
         // addon system hooks
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnClientCharactersAvailable_", charactersAvailableMsg);
     }
 
     // called after the client calls ClientScene.AddPlayer with a msg parameter
-    public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMsg)
+    public override void OnServerAddPlayer(NetworkConnection conn, AddPlayerMessage message)
     {
-        print("OnServerAddPlayer extra");
-        if (extraMsg != null)
+        //print("OnServerAddPlayer extra");
+        // only while in lobby (aka after handshake and not ingame)
+        if (lobby.ContainsKey(conn))
         {
-            // only while in lobby (aka after handshake and not ingame)
-            if (lobby.ContainsKey(conn))
+            // valid message bytes for index?
+            if (message.value != null && message.value.Length == sizeof(int))
             {
                 // read the index and find the n-th character
                 // (only if we know that he is not ingame, otherwise lobby has
                 //  no netMsg.conn key)
-                CharacterSelectMsg message = extraMsg.ReadMessage<CharacterSelectMsg>();
+                int index = BitConverter.ToInt32(message.value, 0);
                 string account = lobby[conn];
-                List<string> characters = Database.CharactersForAccount(account);
+                List<string> characters = Database.singleton.CharactersForAccount(account);
 
                 // validate index
-                if (0 <= message.index && message.index < characters.Count)
+                if (0 <= index && index < characters.Count)
                 {
-                    print(account + " selected player " + characters[message.index]);
+                    //print(account + " selected player " + characters[index]);
 
                     // load character data
-                    GameObject go = Database.CharacterLoad(characters[message.index], GetPlayerClasses());
+                    GameObject go = Database.singleton.CharacterLoad(characters[index], GetPlayerClasses(), false);
 
                     // add to client
-                    NetworkServer.AddPlayerForConnection(conn, go, playerControllerId);
+                    NetworkServer.AddPlayerForConnection(conn, go);
 
                     // addon system hooks
                     Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerAddPlayer_", account, go, conn, message);
@@ -353,20 +404,15 @@ public partial class NetworkManagerMMO : NetworkManager
                 }
                 else
                 {
-                    print("invalid character index: " + account + " " + message.index);
-                    ClientSendPopup(conn, "invalid character index", false);
+                    print("invalid character index: " + account + " " + index);
+                    ServerSendError(conn, "invalid character index", false);
                 }
-            }
-            else
-            {
-                print("AddPlayer: not in lobby" + conn);
-                ClientSendPopup(conn, "AddPlayer: not in lobby", true);
             }
         }
         else
         {
-            print("missing extraMessageReader");
-            ClientSendPopup(conn, "missing parameter", true);
+            print("AddPlayer: not in lobby" + conn);
+            ServerSendError(conn, "AddPlayer: not in lobby", true);
         }
     }
 
@@ -391,23 +437,22 @@ public partial class NetworkManagerMMO : NetworkManager
         return spawn ?? GetStartPosition();
     }
 
-    void OnServerCharacterCreate(NetworkMessage netMsg)
+    void OnServerCharacterCreate(NetworkConnection conn, CharacterCreateMsg message)
     {
-        print("OnServerCharacterCreate " + netMsg.conn);
-        CharacterCreateMsg message = netMsg.ReadMessage<CharacterCreateMsg>();
+        //print("OnServerCharacterCreate " + conn);
 
         // only while in lobby (aka after handshake and not ingame)
-        if (lobby.ContainsKey(netMsg.conn))
+        if (lobby.ContainsKey(conn))
         {
             // allowed character name?
             if (IsAllowedCharacterName(message.name))
             {
                 // not existant yet?
-                string account = lobby[netMsg.conn];
-                if (!Database.CharacterExists(message.name))
+                string account = lobby[conn];
+                if (!Database.singleton.CharacterExists(message.name))
                 {
                     // not too may characters created yet?
-                    if (Database.CharactersForAccount(account).Count < characterLimit)
+                    if (Database.singleton.CharactersForAccount(account).Count < characterLimit)
                     {
                         // valid class index?
                         List<Player> classes = GetPlayerClasses();
@@ -418,8 +463,8 @@ public partial class NetworkManagerMMO : NetworkManager
                             // -> skills are handled in Database.CharacterLoad every time. if we
                             //    add new ones to a prefab, all existing players should get them
                             // (instantiate temporary player)
-                            print("creating character: " + message.name + " " + message.classIndex);
-                            Player prefab = GameObject.Instantiate(classes[message.classIndex]).GetComponent<Player>();
+                            //print("creating character: " + message.name + " " + message.classIndex);
+                            Player prefab = Instantiate(classes[message.classIndex]).GetComponent<Player>();
                             prefab.name = message.name;
                             prefab.account = account;
                             prefab.className = classes[message.classIndex].name;
@@ -427,13 +472,13 @@ public partial class NetworkManagerMMO : NetworkManager
                             for (int i = 0; i < prefab.inventorySize; ++i)
                             {
                                 // add empty slot or default item if any
-                                prefab.inventory.Add(i < prefab.defaultItems.Length ? new ItemSlot(new Item(prefab.defaultItems[i])) : new ItemSlot());
+                                prefab.inventory.Add(i < prefab.defaultItems.Length ? new ItemSlot(new Item(prefab.defaultItems[i].item), prefab.defaultItems[i].amount) : new ItemSlot());
                             }
                             for (int i = 0; i < prefab.equipmentInfo.Length; ++i)
                             {
                                 // add empty slot or default item if any
                                 EquipmentInfo info = prefab.equipmentInfo[i];
-                                prefab.equipment.Add(info.defaultItem != null ? new ItemSlot(new Item(info.defaultItem)) : new ItemSlot());
+                                prefab.equipment.Add(info.defaultItem.item != null ? new ItemSlot(new Item(info.defaultItem.item), info.defaultItem.amount) : new ItemSlot());
                             }
                             prefab.health = prefab.healthMax; // after equipment in case of boni
                             prefab.mana = prefab.manaMax; // after equipment in case of boni
@@ -442,82 +487,78 @@ public partial class NetworkManagerMMO : NetworkManager
                             Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerCharacterCreate_", message, prefab);
 
                             // save the player
-                            Database.CharacterSave(prefab, false);
-                            GameObject.Destroy(prefab.gameObject);
+                            Database.singleton.CharacterSave(prefab, false);
+                            Destroy(prefab.gameObject);
 
                             // send available characters list again, causing
                             // the client to switch to the character
                             // selection scene again
-                            CharactersAvailableMsg reply = MakeCharactersAvailableMessage(account);
-                            netMsg.conn.Send(CharactersAvailableMsg.MsgId, reply);
+                            conn.Send(MakeCharactersAvailableMessage(account));
                         }
                         else
                         {
                             print("character invalid class: " + message.classIndex);
-                            ClientSendPopup(netMsg.conn, "character invalid class", false);
+                            ServerSendError(conn, "character invalid class", false);
                         }
                     }
                     else
                     {
                         print("character limit reached: " + message.name);
-                        ClientSendPopup(netMsg.conn, "character limit reached", false);
+                        ServerSendError(conn, "character limit reached", false);
                     }
                 }
                 else
                 {
                     print("character name already exists: " + message.name);
-                    ClientSendPopup(netMsg.conn, "name already exists", false);
+                    ServerSendError(conn, "name already exists", false);
                 }
             }
             else
             {
                 print("character name not allowed: " + message.name);
-                ClientSendPopup(netMsg.conn, "character name not allowed", false);
+                ServerSendError(conn, "character name not allowed", false);
             }
         }
         else
         {
             print("CharacterCreate: not in lobby");
-            ClientSendPopup(netMsg.conn, "CharacterCreate: not in lobby", true);
+            ServerSendError(conn, "CharacterCreate: not in lobby", true);
         }
     }
 
-    void OnServerCharacterDelete(NetworkMessage netMsg)
+    void OnServerCharacterDelete(NetworkConnection conn, CharacterDeleteMsg message)
     {
-        print("OnServerCharacterDelete " + netMsg.conn);
-        CharacterDeleteMsg message = netMsg.ReadMessage<CharacterDeleteMsg>();
+        //print("OnServerCharacterDelete " + conn);
 
         // only while in lobby (aka after handshake and not ingame)
-        if (lobby.ContainsKey(netMsg.conn))
+        if (lobby.ContainsKey(conn))
         {
-            string account = lobby[netMsg.conn];
-            List<string> characters = Database.CharactersForAccount(account);
+            string account = lobby[conn];
+            List<string> characters = Database.singleton.CharactersForAccount(account);
 
             // validate index
-            if (0 <= message.index && message.index < characters.Count)
+            if (0 <= message.value && message.value < characters.Count)
             {
                 // delete the character
-                print("delete character: " + characters[message.index]);
-                Database.CharacterDelete(characters[message.index]);
+                print("delete character: " + characters[message.value]);
+                Database.singleton.CharacterDelete(characters[message.value]);
 
                 // addon system hooks
                 Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerCharacterDelete_", message);
 
                 // send the new character list to client
-                characters = Database.CharactersForAccount(account);
-                CharactersAvailableMsg reply = MakeCharactersAvailableMessage(account);
-                netMsg.conn.Send(CharactersAvailableMsg.MsgId, reply);
+                conn.Send(MakeCharactersAvailableMessage(account));
             }
             else
             {
-                print("invalid character index: " + account + " " + message.index);
-                ClientSendPopup(netMsg.conn, "invalid character index", false);
+                print("invalid character index: " + account + " " + message.value);
+                ServerSendError(conn, "invalid character index", false);
             }
         }
         else
         {
-            print("CharacterDelete: not in lobby: " + netMsg.conn);
-            ClientSendPopup(netMsg.conn, "CharacterDelete: not in lobby", true);
+            print("CharacterDelete: not in lobby: " + conn);
+            ServerSendError(conn, "CharacterDelete: not in lobby", true);
         }
     }
 
@@ -529,23 +570,39 @@ public partial class NetworkManagerMMO : NetworkManager
     // duplicates.
     void SavePlayers()
     {
-        List<Player> players = Player.onlinePlayers.Values.ToList();
-        Database.CharacterSaveMany(players);
-        if (players.Count > 0) Debug.Log("saved " + players.Count + " player(s)");
+        Database.singleton.CharacterSaveMany(Player.onlinePlayers.Values);
+        if (Player.onlinePlayers.Count > 0) Debug.Log("saved " + Player.onlinePlayers.Count + " player(s)");
     }
 
     // stop/disconnect /////////////////////////////////////////////////////////
     // called on the server when a client disconnects
     public override void OnServerDisconnect(NetworkConnection conn)
     {
-        print("OnServerDisconnect " + conn);
+        //print("OnServerDisconnect " + conn);
+
+        // players shouldn't be able to log out instantly to flee combat.
+        // there should be a delay.
+        float delay = 0;
+        if (conn.playerController != null)
+        {
+            Player player = conn.playerController.GetComponent<Player>();
+            delay = (float)player.remainingLogoutTime;
+        }
+
+        StartCoroutine(DoServerDisconnect(conn, delay));
+    }
+
+    IEnumerator<WaitForSeconds> DoServerDisconnect(NetworkConnection conn, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        //print("DoServerDisconnect " + conn);
 
         // save player (if any)
-        GameObject go = Utils.GetGameObjectFromPlayerControllers(conn.playerControllers);
-        if (go != null)
+        if (conn.playerController != null)
         {
-            Database.CharacterSave(go.GetComponent<Player>(), false);
-            print("saved:" + go.name);
+            Database.singleton.CharacterSave(conn.playerController.GetComponent<Player>(), false);
+            print("saved:" + conn.playerController.name);
         }
         else print("no player to save for: " + conn);
 
@@ -555,10 +612,8 @@ public partial class NetworkManagerMMO : NetworkManager
         // remove logged in account after everything else was done
         lobby.Remove(conn); // just returns false if not found
 
-        // do base function logic without showing the annoying Debug.LogErrror
-        // (until UNET fixes it)
-        //base.OnServerDisconnect(conn);
-        NetworkServer.DestroyPlayersForConnection(conn);
+        // do base function logic (removes the player for the connection)
+        base.OnServerDisconnect(conn);
     }
 
     // called on the client if he disconnects
@@ -575,6 +630,9 @@ public partial class NetworkManagerMMO : NetworkManager
         // call StopClient to clean everything up properly (otherwise
         // NetworkClient.active remains false after next login)
         StopClient();
+
+        // set state
+        state = NetworkState.Offline;
 
         // addon system hooks
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnClientDisconnect_", conn);
@@ -594,169 +652,36 @@ public partial class NetworkManagerMMO : NetworkManager
     // stop in the editor
     // -> we want to send the quit packet to the server instead of waiting for a
     //    timeout
-    // -> this also avoids the OnDisconnectError UNET bug (#838689) more often
-    void OnApplicationQuit()
+    public override void OnApplicationQuit()
     {
-        if (IsClientConnected())
+        base.OnApplicationQuit();
+        if (NetworkClient.isConnected)
         {
             StopClient();
             print("OnApplicationQuit: stopped client");
         }
     }
 
-    void OnValidate()
+    public override void OnValidate()
     {
-        // Channel #0 always has to be reliable and Channel #1 always has to be
-        // Unreliable because Channels.DefaultReliable is 0 and
-        // DefaultUnreliable 1.
-        //
-        // Those two helpers are used by the HLAPI and by us to avoid hardcoding
-        // channel indices for NetworkBehaviours, Commands, Rpcs, etc.
-        //
-        // Changing them would result in chaos. Using anything != Fragmented
-        // would fail to send bigger messages too.
-        if (channels.Count < 1 || channels[0] != QosType.ReliableFragmented)
-            Debug.LogWarning("NetworkManager channel 0 has to be ReliableFragmented");
-        if (channels.Count < 2 || channels[1] != QosType.UnreliableFragmented)
-            Debug.LogWarning("NetworkManager channel 1 has to be UnreliableFragmented");
+        base.OnValidate();
 
         // ip has to be changed in the server list. make it obvious to users.
         if (!Application.isPlaying && networkAddress != "")
             networkAddress = "Use the Server List below!";
-    }
 
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
+        // need enough character selection locations for character limit
+        if (selectionLocations.Length != characterLimit)
+        {
+            // create new array with proper size
+            Transform[] newArray = new Transform[characterLimit];
 
-    public override bool Equals(object other)
-    {
-        return base.Equals(other);
-    }
+            // copy old values
+            for (int i = 0; i < Mathf.Min(characterLimit, selectionLocations.Length); ++i)
+                newArray[i] = selectionLocations[i];
 
-    public override string ToString()
-    {
-        return base.ToString();
-    }
-
-    public override void Awake()
-    {
-        base.Awake();
-    }
-
-    public override void Start()
-    {
-        base.Start();
-    }
-
-    public override void LateUpdate()
-    {
-        base.LateUpdate();
-    }
-
-    public override void OnApplicationQuit()
-    {
-        base.OnApplicationQuit();
-    }
-
-    public override void OnValidate()
-    {
-        base.OnValidate();
-    }
-
-    public override void ConfigureServerFrameRate()
-    {
-        base.ConfigureServerFrameRate();
-    }
-
-    public override void StartHost()
-    {
-        base.StartHost();
-    }
-
-    public override void ServerChangeScene(string newSceneName)
-    {
-        base.ServerChangeScene(newSceneName);
-    }
-
-    public override void ServerChangeScene(string newSceneName, LoadSceneMode sceneMode, LocalPhysicsMode physicsMode)
-    {
-        base.ServerChangeScene(newSceneName, sceneMode, physicsMode);
-    }
-
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
-
-    public override void OnServerConnect(NetworkConnection conn)
-    {
-        base.OnServerConnect(conn);
-    }
-
-    public override void OnServerReady(NetworkConnection conn)
-    {
-        base.OnServerReady(conn);
-    }
-
-    public override void OnServerAddPlayer(NetworkConnection conn, AddPlayerMessage extraMessage)
-    {
-        base.OnServerAddPlayer(conn, extraMessage);
-    }
-
-    public override void OnServerRemovePlayer(NetworkConnection conn, NetworkIdentity player)
-    {
-        base.OnServerRemovePlayer(conn, player);
-    }
-
-    public override void OnServerError(NetworkConnection conn, int errorCode)
-    {
-        base.OnServerError(conn, errorCode);
-    }
-
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        base.OnServerSceneChanged(sceneName);
-    }
-
-    public override void OnClientError(NetworkConnection conn, int errorCode)
-    {
-        base.OnClientError(conn, errorCode);
-    }
-
-    public override void OnClientNotReady(NetworkConnection conn)
-    {
-        base.OnClientNotReady(conn);
-    }
-
-    public override void OnClientChangeScene(string newSceneName)
-    {
-        base.OnClientChangeScene(newSceneName);
-    }
-
-    public override void OnStartHost()
-    {
-        base.OnStartHost();
-    }
-
-    public override void OnStartClient(NetworkClient client)
-    {
-        base.OnStartClient(client);
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-    }
-
-    public override void OnStopClient()
-    {
-        base.OnStopClient();
-    }
-
-    public override void OnStopHost()
-    {
-        base.OnStopHost();
+            // use new array
+            selectionLocations = newArray;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Ninja.WebSockets
         /// <param name="uri">The WebSocket uri to connect to (e.g. ws://example.com or wss://example.com for SSL)</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>A connected web socket instance</returns>
-        Task<WebSocket> ConnectAsync(Uri uri, CancellationToken token = default(CancellationToken));
+        Task<WebSocket> ConnectAsync(Uri uri, CancellationToken token = default);
 
         /// <summary>
         /// Connect with options specified

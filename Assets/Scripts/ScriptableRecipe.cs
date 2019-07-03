@@ -25,25 +25,40 @@ public class ScriptableRecipe : ScriptableObject
     public static int recipeSize = 6;
 
     // ingredients and result
-    public List<ScriptableItem> ingredients = new List<ScriptableItem>(6);
+    public List<ScriptableItemAndAmount> ingredients = new List<ScriptableItemAndAmount>(6);
     public ScriptableItem result;
+
+    // crafting time in seconds
+    public float craftingTime = 1;
+
+    // probability of success
+    [Range(0, 1)] public float probability = 1;
 
     // check if the list of items works for this recipe. the list shouldn't
     // contain 'null'.
     // (inheriting classes can modify the matching algorithm if needed)
-    public virtual bool CanCraftWith(List<ScriptableItem> items)
+    public virtual bool CanCraftWith(List<ItemSlot> items)
     {
         // items list should not be touched, since it's often used to check more
         // than one recipe. so let's just create a local copy.
-        items = new List<ScriptableItem>(items);
+        items = new List<ItemSlot>(items);
 
         // make sure that we have at least one ingredient
-        if (ingredients.Any(it => it != null))
+        if (ingredients.Any(slot => slot.amount > 0 && slot.item != null))
         {
-            // each ingredient in the list?
-            foreach (ScriptableItem ingredient in ingredients)
-                if (ingredient != null)
-                    if (!items.Remove(ingredient)) return false;
+            // each ingredient in the list, with amount?
+            foreach (ScriptableItemAndAmount ingredient in ingredients)
+            {
+                if (ingredient.amount > 0 && ingredient.item != null)
+                {
+                    // is there a stack with at least that amount and that item?
+                    int index = items.FindIndex(slot => slot.amount >= ingredient.amount && slot.item.data == ingredient.item);
+                    if (index != -1)
+                        items.RemoveAt(index);
+                    else
+                        return false;
+                }
+            }
 
             // and nothing else in the list?
             return items.Count == 0;
@@ -55,16 +70,29 @@ public class ScriptableRecipe : ScriptableObject
     // we can only use Resources.Load in the main thread. we can't use it when
     // declaring static variables. so we have to use it as soon as 'dict' is
     // accessed for the first time from the main thread.
-    static Dictionary<string, ScriptableRecipe> cache = null;
+    static Dictionary<string, ScriptableRecipe> cache;
     public static Dictionary<string, ScriptableRecipe> dict
     {
         get
         {
-            // load if not loaded yet
+            // not loaded yet?
             if (cache == null)
-                cache = Resources.LoadAll<ScriptableRecipe>("").ToDictionary(
-                    recipe => recipe.name, recipe => recipe
-                );
+            {
+                // get all ScriptableRecipes in resources
+                ScriptableRecipe[] recipes = Resources.LoadAll<ScriptableRecipe>("");
+
+                // check for duplicates, then add to cache
+                List<string> duplicates = recipes.ToList().FindDuplicates(recipe => recipe.name);
+                if (duplicates.Count == 0)
+                {
+                    cache = recipes.ToDictionary(recipe => recipe.name, recipe => recipe);
+                }
+                else
+                {
+                    foreach (string duplicate in duplicates)
+                        Debug.LogError("Resources folder contains multiple ScriptableRecipes with the name " + duplicate + ". If you are using subfolders like 'Warrior/Ring' and 'Archer/Ring', then rename them to 'Warrior/(Warrior)Ring' and 'Archer/(Archer)Ring' instead.");
+                }
+            }
             return cache;
         }
     }
@@ -75,25 +103,10 @@ public class ScriptableRecipe : ScriptableObject
         // force list size
         // -> add if too few
         for (int i = ingredients.Count; i < recipeSize; ++i)
-            ingredients.Add(null);
+            ingredients.Add(new ScriptableItemAndAmount());
 
         // -> remove if too many
         for (int i = recipeSize; i < ingredients.Count; ++i)
             ingredients.RemoveAt(i);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-    public override bool Equals(object other)
-    {
-        return base.Equals(other);
-    }
-
-    public override string ToString()
-    {
-        return base.ToString();
     }
 }

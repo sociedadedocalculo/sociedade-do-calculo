@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class NavmeshPathGizmo : MonoBehaviour
+public class NavMeshPathGizmo : MonoBehaviour
 {
-    public NavMeshAgent agent;
-
     void OnDrawGizmos()
     {
+        // can't cache agent because reloading script sometimes clears cached
+        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+
+        // get path
         NavMeshPath path = agent.path;
 
         // color depends on status

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b06ce865132a4e278ff2f82a8b591f1, type: 3}
+  m_Name: Blocked Path
+  m_EditorClassIdentifier: 
+  toolTip: '<b>{NAME}</b>
+
+    Find out what happened at the Blocked Path, then report back to the Guardian near
+    the forest.
+
+
+    Tasks:
+
+    * Inspect the Blocked Path: {LOCATIONSTATUS}
+
+
+    Rewards:
+
+    * {REWARDGOLD} Gold
+
+    * {REWARDEXPERIENCE} Experience
+
+
+    {STATUS}'
+  requiredLevel: 0
+  predecessor: {fileID: 0}
+  rewardGold: 50
+  rewardExperience: 50
+  rewardItem: {fileID: 0}

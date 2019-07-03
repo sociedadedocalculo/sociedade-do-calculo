@@ -28,30 +28,33 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Mirror;
+using TMPro;
 
-public enum DamageType { Normal, Block, Crit };
+public enum DamageType : byte { Normal, Block, Crit };
 
 // note: no animator required, towers, dummies etc. may not have one
 [RequireComponent(typeof(Rigidbody))] // kinematic, only needed for OnTrigger
-[RequireComponent(typeof(NetworkProximityCheckerCustom))]
+[RequireComponent(typeof(NetworkProximityGridChecker))]
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(NetworkNavMeshAgent))]
+[RequireComponent(typeof(AudioSource))]
 public abstract partial class Entity : NetworkBehaviour
 {
     [Header("Components")]
     public NavMeshAgent agent;
-    public NetworkProximityChecker proxchecker;
-#pragma warning disable CS0108 // O membro oculta o membro herdado; nova palavra-chave ausente
-    public NetworkIdentity netIdentity;
-#pragma warning restore CS0108 // O membro oculta o membro herdado; nova palavra-chave ausente
+    public NetworkProximityGridChecker proxchecker;
     public Animator animator;
     new public Collider collider;
+    public AudioSource audioSource;
 
     // finite state machine
     // -> state only writable by entity class to avoid all kinds of confusion
     [Header("State")]
     [SyncVar, SerializeField] string _state = "IDLE";
-    public string state { get { return _state; } }
+    public string state => _state;
+
+    // it's useful to know an entity's last combat time (did/was attacked)
+    // e.g. to prevent logging out for x seconds after combat
+    [SyncVar] public double lastCombatTime;
 
     // 'Entity' can't be SyncVar and NetworkIdentity causes errors when null,
     // so we use [SyncVar] GameObject and wrap it for simplicity
@@ -67,14 +70,17 @@ public abstract partial class Entity : NetworkBehaviour
     [SyncVar] public int level = 1;
 
     [Header("Health")]
-    [SerializeField] protected LevelBasedInt _healthMax = new LevelBasedInt { baseValue = 100 };
+    [SerializeField] protected LinearInt _healthMax = new LinearInt { baseValue = 100 };
     public virtual int healthMax
     {
         get
         {
-            // base + buffs
-            int buffBonus = buffs.Sum(buff => buff.buffsHealthMax);
-            return _healthMax.Get(level) + buffBonus;
+            // base + passives + buffs
+            int passiveBonus = (from skill in skills
+                                where skill.level > 0 && skill.data is PassiveSkill
+                                select ((PassiveSkill)skill.data).bonusHealthMax.Get(skill.level)).Sum();
+            int buffBonus = buffs.Sum(buff => buff.bonusHealthMax);
+            return _healthMax.Get(level) + passiveBonus + buffBonus;
         }
     }
     public bool invincible = false; // GMs, Npcs, ...
@@ -86,26 +92,32 @@ public abstract partial class Entity : NetworkBehaviour
     }
 
     public bool healthRecovery = true; // can be disabled in combat etc.
-    [SerializeField] protected LevelBasedInt _healthRecoveryRate = new LevelBasedInt { baseValue = 1 };
+    [SerializeField] protected LinearInt _healthRecoveryRate = new LinearInt { baseValue = 1 };
     public virtual int healthRecoveryRate
     {
         get
         {
-            // base + buffs
-            float buffPercent = buffs.Sum(buff => buff.buffsHealthPercentPerSecond);
-            return _healthRecoveryRate.Get(level) + Convert.ToInt32(buffPercent * healthMax);
+            // base + passives + buffs
+            float passivePercent = (from skill in skills
+                                    where skill.level > 0 && skill.data is PassiveSkill
+                                    select ((PassiveSkill)skill.data).bonusHealthPercentPerSecond.Get(skill.level)).Sum();
+            float buffPercent = buffs.Sum(buff => buff.bonusHealthPercentPerSecond);
+            return _healthRecoveryRate.Get(level) + Convert.ToInt32(passivePercent * healthMax) + Convert.ToInt32(buffPercent * healthMax);
         }
     }
 
     [Header("Mana")]
-    [SerializeField] protected LevelBasedInt _manaMax = new LevelBasedInt { baseValue = 100 };
+    [SerializeField] protected LinearInt _manaMax = new LinearInt { baseValue = 100 };
     public virtual int manaMax
     {
         get
         {
-            // base + buffs
-            int buffBonus = buffs.Sum(buff => buff.buffsManaMax);
-            return _manaMax.Get(level) + buffBonus;
+            // base + passives + buffs
+            int passiveBonus = (from skill in skills
+                                where skill.level > 0 && skill.data is PassiveSkill
+                                select ((PassiveSkill)skill.data).bonusManaMax.Get(skill.level)).Sum();
+            int buffBonus = buffs.Sum(buff => buff.bonusManaMax);
+            return _manaMax.Get(level) + passiveBonus + buffBonus;
         }
     }
     [SyncVar] int _mana = 1;
@@ -116,67 +128,94 @@ public abstract partial class Entity : NetworkBehaviour
     }
 
     public bool manaRecovery = true; // can be disabled in combat etc.
-    [SerializeField] protected LevelBasedInt _manaRecoveryRate = new LevelBasedInt { baseValue = 1 };
+    [SerializeField] protected LinearInt _manaRecoveryRate = new LinearInt { baseValue = 1 };
     public int manaRecoveryRate
     {
         get
         {
-            // base + buffs
-            float buffPercent = buffs.Sum(buff => buff.buffsManaPercentPerSecond);
-            return _manaRecoveryRate.Get(level) + Convert.ToInt32(buffPercent * manaMax);
+            // base + passives + buffs
+            float passivePercent = (from skill in skills
+                                    where skill.level > 0 && skill.data is PassiveSkill
+                                    select ((PassiveSkill)skill.data).bonusManaPercentPerSecond.Get(skill.level)).Sum();
+            float buffPercent = buffs.Sum(buff => buff.bonusManaPercentPerSecond);
+            return _manaRecoveryRate.Get(level) + Convert.ToInt32(passivePercent * manaMax) + Convert.ToInt32(buffPercent * manaMax);
         }
     }
 
     [Header("Damage")]
-    [SerializeField] protected LevelBasedInt _damage = new LevelBasedInt { baseValue = 1 };
+    [SerializeField] protected LinearInt _damage = new LinearInt { baseValue = 1 };
     public virtual int damage
     {
         get
         {
-            // base + buffs
-            int buffBonus = buffs.Sum(buff => buff.buffsDamage);
-            return _damage.Get(level) + buffBonus;
+            // base + passives + buffs
+            int passiveBonus = (from skill in skills
+                                where skill.level > 0 && skill.data is PassiveSkill
+                                select ((PassiveSkill)skill.data).bonusDamage.Get(skill.level)).Sum();
+            int buffBonus = buffs.Sum(buff => buff.bonusDamage);
+            return _damage.Get(level) + passiveBonus + buffBonus;
         }
     }
 
     [Header("Defense")]
-    [SerializeField] protected LevelBasedInt _defense = new LevelBasedInt { baseValue = 1 };
+    [SerializeField] protected LinearInt _defense = new LinearInt { baseValue = 1 };
     public virtual int defense
     {
         get
         {
-            // base + buffs
-            int buffBonus = buffs.Sum(buff => buff.buffsDefense);
-            return _defense.Get(level) + buffBonus;
+            // base + passives + buffs
+            int passiveBonus = (from skill in skills
+                                where skill.level > 0 && skill.data is PassiveSkill
+                                select ((PassiveSkill)skill.data).bonusDefense.Get(skill.level)).Sum();
+            int buffBonus = buffs.Sum(buff => buff.bonusDefense);
+            return _defense.Get(level) + passiveBonus + buffBonus;
         }
     }
 
     [Header("Block")]
-    [SerializeField] protected LevelBasedFloat _blockChance;
+    [SerializeField] protected LinearFloat _blockChance;
     public virtual float blockChance
     {
         get
         {
-            // base + buffs
-            float buffBonus = buffs.Sum(buff => buff.buffsBlockChance);
-            return _blockChance.Get(level) + buffBonus;
+            // base + passives + buffs
+            float passiveBonus = (from skill in skills
+                                  where skill.level > 0 && skill.data is PassiveSkill
+                                  select ((PassiveSkill)skill.data).bonusBlockChance.Get(skill.level)).Sum();
+            float buffBonus = buffs.Sum(buff => buff.bonusBlockChance);
+            return _blockChance.Get(level) + passiveBonus + buffBonus;
         }
     }
 
     [Header("Critical")]
-    [SerializeField] protected LevelBasedFloat _criticalChance;
+    [SerializeField] protected LinearFloat _criticalChance;
     public virtual float criticalChance
     {
         get
         {
-            // base + buffs
-            float buffBonus = buffs.Sum(buff => buff.buffsCriticalChance);
-            return _criticalChance.Get(level) + buffBonus;
+            // base + passives + buffs
+            float passiveBonus = (from skill in skills
+                                  where skill.level > 0 && skill.data is PassiveSkill
+                                  select ((PassiveSkill)skill.data).bonusCriticalChance.Get(skill.level)).Sum();
+            float buffBonus = buffs.Sum(buff => buff.bonusCriticalChance);
+            return _criticalChance.Get(level) + passiveBonus + buffBonus;
         }
     }
 
-    // speed wrapper
-    public float speed { get { return agent.speed; } }
+    [Header("Speed")]
+    [SerializeField] protected LinearFloat _speed = new LinearFloat { baseValue = 5 };
+    public virtual float speed
+    {
+        get
+        {
+            // base + passives + buffs
+            float passiveBonus = (from skill in skills
+                                  where skill.level > 0 && skill.data is PassiveSkill
+                                  select ((PassiveSkill)skill.data).bonusSpeed.Get(skill.level)).Sum();
+            float buffBonus = buffs.Sum(buff => buff.bonusSpeed);
+            return _speed.Get(level) + passiveBonus + buffBonus;
+        }
+    }
 
     [Header("Damage Popup")]
     public GameObject damagePopupPrefab;
@@ -195,13 +234,18 @@ public abstract partial class Entity : NetworkBehaviour
     // -> can be overwritten, e.g. for mages to set it to the weapon's effect
     //    mount
     // -> assign to right hand if in doubt!
-    [SerializeField] Transform _effectMount;
+    [SerializeField] private Transform _effectMount;
     public virtual Transform effectMount { get { return _effectMount; } }
 
     // all entities should have an inventory, not just the player.
     // useful for monster loot, chests, etc.
     [Header("Inventory")]
     public SyncListItemSlot inventory = new SyncListItemSlot();
+
+    // equipment needs to be in Entity because arrow shooting skills need to
+    // check if the entity has enough arrows
+    [Header("Equipment")]
+    public SyncListItemSlot equipment = new SyncListItemSlot();
 
     // all entities should have gold, not just the player
     // useful for monster loot, chests etc.
@@ -212,7 +256,14 @@ public abstract partial class Entity : NetworkBehaviour
 
     // 3D text mesh for name above the entity's head
     [Header("Text Meshes")]
-    public TextMesh nameOverlay;
+    public TextMeshPro stunnedOverlay;
+
+    // every entity can be stunned by setting stunEndTime
+    protected double stunTimeEnd;
+
+    // safe zone flag
+    // -> needs to be in Entity because both player and pet need it
+    [HideInInspector] public bool inSafeZone;
 
     // networkbehaviour ////////////////////////////////////////////////////////
     protected virtual void Awake()
@@ -224,7 +275,7 @@ public abstract partial class Entity : NetworkBehaviour
     public override void OnStartServer()
     {
         // health recovery every second
-        InvokeRepeating("Recover", 1, 1);
+        InvokeRepeating(nameof(Recover), 1, 1);
 
         // dead if spawned without health
         if (health == 0) _state = "DEAD";
@@ -274,10 +325,12 @@ public abstract partial class Entity : NetworkBehaviour
         //    as target again when they are shown again
         if (IsWorthUpdating())
         {
+            // always apply speed to agent
+            agent.speed = speed;
+
             if (isClient)
             {
                 UpdateClient();
-                if (nameOverlay != null) nameOverlay.text = name;
             }
             if (isServer)
             {
@@ -289,6 +342,10 @@ public abstract partial class Entity : NetworkBehaviour
             // addon system hooks
             Utils.InvokeMany(typeof(Entity), this, "Update_");
         }
+
+        // update overlays in any case, except on server-only mode
+        // (also update for character selection previews etc. then)
+        if (!isServerOnly) UpdateOverlays();
     }
 
     // update for server. should return the new state.
@@ -296,6 +353,13 @@ public abstract partial class Entity : NetworkBehaviour
 
     // update for client.
     protected abstract void UpdateClient();
+
+    // can be overwritten for more overlays
+    protected virtual void UpdateOverlays()
+    {
+        if (stunnedOverlay != null)
+            stunnedOverlay.gameObject.SetActive(state == "STUNNED");
+    }
 
     // visibility //////////////////////////////////////////////////////////////
     // hide a entity
@@ -318,15 +382,9 @@ public abstract partial class Entity : NetworkBehaviour
     // note: usually the server is the only one who uses forceHidden, the
     //       client usually doesn't know about it and simply doesn't see the
     //       GameObject.
-    public bool IsHidden()
-    {
-        return proxchecker.forceHidden;
-    }
+    public bool IsHidden() => proxchecker.forceHidden;
 
-    public float VisRange()
-    {
-        return proxchecker.visRange;
-    }
+    public float VisRange() => NetworkProximityGridChecker.visRange;
 
     // look at a transform while only rotating on the Y axis (to avoid weird
     // tilts)
@@ -335,20 +393,17 @@ public abstract partial class Entity : NetworkBehaviour
         transform.LookAt(new Vector3(position.x, transform.position.y, position.z));
     }
 
-    // note: client can find out if moving by simply checking the state!
-    [Server] // server is the only one who has up-to-date NavMeshAgent
-    public bool IsMoving()
-    {
-        // -> agent.hasPath will be true if stopping distance > 0, so we can't
-        //    really rely on that.
-        // -> pathPending is true while calculating the path, which is good
-        // -> remainingDistance is the distance to the last path point, so it
-        //    also works when clicking somewhere onto a obstacle that isn'
-        //    directly reachable.
-        return agent.pathPending ||
-               agent.remainingDistance > agent.stoppingDistance ||
-               agent.velocity != Vector3.zero;
-    }
+    // -> agent.hasPath will be true if stopping distance > 0, so we can't
+    //    really rely on that.
+    // -> pathPending is true while calculating the path, which is good
+    // -> remainingDistance is the distance to the last path point, so it
+    //    also works when clicking somewhere onto a obstacle that isn't
+    //    directly reachable.
+    // -> velocity is the best way to detect WASD movement
+    public bool IsMoving() =>
+        agent.pathPending ||
+        agent.remainingDistance > agent.stoppingDistance ||
+        agent.velocity != Vector3.zero;
 
     // health & mana ///////////////////////////////////////////////////////////
     public float HealthPercent()
@@ -371,7 +426,7 @@ public abstract partial class Entity : NetworkBehaviour
     // deal damage at another entity
     // (can be overwritten for players etc. that need custom functionality)
     [Server]
-    public virtual void DealDamageAt(Entity entity, int amount)
+    public virtual void DealDamageAt(Entity entity, int amount, float stunChance = 0, float stunTime = 0)
     {
         int damageDealt = 0;
         DamageType damageType = DamageType.Normal;
@@ -400,6 +455,16 @@ public abstract partial class Entity : NetworkBehaviour
 
                 // deal the damage
                 entity.health -= damageDealt;
+
+                // stun?
+                if (UnityEngine.Random.value < stunChance)
+                {
+                    // dont allow a short stun to overwrite a long stun
+                    // => if a player is hit with a 10s stun, immediately
+                    //    followed by a 1s stun, we don't want it to end in 1s!
+                    double newStunEndTime = NetworkTime.time + stunTime;
+                    entity.stunTimeEnd = Math.Max(newStunEndTime, stunTimeEnd);
+                }
             }
         }
 
@@ -409,6 +474,10 @@ public abstract partial class Entity : NetworkBehaviour
 
         // show effects on clients
         entity.RpcOnDamageReceived(damageDealt, damageType);
+
+        // reset last combat time for both
+        lastCombatTime = NetworkTime.time;
+        entity.lastCombatTime = NetworkTime.time;
 
         // addon system hooks
         Utils.InvokeMany(typeof(Entity), this, "DealDamageAt_", entity, amount);
@@ -430,15 +499,15 @@ public abstract partial class Entity : NetworkBehaviour
 
             GameObject popup = Instantiate(damagePopupPrefab, position, Quaternion.identity);
             if (damageType == DamageType.Normal)
-                popup.GetComponentInChildren<TextMesh>().text = amount.ToString();
+                popup.GetComponentInChildren<TextMeshPro>().text = amount.ToString();
             else if (damageType == DamageType.Block)
-                popup.GetComponentInChildren<TextMesh>().text = "<i>Block!</i>";
+                popup.GetComponentInChildren<TextMeshPro>().text = "<i>Block!</i>";
             else if (damageType == DamageType.Crit)
-                popup.GetComponentInChildren<TextMesh>().text = amount + " Crit!";
+                popup.GetComponentInChildren<TextMeshPro>().text = amount + " Crit!";
         }
     }
 
-    [ClientRpc(channel = Channels.DefaultUnreliable)] // unimportant => unreliable
+    [ClientRpc]
     void RpcOnDamageReceived(int amount, DamageType damageType)
     {
         // show popup above receiver's head in all observers via ClientRpc
@@ -475,51 +544,64 @@ public abstract partial class Entity : NetworkBehaviour
         return skills.FindIndex(skill => skill.name == skillName);
     }
 
-    // fist fights are virtually pointless because they overcomplicate the code
-    // and they don't add any value to the game. so we need a check to find out
-    // if the entity currently has a weapon equipped, otherwise casting a skill
-    // shouldn't be possible. this may always return true for monsters, towers
-    // etc.
-    public abstract bool HasCastWeapon();
+    // helper function to find a buff index
+    public int GetBuffIndexByName(string buffName)
+    {
+        return buffs.FindIndex(buff => buff.name == buffName);
+    }
 
-    // we need an abstract function to check if an entity can attack another,
-    // e.g. if player can attack monster / pet / npc, ...
-    // => we don't just compare the type because other things like 'is own pet'
-    //    etc. matter too
-    public abstract bool CanAttack(Entity entity);
+    // we need a function to check if an entity can attack another.
+    // => overwrite to add more cases like 'monsters can only attack players'
+    //    or 'player can attack pets but not own pet' etc.
+    // => raycast NavMesh to prevent attacks through walls, while allowing
+    //    attacks through steep hills etc. (unlike Physics.Raycast). this is
+    //    very important to prevent exploits where someone might try to attack a
+    //    boss monster through a dungeon wall, etc.
+    public virtual bool CanAttack(Entity entity)
+    {
+        return health > 0 &&
+               entity.health > 0 &&
+               entity != this &&
+               !inSafeZone && !entity.inSafeZone &&
+               !NavMesh.Raycast(transform.position, entity.transform.position, out NavMeshHit hit, NavMesh.AllAreas);
+    }
 
     // the first check validates the caster
     // (the skill won't be ready if we check self while casting it. so the
     //  checkSkillReady variable can be used to ignore that if needed)
-    public bool CastCheckSelf(Skill skill, bool checkSkillReady = true)
-    {
-        // has a weapon (important for projectiles etc.), no cooldown, hp, mp?
-        return (!skill.requiresWeapon || HasCastWeapon()) &&
-               (!checkSkillReady || skill.IsReady()) &&
-               health > 0 &&
-               mana >= skill.manaCosts;
-    }
+    // has a weapon (important for projectiles etc.), no cooldown, hp, mp?
+    public bool CastCheckSelf(Skill skill, bool checkSkillReady = true) =>
+        skill.CheckSelf(this, checkSkillReady);
 
     // the second check validates the target and corrects it for the skill if
     // necessary (e.g. when trying to heal an npc, it sets target to self first)
     // (skill shots that don't need a target will just return true if the user
     //  wants to cast them at a valid position)
-    public bool CastCheckTarget(Skill skill)
-    {
-        return skill.CheckTarget(this);
-    }
+    public bool CastCheckTarget(Skill skill) =>
+        skill.CheckTarget(this);
 
     // the third check validates the distance between the caster and the target
     // (target entity or target position in case of skill shots)
     // note: castchecktarget already corrected the target (if any), so we don't
     //       have to worry about that anymore here
-    public bool CastCheckDistance(Skill skill, out Vector3 destination)
+    public bool CastCheckDistance(Skill skill, out Vector3 destination) =>
+        skill.CheckDistance(this, out destination);
+
+    // starts casting
+    public void StartCastSkill(Skill skill)
     {
-        return skill.CheckDistance(this, out destination);
+        // start casting and set the casting end time
+        skill.castTimeEnd = NetworkTime.time + skill.castTime;
+
+        // save modifications
+        skills[currentSkill] = skill;
+
+        // rpc for client sided effects
+        RpcSkillCastStarted();
     }
 
-    // casts the skill. casting and waiting has to be done in the state machine
-    public void CastSkill(Skill skill)
+    // finishes casting. casting and waiting has to be done in the state machine
+    public void FinishCastSkill(Skill skill)
     {
         // * check if we can currently cast a skill (enough mana etc.)
         // * check if we can cast THAT skill on THAT target
@@ -531,11 +613,16 @@ public abstract partial class Entity : NetworkBehaviour
             // let the skill template handle the action
             skill.Apply(this);
 
+            // rpc for client sided effects
+            // -> pass that skill because skillIndex might be reset in the mean
+            //    time, we never know
+            RpcSkillCastFinished(skill);
+
             // decrease mana in any case
             mana -= skill.manaCosts;
 
             // start the cooldown (and save it in the struct)
-            skill.cooldownEnd = Time.time + skill.cooldown;
+            skill.cooldownEnd = NetworkTime.time + skill.cooldown;
 
             // save any skill modifications in any case
             skills[currentSkill] = skill;
@@ -566,6 +653,34 @@ public abstract partial class Entity : NetworkBehaviour
                 buffs.RemoveAt(i);
                 --i;
             }
+        }
+    }
+
+    // skill cast started rpc for client sided effects
+    // note: no need to pass skillIndex, currentSkill is synced anyway
+    [ClientRpc]
+    public void RpcSkillCastStarted()
+    {
+        // validate: still alive and valid skill?
+        if (health > 0 && 0 <= currentSkill && currentSkill < skills.Count)
+        {
+            skills[currentSkill].data.OnCastStarted(this);
+        }
+    }
+
+    // skill cast finished rpc for client sided effects
+    // note: no need to pass skillIndex, currentSkill is synced anyway
+    [ClientRpc]
+    public void RpcSkillCastFinished(Skill skill)
+    {
+        // validate: still alive?
+        if (health > 0)
+        {
+            // call scriptableskill event
+            skill.data.OnCastFinished(this);
+
+            // maybe some other component needs to know about it too
+            SendMessage("OnSkillCastFinished", skill, SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -652,7 +767,25 @@ public abstract partial class Entity : NetworkBehaviour
         // let's double check
         if (InventoryCanAdd(item, amount))
         {
-            // go through each slot
+            // add to same item stacks first (if any)
+            // (otherwise we add to first empty even if there is an existing
+            //  stack afterwards)
+            for (int i = 0; i < inventory.Count; ++i)
+            {
+                // not empty and same type? then add free amount (max-amount)
+                // note: .Equals because name AND dynamic variables matter (petLevel etc.)
+                if (inventory[i].amount > 0 && inventory[i].item.Equals(item))
+                {
+                    ItemSlot temp = inventory[i];
+                    amount -= temp.IncreaseAmount(amount);
+                    inventory[i] = temp;
+                }
+
+                // were we able to fit the whole amount already? then stop loop
+                if (amount <= 0) return true;
+            }
+
+            // add to empty slots (if any)
             for (int i = 0; i < inventory.Count; ++i)
             {
                 // empty? then fill slot with as many as possible
@@ -662,16 +795,8 @@ public abstract partial class Entity : NetworkBehaviour
                     inventory[i] = new ItemSlot(item, add);
                     amount -= add;
                 }
-                // not empty. same type too? then add free amount (max-amount)
-                // note: .Equals because name AND dynamic variables matter (petLevel etc.)
-                else if (inventory[i].item.Equals(item))
-                {
-                    ItemSlot temp = inventory[i];
-                    amount -= temp.IncreaseAmount(amount);
-                    inventory[i] = temp;
-                }
 
-                // were we able to fit the whole amount already?
+                // were we able to fit the whole amount already? then stop loop
                 if (amount <= 0) return true;
             }
             // we should have been able to add all of them
@@ -680,18 +805,59 @@ public abstract partial class Entity : NetworkBehaviour
         return false;
     }
 
+    // equipment ///////////////////////////////////////////////////////////////
+    public int GetEquipmentIndexByName(string itemName)
+    {
+        return equipment.FindIndex(slot => slot.amount > 0 && slot.item.name == itemName);
+    }
+
+    // helper function to find the equipped weapon index
+    // -> works for all entity types. returns -1 if no weapon equipped.
+    public int GetEquippedWeaponIndex()
+    {
+        return equipment.FindIndex(slot => slot.amount > 0 &&
+                                           slot.item.data is WeaponItem);
+    }
+
+    // get currently equipped weapon category to check if skills can be casted
+    // with this weapon. returns "" if none.
+    public string GetEquippedWeaponCategory()
+    {
+        // find the weapon slot
+        int index = GetEquippedWeaponIndex();
+        return index != -1 ? ((WeaponItem)equipment[index].item.data).category : "";
+    }
+
     // death ///////////////////////////////////////////////////////////////////
     // universal OnDeath function that takes care of all the Entity stuff.
     // should be called by inheriting classes' finite state machine on death.
     [Server]
     protected virtual void OnDeath()
     {
-        // stop any movement and buffs, clear target
-        agent.ResetPath();
+        // clear movement/buffs/target/cast
+        agent.ResetMovement();
         buffs.Clear();
         target = null;
+        currentSkill = -1;
 
         // addon system hooks
         Utils.InvokeMany(typeof(Entity), this, "OnDeath_");
+    }
+
+    // ontrigger ///////////////////////////////////////////////////////////////
+    // protected so that inheriting classes can use OnTrigger too, while also
+    // calling those here via base.OnTriggerEnter/Exit
+    protected virtual void OnTriggerEnter(Collider col)
+    {
+        // check if trigger first to avoid GetComponent tests for environment
+        if (col.isTrigger && col.GetComponent<SafeZone>())
+            inSafeZone = true;
+    }
+
+    protected virtual void OnTriggerExit(Collider col)
+    {
+        // check if trigger first to avoid GetComponent tests for environment
+        if (col.isTrigger && col.GetComponent<SafeZone>())
+            inSafeZone = false;
     }
 }

@@ -1,5 +1,6 @@
 ﻿// Buffs are like Skills, but for the Buffs list.
 using System;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Mirror;
@@ -14,7 +15,7 @@ public partial struct Buff
 
     // dynamic stats (cooldowns etc.)
     public int level;
-    public float buffTimeEnd; // server time
+    public double buffTimeEnd; // server time. double for long term precision.
 
     // constructors
     public Buff(BuffSkill data, int level)
@@ -25,19 +26,32 @@ public partial struct Buff
     }
 
     // wrappers for easier access
-    public BuffSkill data { get { return (BuffSkill)ScriptableSkill.dict[hash]; } }
-    public string name { get { return data.name; } }
-    public Sprite image { get { return data.image; } }
-    public float buffTime { get { return data.buffTime.Get(level); } }
-    public int buffsHealthMax { get { return data.buffsHealthMax.Get(level); } }
-    public int buffsManaMax { get { return data.buffsManaMax.Get(level); } }
-    public int buffsDamage { get { return data.buffsDamage.Get(level); } }
-    public int buffsDefense { get { return data.buffsDefense.Get(level); } }
-    public float buffsBlockChance { get { return data.buffsBlockChance.Get(level); } }
-    public float buffsCriticalChance { get { return data.buffsCriticalChance.Get(level); } }
-    public float buffsHealthPercentPerSecond { get { return data.buffsHealthPercentPerSecond.Get(level); } }
-    public float buffsManaPercentPerSecond { get { return data.buffsManaPercentPerSecond.Get(level); } }
-    public int maxLevel { get { return data.maxLevel; } }
+    public BuffSkill data
+    {
+        get
+        {
+            // show a useful error message if the key can't be found
+            // note: ScriptableSkill.OnValidate 'is in resource folder' check
+            //       causes Unity SendMessage warnings and false positives.
+            //       this solution is a lot better.
+            if (!ScriptableSkill.dict.ContainsKey(hash))
+                throw new KeyNotFoundException("There is no ScriptableSkill with hash=" + hash + ". Make sure that all ScriptableSkills are in the Resources folder so they are loaded properly.");
+            return (BuffSkill)ScriptableSkill.dict[hash];
+        }
+    }
+    public string name => data.name;
+    public Sprite image => data.image;
+    public float buffTime => data.buffTime.Get(level);
+    public int bonusHealthMax => data.bonusHealthMax.Get(level);
+    public int bonusManaMax => data.bonusManaMax.Get(level);
+    public int bonusDamage => data.bonusDamage.Get(level);
+    public int bonusDefense => data.bonusDefense.Get(level);
+    public float bonusBlockChance => data.bonusBlockChance.Get(level);
+    public float bonusCriticalChance => data.bonusCriticalChance.Get(level);
+    public float bonusHealthPercentPerSecond => data.bonusHealthPercentPerSecond.Get(level);
+    public float bonusManaPercentPerSecond => data.bonusManaPercentPerSecond.Get(level);
+    public float bonusSpeed => data.bonusSpeed.Get(level);
+    public int maxLevel => data.maxLevel;
 
     // tooltip - runtime part
     public string ToolTip()
@@ -55,8 +69,8 @@ public partial struct Buff
     public float BuffTimeRemaining()
     {
         // how much time remaining until the buff ends? (using server time)
-        return NetworkTime.time >= buffTimeEnd ? 0 : buffTimeEnd - NetworkTime.time;
+        return NetworkTime.time >= buffTimeEnd ? 0 : (float)(buffTimeEnd - NetworkTime.time);
     }
 }
 
-public class SyncListBuff : SyncListSTRUCT<Buff> { }
+public class SyncListBuff : SyncList<Buff> { }

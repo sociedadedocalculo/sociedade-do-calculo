@@ -53,4 +53,4 @@ public partial struct ItemSlot
     }
 }
 
-public class SyncListItemSlot : SyncListSTRUCT<ItemSlot> { }
+public class SyncListItemSlot : SyncList<ItemSlot> { }

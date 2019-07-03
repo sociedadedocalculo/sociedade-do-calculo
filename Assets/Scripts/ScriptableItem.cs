@@ -33,15 +33,13 @@ public partial class ScriptableItem : ScriptableObject
     public bool sellable;
     public bool tradable;
     public bool destroyable;
-    [TextArea(1, 30)] public string toolTip;
+    [SerializeField, TextArea(1, 30)] protected string toolTip; // not public, use ToolTip()
     public Sprite image;
 
     // tooltip /////////////////////////////////////////////////////////////////
     // fill in all variables into the tooltip
-    // this saves us lots of ugly string concatenation code. we can't do it in
-    // ScriptableItem because some variables can only be replaced here, hence we
-    // would end up with some variables not replaced in the string when calling
-    // Tooltip() from the template.
+    // this saves us lots of ugly string concatenation code.
+    // (dynamic ones are filled in Item.cs)
     // -> note: each tooltip can have any variables, or none if needed
     // -> example usage:
     /*
@@ -81,18 +79,41 @@ public partial class ScriptableItem : ScriptableObject
     {
         get
         {
-            // load if not loaded yet
-            return cache ?? (cache = Resources.LoadAll<ScriptableItem>("").ToDictionary(
-                item => item.name.GetStableHashCode(), item => item)
-            );
+            // not loaded yet?
+            if (cache == null)
+            {
+                // get all ScriptableItems in resources
+                ScriptableItem[] items = Resources.LoadAll<ScriptableItem>("");
+
+                // check for duplicates, then add to cache
+                List<string> duplicates = items.ToList().FindDuplicates(item => item.name);
+                if (duplicates.Count == 0)
+                {
+                    cache = items.ToDictionary(item => item.name.GetStableHashCode(), item => item);
+                }
+                else
+                {
+                    foreach (string duplicate in duplicates)
+                        Debug.LogError("Resources folder contains multiple ScriptableItems with the name " + duplicate + ". If you are using subfolders like 'Warrior/Ring' and 'Archer/Ring', then rename them to 'Warrior/(Warrior)Ring' and 'Archer/(Archer)Ring' instead.");
+                }
+            }
+            return cache;
         }
     }
 
-    // inspector validation ////////////////////////////////////////////////////
+    // validation //////////////////////////////////////////////////////////////
     void OnValidate()
     {
         // make sure that the sell price <= buy price to avoid exploitation
         // (people should never buy an item for 1 gold and sell it for 2 gold)
         sellPrice = Math.Min(sellPrice, buyPrice);
     }
+}
+
+// ScriptableItem + Amount is useful for default items (e.g. spawn with 10 potions)
+[Serializable]
+public struct ScriptableItemAndAmount
+{
+    public ScriptableItem item;
+    public int amount;
 }

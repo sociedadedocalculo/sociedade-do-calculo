@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -80,10 +78,7 @@ namespace Ninja.WebSockets
                 _bufferPoolInternal.ReturnBuffer(_buffer);
             }
 
-            public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
-            {
-                return _ms.CopyToAsync(destination, bufferSize, cancellationToken);
-            }
+            public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken) => _ms.CopyToAsync(destination, bufferSize, cancellationToken);
 
             public override int EndRead(IAsyncResult asyncResult)
             {
@@ -245,18 +240,6 @@ namespace Ninja.WebSockets
         protected void ReturnBuffer(byte[] buffer)
         {
             _bufferPoolStack.Push(buffer);
-        }
-
-        public override bool Equals(object obj)
-        {
-            var pool = obj as BufferPool;
-            return pool != null &&
-                   EqualityComparer<ConcurrentStack<byte[]>>.Default.Equals(_bufferPoolStack, pool._bufferPoolStack);
-        }
-
-        public override int GetHashCode()
-        {
-            return -133259450 + EqualityComparer<ConcurrentStack<byte[]>>.Default.GetHashCode(_bufferPoolStack);
         }
     }
 }
