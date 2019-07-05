@@ -3215,7 +3215,7 @@ public partial class Player : Entity
 
     // simple tab targeting
     [Client]
-    private void TargetNearest()
+    void TargetNearest()
     {
         if (Input.GetKeyDown(targetNearestKey))
         {
@@ -3412,6 +3412,8 @@ public partial class Player : Entity
         Component[] components = GetComponents<Component>();
         if (Array.IndexOf(components, GetComponent<NetworkNavMeshAgentRubberbanding>()) >
             Array.IndexOf(components, this))
+        {
             Debug.LogWarning(name + "'s NetworkNavMeshAgentRubberbanding component is below the Player component. Please drag it above the Player component in the Inspector, otherwise there might be WASD movement issues due to the Update order.");
+        }
     }
 }

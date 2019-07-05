@@ -23,13 +23,13 @@ public class UIShowToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     void ShowToolTip(float delay)
     {
-        Invoke("CreateToolTip", delay);
+        Invoke(nameof(CreateToolTip), delay);
     }
 
     void DestroyToolTip()
     {
         // stop any running attempts to show it
-        CancelInvoke("CreateToolTip");
+        CancelInvoke(nameof(CreateToolTip));
 
         // destroy it
         Destroy(current);

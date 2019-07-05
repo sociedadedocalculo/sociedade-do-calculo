@@ -29,6 +29,11 @@ namespace Ninja.WebSockets
             _bufferPoolStack = new ConcurrentStack<byte[]>();
         }
 
+        public BufferPool(ConcurrentStack<byte[]> bufferPoolStack)
+        {
+            _bufferPoolStack = bufferPoolStack;
+        }
+
         /// <summary>
         /// This memory stream is not instance thread safe (not to be confused with the BufferPool which is instance thread safe)
         /// </summary>
