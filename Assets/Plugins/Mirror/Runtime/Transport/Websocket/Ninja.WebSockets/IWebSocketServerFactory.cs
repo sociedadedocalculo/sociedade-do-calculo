@@ -16,7 +16,7 @@ namespace Ninja.WebSockets
         /// <param name="stream">The network stream</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>Http data read from the stream</returns>
-        Task<WebSocketHttpContext> ReadHttpHeaderFromStreamAsync(Stream stream, CancellationToken token = default);
+        Task<WebSocketHttpContext> ReadHttpHeaderFromStreamAsync(Stream stream, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Accept web socket with default options
@@ -25,7 +25,7 @@ namespace Ninja.WebSockets
         /// <param name="context">The http context used to initiate this web socket request</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>A connected web socket</returns>
-        Task<WebSocket> AcceptWebSocketAsync(WebSocketHttpContext context, CancellationToken token = default);
+        Task<WebSocket> AcceptWebSocketAsync(WebSocketHttpContext context, CancellationToken token = default(CancellationToken));
 
         /// <summary>
         /// Accept web socket with options specified

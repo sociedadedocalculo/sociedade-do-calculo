@@ -92,7 +92,7 @@ namespace Ninja.WebSockets
             Pong?.Invoke(this, e);
         }
 
-        private async Task PingForever()
+        async Task PingForever()
         {
             Events.Log.PingPongManagerStarted(_guid, (int)_keepAliveInterval.TotalSeconds);
 

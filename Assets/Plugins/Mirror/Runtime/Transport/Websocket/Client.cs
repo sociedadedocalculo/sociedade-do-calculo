@@ -1,14 +1,14 @@
-// incoming message queue of <connectionId, message>
-// (not a HashSet because one connection can have multiple new messages)
-// -> a struct to minimize GC
 #if !UNITY_WEBGL || UNITY_EDITOR
 
 using System;
+using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Ninja.WebSockets;
+using UnityEngine;
 
 namespace Mirror.Websocket
 {
@@ -82,7 +82,7 @@ namespace Mirror.Websocket
             }
         }
 
-        private async Task ReceiveLoop(WebSocket webSocket, CancellationToken token)
+        async Task ReceiveLoop(WebSocket webSocket, CancellationToken token)
         {
             byte[] buffer = new byte[MaxMessageSize];
 

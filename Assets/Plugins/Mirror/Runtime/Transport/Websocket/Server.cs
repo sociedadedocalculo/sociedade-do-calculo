@@ -110,7 +110,7 @@ namespace Mirror.Websocket
             }
         }
 
-        private async void ProcessTcpClient(TcpClient tcpClient, CancellationToken token)
+        async void ProcessTcpClient(TcpClient tcpClient, CancellationToken token)
         {
 
             try
@@ -173,7 +173,7 @@ namespace Mirror.Websocket
             return true;
         }
 
-        private async Task ReceiveLoopAsync(WebSocket webSocket, CancellationToken token)
+        async Task ReceiveLoopAsync(WebSocket webSocket, CancellationToken token)
         {
             int connectionId = NextConnectionId();
             clients.Add(connectionId, webSocket);
@@ -226,7 +226,7 @@ namespace Mirror.Websocket
 
         // a message might come splitted in multiple frames
         // collect all frames
-        private async Task<ArraySegment<byte>> ReadFrames(int connectionId, WebSocketReceiveResult result, WebSocket webSocket, byte[] buffer, CancellationToken token)
+        async Task<ArraySegment<byte>> ReadFrames(int connectionId, WebSocketReceiveResult result, WebSocket webSocket, byte[] buffer, CancellationToken token)
         {
             int count = result.Count;
 

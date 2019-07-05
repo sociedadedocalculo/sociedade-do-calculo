@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,11 +29,6 @@ namespace Ninja.WebSockets
         {
             _bufferSize = bufferSize;
             _bufferPoolStack = new ConcurrentStack<byte[]>();
-        }
-
-        public BufferPool(ConcurrentStack<byte[]> bufferPoolStack)
-        {
-            _bufferPoolStack = bufferPoolStack;
         }
 
         /// <summary>
@@ -83,7 +80,10 @@ namespace Ninja.WebSockets
                 _bufferPoolInternal.ReturnBuffer(_buffer);
             }
 
-            public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken) => _ms.CopyToAsync(destination, bufferSize, cancellationToken);
+            public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
+            {
+                return _ms.CopyToAsync(destination, bufferSize, cancellationToken);
+            }
 
             public override int EndRead(IAsyncResult asyncResult)
             {

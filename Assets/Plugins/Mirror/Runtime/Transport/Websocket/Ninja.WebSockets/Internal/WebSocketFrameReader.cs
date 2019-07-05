@@ -140,7 +140,7 @@ namespace Ninja.WebSockets.Internal
         /// <summary>
         /// Reads the length of the payload according to the contents of byte2
         /// </summary>
-        private static async Task<uint> ReadLength(byte byte2, ArraySegment<byte> smallBuffer, Stream fromStream, CancellationToken cancellationToken)
+        static async Task<uint> ReadLength(byte byte2, ArraySegment<byte> smallBuffer, Stream fromStream, CancellationToken cancellationToken)
         {
             byte payloadLenFlag = 0x7F;
             uint len = (uint) (byte2 & payloadLenFlag);
