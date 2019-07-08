@@ -351,7 +351,7 @@ namespace Mirror
             m_SceneId = (m_SceneId & 0xFFFFFFFF) | shiftedHash;
 
             // log it. this is incredibly useful to debug sceneId issues.
-            if (LogFilter.Debug) Debug.Log(name + " in scene=" + gameObject.scene.name + " scene index hash(" + pathHash.ToString("X") + ") copied into sceneId: " + m_SceneId.ToString("X"));
+            Debug.Log(name + " in scene=" + gameObject.scene.name + " scene index hash(" + pathHash.ToString("X") + ") copied into sceneId: " + m_SceneId.ToString("X"));
         }
 
         void SetupIDs()
@@ -811,8 +811,6 @@ namespace Mirror
             conn.AddToVisList(this);
         }
 
-        static readonly HashSet<NetworkConnection> newObservers = new HashSet<NetworkConnection>();
-
         public void RebuildObservers(bool initialize)
         {
             if (observers == null)
@@ -820,8 +818,8 @@ namespace Mirror
 
             bool changed = false;
             bool result = false;
-
-            newObservers.Clear();
+            HashSet<NetworkConnection> oldObservers = new HashSet<NetworkConnection>(observers.Values);
+            HashSet<NetworkConnection> newObservers = new HashSet<NetworkConnection>();
 
             // call OnRebuildObservers function in components
             foreach (NetworkBehaviour comp in NetworkBehaviours)
@@ -872,7 +870,7 @@ namespace Mirror
                     continue;
                 }
 
-                if (initialize || !observers.ContainsKey(conn.connectionId))
+                if (initialize || !oldObservers.Contains(conn))
                 {
                     // new observer
                     conn.AddToVisList(this);
@@ -881,7 +879,7 @@ namespace Mirror
                 }
             }
 
-            foreach (NetworkConnection conn in observers.Values)
+            foreach (NetworkConnection conn in oldObservers)
             {
                 if (!newObservers.Contains(conn))
                 {
@@ -903,12 +901,10 @@ namespace Mirror
 
             if (changed)
             {
-                observers.Clear();
-                foreach (NetworkConnection conn in newObservers)
-                {
-                    if (conn.isReady)
-                        observers.Add(conn.connectionId, conn);
-                }
+                observers =
+                    newObservers.
+                    Where(conn => conn.isReady).
+                    ToDictionary(conn => conn.connectionId, conn => conn);
             }
         }
 
@@ -1043,9 +1039,7 @@ namespace Mirror
             {
                 // populate cached UpdateVarsMessage and send
                 varsMessage.netId = netId;
-                // segment to avoid reader allocations.
-                // (never null because of our above check)
-                varsMessage.payload = new ArraySegment<byte>(payload);
+                varsMessage.payload = payload;
                 NetworkServer.SendToReady(this, varsMessage);
             }
         }
