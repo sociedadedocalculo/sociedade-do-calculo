@@ -73,4 +73,10 @@ public partial struct Buff
     }
 }
 
-public class SyncListBuff : SyncList<Buff> { }
+public class SyncListBuff : SyncList<Buff>
+{
+    internal int Sum(Func<object, object> p)
+    {
+        throw new NotImplementedException();
+    }
+}

@@ -1,7 +1,7 @@
 Mirror is a MMO Scale Networking library for Unity, used in uMMORPG, uSurvival
 and several MMO projects in development.
 
-*** IMPORTANT -- You must restart Unity after importing Mirror for the Components Menu to update! ***
+  https://github.com/vis2k/Mirror
 
 Documentation:
   https://vis2k.github.io/Mirror/

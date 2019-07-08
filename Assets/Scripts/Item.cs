@@ -30,7 +30,7 @@ public partial struct Item
     {
         hash = data.name.GetStableHashCode();
         petSummoned = null;
-        petHealth = data is PetItem ? ((PetItem)data).petPrefab.healthMax : 0;
+        petHealth = data is PetItem ? ((PetItem)data).petPrefab.HealthMax : 0;
         petLevel = data is PetItem ? 1 : 0;
         petExperience = 0;
     }

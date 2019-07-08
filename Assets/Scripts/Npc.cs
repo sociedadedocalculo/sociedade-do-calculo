@@ -50,7 +50,7 @@ public partial class Npc : Entity
         base.OnStartServer();
 
         // all npcs should spawn with full health and mana
-        health = healthMax;
+        health = HealthMax;
         mana = manaMax;
 
         // addon system hooks

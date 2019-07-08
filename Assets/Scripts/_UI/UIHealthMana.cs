@@ -16,7 +16,7 @@ public partial class UIHealthMana : MonoBehaviour
         if (!player) return;
 
         healthSlider.value = player.HealthPercent();
-        healthStatus.text = player.health + " / " + player.healthMax;
+        healthStatus.text = player.health + " / " + player.HealthMax;
 
         manaSlider.value = player.ManaPercent();
         manaStatus.text = player.mana + " / " + player.manaMax;

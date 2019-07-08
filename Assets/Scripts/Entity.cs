@@ -71,7 +71,7 @@ public abstract partial class Entity : NetworkBehaviour
 
     [Header("Health")]
     [SerializeField] protected LinearInt _healthMax = new LinearInt { baseValue = 100 };
-    public virtual int healthMax
+    public virtual int HealthMax
     {
         get
         {
@@ -87,8 +87,8 @@ public abstract partial class Entity : NetworkBehaviour
     [SyncVar] int _health = 1;
     public int health
     {
-        get { return Mathf.Min(_health, healthMax); } // min in case hp>hpmax after buff ends etc.
-        set { _health = Mathf.Clamp(value, 0, healthMax); }
+        get { return Mathf.Min(_health, HealthMax); } // min in case hp>hpmax after buff ends etc.
+        set { _health = Mathf.Clamp(value, 0, HealthMax); }
     }
 
     public bool healthRecovery = true; // can be disabled in combat etc.
@@ -102,7 +102,7 @@ public abstract partial class Entity : NetworkBehaviour
                                     where skill.level > 0 && skill.data is PassiveSkill
                                     select ((PassiveSkill)skill.data).bonusHealthPercentPerSecond.Get(skill.level)).Sum();
             float buffPercent = buffs.Sum(buff => buff.bonusHealthPercentPerSecond);
-            return _healthRecoveryRate.Get(level) + Convert.ToInt32(passivePercent * healthMax) + Convert.ToInt32(buffPercent * healthMax);
+            return _healthRecoveryRate.Get(level) + Convert.ToInt32(passivePercent * HealthMax) + Convert.ToInt32(buffPercent * HealthMax);
         }
     }
 
@@ -408,13 +408,13 @@ public abstract partial class Entity : NetworkBehaviour
     // health & mana ///////////////////////////////////////////////////////////
     public float HealthPercent()
     {
-        return (health != 0 && healthMax != 0) ? (float)health / (float)healthMax : 0;
+        return (health != 0 && HealthMax != 0) ? (float)health / (float)HealthMax : 0;
     }
 
     [Server]
     public void Revive(float healthPercentage = 1)
     {
-        health = Mathf.RoundToInt(healthMax * healthPercentage);
+        health = Mathf.RoundToInt(HealthMax * healthPercentage);
     }
 
     public float ManaPercent()

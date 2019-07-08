@@ -84,7 +84,7 @@ public partial class Player : Entity
     public static Player localPlayer;
 
     // health
-    public override int healthMax
+    public override int HealthMax
     {
         get
         {
@@ -97,7 +97,7 @@ public partial class Player : Entity
             int attributeBonus = Convert.ToInt32(_healthMax.Get(level) * (strength * 0.01f));
 
             // base (health + buff) + equip + attributes
-            return base.healthMax + equipmentBonus + attributeBonus;
+            return base.HealthMax + equipmentBonus + attributeBonus;
         }
     }
 

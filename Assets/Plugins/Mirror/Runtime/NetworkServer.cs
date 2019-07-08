@@ -836,21 +836,6 @@ namespace Mirror
 
             if (LogFilter.Debug) Debug.Log("Server SendSpawnMessage: name=" + identity.name + " sceneId=" + identity.sceneId.ToString("X") + " netid=" + identity.netId); // for easier debugging
 
-            NetworkWriter writer = NetworkWriterPool.GetWriter();
-           
-            
-
-            // convert to ArraySegment to avoid reader allocations
-            // (need to handle null case too)
-            ArraySegment<byte> segment = default;
-
-            // serialize all components with initialState = true
-            // (can be null if has none)
-            if (identity.OnSerializeAllSafely(true, writer))
-            {
-                segment = writer.ToArraySegment();
-            }
-
             // 'identity' is a prefab that should be spawned
             if (identity.sceneId == 0)
             {
@@ -863,7 +848,9 @@ namespace Mirror
                     position = identity.transform.localPosition,
                     rotation = identity.transform.localRotation,
                     scale = identity.transform.localScale,
-                    payload = segment
+
+                    // serialize all components with initialState = true
+                    payload = identity.OnSerializeAllSafely(true)
                 };
 
                 // conn is != null when spawning it for a client
@@ -889,7 +876,9 @@ namespace Mirror
                     position = identity.transform.localPosition,
                     rotation = identity.transform.localRotation,
                     scale = identity.transform.localScale,
-                    payload = segment
+
+                    // include synch data
+                    payload = identity.OnSerializeAllSafely(true)
                 };
 
                 // conn is != null when spawning it for a client
@@ -903,8 +892,6 @@ namespace Mirror
                     SendToReady(identity, msg);
                 }
             }
-
-            NetworkWriterPool.Recycle(writer);
         }
 
         public static void DestroyPlayerForConnection(NetworkConnection conn)

@@ -107,15 +107,8 @@ namespace Mirror.Weaver
         public static void WriteCreateWriter(ILProcessor worker)
         {
             // create writer
-            worker.Append(worker.Create(OpCodes.Call, Weaver.GetPooledWriterReference));
+            worker.Append(worker.Create(OpCodes.Newobj, Weaver.NetworkWriterCtor));
             worker.Append(worker.Create(OpCodes.Stloc_0));
-        }
-
-        public static void WriteRecycleWriter(ILProcessor worker)
-        {
-            // NetworkWriterPool.Recycle(writer);
-            worker.Append(worker.Create(OpCodes.Ldloc_0));
-            worker.Append(worker.Create(OpCodes.Call, Weaver.RecycleWriterReference));
         }
 
         public static bool WriteArguments(ILProcessor worker, MethodDefinition md, bool skipFirst)
@@ -606,7 +599,7 @@ namespace Mirror.Weaver
             netBehaviourSubclass.Methods.Add(serialize);
         }
 
-        public static bool ProcessNetworkReaderParameters(MethodDefinition md, ILProcessor worker, bool skipFirst)
+        public static bool ProcessNetworkReaderParameters(TypeDefinition td, MethodDefinition md, ILProcessor worker, bool skipFirst)
         {
             int count = 0;
 
@@ -649,7 +642,7 @@ namespace Mirror.Weaver
             collection.Add(new ParameterDefinition("reader", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.NetworkReaderType)));
         }
 
-        public static bool ProcessMethodsValidateFunction(MethodReference md)
+        public static bool ProcessMethodsValidateFunction(TypeDefinition td, MethodReference md, string actionType)
         {
             if (md.ReturnType.FullName == Weaver.IEnumeratorType.FullName)
             {
@@ -669,7 +662,7 @@ namespace Mirror.Weaver
             return true;
         }
 
-        public static bool ProcessMethodsValidateParameters(MethodReference md, CustomAttribute ca)
+        public static bool ProcessMethodsValidateParameters(TypeDefinition td, MethodReference md, CustomAttribute ca, string actionType)
         {
             for (int i = 0; i < md.Parameters.Count; ++i)
             {
@@ -773,7 +766,7 @@ namespace Mirror.Weaver
 
         void ProcessClientRpc(HashSet<string> names, MethodDefinition md, CustomAttribute ca)
         {
-            if (!RpcProcessor.ProcessMethodsValidateRpc(md, ca))
+            if (!RpcProcessor.ProcessMethodsValidateRpc(netBehaviourSubclass, md, ca))
             {
                 return;
             }
@@ -802,7 +795,7 @@ namespace Mirror.Weaver
 
         void ProcessTargetRpc(HashSet<string> names, MethodDefinition md, CustomAttribute ca)
         {
-            if (!TargetRpcProcessor.ProcessMethodsValidateTargetRpc(md, ca))
+            if (!TargetRpcProcessor.ProcessMethodsValidateTargetRpc(netBehaviourSubclass, md, ca))
                 return;
 
             if (names.Contains(md.Name))
@@ -829,7 +822,7 @@ namespace Mirror.Weaver
 
         void ProcessCommand(HashSet<string> names, MethodDefinition md, CustomAttribute ca)
         {
-            if (!CommandProcessor.ProcessMethodsValidateCommand(md, ca))
+            if (!CommandProcessor.ProcessMethodsValidateCommand(netBehaviourSubclass, md, ca))
                 return;
 
             if (names.Contains(md.Name))

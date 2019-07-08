@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
@@ -5,7 +6,7 @@ using Mono.CecilX.Cil;
 namespace Mirror.Weaver
 {
 
-    public static class Writers
+    public class Writers
     {
         const int MaxRecursionCount = 128;
 
@@ -48,7 +49,7 @@ namespace Mirror.Weaver
                 { Weaver.NetworkIdentityType.FullName, Resolvers.ResolveMethodWithArg(networkWriterType, CurrentAssembly, "Write", Weaver.NetworkIdentityType) },
                 { Weaver.transformType.FullName, Resolvers.ResolveMethodWithArg(networkWriterType, CurrentAssembly, "Write", Weaver.transformType) },
                 { "System.Byte[]", Resolvers.ResolveMethodWithArg(networkWriterType, CurrentAssembly, "WriteBytesAndSize", "System.Byte[]") },
-                { "System.ArraySegment`1<System.Byte>", Resolvers.ResolveMethodWithArg(networkWriterType, CurrentAssembly, "WriteBytesAndSizeSegment", "System.ArraySegment`1<System.Byte>") }
+                { "System.ArraySegment`1<System.Byte>", Resolvers.ResolveMethodWithArg(networkWriterType, CurrentAssembly, "WriteBytesSegment", "System.ArraySegment`1<System.Byte>") }
             };
         }
 
@@ -213,38 +214,36 @@ namespace Mirror.Weaver
             writerFunc.Parameters.Add(new ParameterDefinition("writer", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.NetworkWriterType)));
             writerFunc.Parameters.Add(new ParameterDefinition("value", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(variable)));
 
-            writerFunc.Body.Variables.Add(new VariableDefinition(Weaver.int32Type));
-            writerFunc.Body.Variables.Add(new VariableDefinition(Weaver.int32Type));
+            writerFunc.Body.Variables.Add(new VariableDefinition(Weaver.uint16Type));
+            writerFunc.Body.Variables.Add(new VariableDefinition(Weaver.uint16Type));
             writerFunc.Body.InitLocals = true;
 
             ILProcessor worker = writerFunc.Body.GetILProcessor();
 
-            // if (value == null)
-            // {
-            //     writer.WritePackedInt32(-1);
-            //     return;
-            // }
+            // null check
             Instruction labelNull = worker.Create(OpCodes.Nop);
             worker.Append(worker.Create(OpCodes.Ldarg_1));
             worker.Append(worker.Create(OpCodes.Brtrue, labelNull));
 
             worker.Append(worker.Create(OpCodes.Ldarg_0));
-            worker.Append(worker.Create(OpCodes.Ldc_I4_M1));
-            worker.Append(worker.Create(OpCodes.Call, Weaver.NetworkWriterWritePackedInt32));
+            worker.Append(worker.Create(OpCodes.Ldc_I4_0));
+            worker.Append(worker.Create(OpCodes.Call, Weaver.NetworkWriteUInt16));
             worker.Append(worker.Create(OpCodes.Ret));
 
-            // int length = value.Length;
+            // setup array length local variable
             worker.Append(labelNull);
             worker.Append(worker.Create(OpCodes.Ldarg_1));
             worker.Append(worker.Create(OpCodes.Ldlen));
+            worker.Append(worker.Create(OpCodes.Conv_I4));
+            worker.Append(worker.Create(OpCodes.Conv_U2));
             worker.Append(worker.Create(OpCodes.Stloc_0));
 
-            // writer.WritePackedInt32(length);
+            //write length
             worker.Append(worker.Create(OpCodes.Ldarg_0));
             worker.Append(worker.Create(OpCodes.Ldloc_0));
-            worker.Append(worker.Create(OpCodes.Call, Weaver.NetworkWriterWritePackedInt32));
+            worker.Append(worker.Create(OpCodes.Call, Weaver.NetworkWriteUInt16));
 
-            // for (int i=0; i< value.length; i++) {
+            // start loop
             worker.Append(worker.Create(OpCodes.Ldc_I4_0));
             worker.Append(worker.Create(OpCodes.Stloc_1));
             Instruction labelHead = worker.Create(OpCodes.Nop);
@@ -253,22 +252,19 @@ namespace Mirror.Weaver
             // loop body
             Instruction labelBody = worker.Create(OpCodes.Nop);
             worker.Append(labelBody);
-            // writer.Write(value[i]);
             worker.Append(worker.Create(OpCodes.Ldarg_0));
             worker.Append(worker.Create(OpCodes.Ldarg_1));
             worker.Append(worker.Create(OpCodes.Ldloc_1));
             worker.Append(worker.Create(OpCodes.Ldelema, variable.GetElementType()));
             worker.Append(worker.Create(OpCodes.Ldobj, variable.GetElementType()));
             worker.Append(worker.Create(OpCodes.Call, elementWriteFunc));
-
-
             worker.Append(worker.Create(OpCodes.Ldloc_1));
             worker.Append(worker.Create(OpCodes.Ldc_I4_1));
             worker.Append(worker.Create(OpCodes.Add));
+            worker.Append(worker.Create(OpCodes.Conv_U2));
             worker.Append(worker.Create(OpCodes.Stloc_1));
 
-
-            // end for loop
+            // loop while check
             worker.Append(labelHead);
             worker.Append(worker.Create(OpCodes.Ldloc_1));
             worker.Append(worker.Create(OpCodes.Ldarg_1));
@@ -276,7 +272,6 @@ namespace Mirror.Weaver
             worker.Append(worker.Create(OpCodes.Conv_I4));
             worker.Append(worker.Create(OpCodes.Blt, labelBody));
 
-            // return
             worker.Append(worker.Create(OpCodes.Ret));
             return writerFunc;
         }
