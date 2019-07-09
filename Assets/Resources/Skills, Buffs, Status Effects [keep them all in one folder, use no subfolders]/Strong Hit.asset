@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -36,32 +37,33 @@ MonoBehaviour:
   cancelCastIfTargetDied: 1
   predecessor: {fileID: 0}
   predecessorLevel: 1
-  requiresWeapon: 1
+  requiredWeaponCategory: WeaponSword
   requiredLevel:
-    baseValue: 2
     bonusPerLevel: 1
+    baseValue: 2
   requiredSkillExperience:
-    baseValue: 5
     bonusPerLevel: 5
+    baseValue: 5
   maxLevel: 4
   manaCosts:
-    baseValue: 5
     bonusPerLevel: 1
+    baseValue: 5
   castTime:
+    bonusPerLevel: 0
     baseValue: 2.133
-    bonusPerLevel: 0
   cooldown:
+    bonusPerLevel: 0
     baseValue: 4
-    bonusPerLevel: 0
   castRange:
+    bonusPerLevel: 0
     baseValue: 2.3
-    bonusPerLevel: 0
+  castSound: {fileID: 0}
   damage:
-    baseValue: 25
     bonusPerLevel: 5
+    baseValue: 25
   stunChance:
+    bonusPerLevel: 0
     baseValue: 1
-    bonusPerLevel: 0
   stunTime:
-    baseValue: 2
     bonusPerLevel: 0
+    baseValue: 2

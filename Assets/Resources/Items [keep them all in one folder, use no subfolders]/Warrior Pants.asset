@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -45,6 +46,7 @@ MonoBehaviour:
     <i>Sells for: {SELLPRICE} Gold</i>'
   image: {fileID: 21300000, guid: 8491b9590cc2940219517b1b0d87529c, type: 3}
   minLevel: 1
+  cooldownBuff: {fileID: 0}
   category: Legs
   healthBonus: 0
   manaBonus: 0
@@ -53,4 +55,4 @@ MonoBehaviour:
   blockChanceBonus: 0
   criticalChanceBonus: 0
   modelPrefab: {fileID: 1368792768511332, guid: 2c1f84257b39648c088731e398bd25d2,
-    type: 2}
+    type: 3}

@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -28,53 +29,58 @@ MonoBehaviour:
   showCastBar: 0
   cancelCastIfTargetDied: 0
   predecessor: {fileID: 0}
-  requiresWeapon: 0
+  predecessorLevel: 1
+  requiredWeaponCategory: 
   requiredLevel:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   requiredSkillExperience:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   maxLevel: 1
   manaCosts:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   castTime:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   cooldown:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   castRange:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
+  castSound: {fileID: 0}
   bonusHealthMax:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   bonusManaMax:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   bonusDamage:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   bonusDefense:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   bonusBlockChance:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   bonusCriticalChance:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   bonusHealthPercentPerSecond:
+    bonusPerLevel: 0
     baseValue: -0.02
-    bonusPerLevel: 0
   bonusManaPercentPerSecond:
+    bonusPerLevel: 0
     baseValue: 0
+  bonusSpeed:
     bonusPerLevel: 0
+    baseValue: 0
   buffTime:
-    baseValue: 3600
     bonusPerLevel: 0
+    baseValue: 3600
   effect: {fileID: 0}
   canBuffSelf: 0
   canBuffOthers: 0

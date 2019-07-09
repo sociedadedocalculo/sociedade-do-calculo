@@ -3,19 +3,19 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48accaeb8682847f29f12fab972a2710, type: 3}
+  m_Script: {fileID: 11500000, guid: f653a8b1ca60b47409f833726aa10a69, type: 3}
   m_Name: Desert Cleaver
   m_EditorClassIdentifier: 
   maxStack: 1
   buyPrice: 10
   sellPrice: 5
   itemMallPrice: 1200
-  minLevel: 1
   sellable: 1
   tradable: 1
   destroyable: 1
@@ -41,6 +41,8 @@ MonoBehaviour:
 
     <i>Sells for: {SELLPRICE} Gold</i>'
   image: {fileID: 21300000, guid: 6240885ec6da7478b9c359712b5d3bda, type: 3}
+  minLevel: 1
+  cooldownBuff: {fileID: 0}
   category: WeaponSword
   healthBonus: 0
   manaBonus: 0
@@ -48,4 +50,5 @@ MonoBehaviour:
   defenseBonus: 0
   blockChanceBonus: 0
   criticalChanceBonus: 0
-  modelPrefab: {fileID: 188352, guid: 3b3f38e6c8f3c4452842f2b599acdd24, type: 2}
+  modelPrefab: {fileID: 188352, guid: 3b3f38e6c8f3c4452842f2b599acdd24, type: 3}
+  requiredAmmo: {fileID: 0}

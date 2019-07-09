@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -20,7 +21,7 @@ MonoBehaviour:
   destroyable: 1
   toolTip: '<b>{NAME}</b>
 
-    Restores some health.
+    Restores some Health.
 
 
     Restores {USAGEHEALTH} Health on use.
@@ -41,6 +42,7 @@ MonoBehaviour:
     <i>Sells for: {SELLPRICE} Gold</i>'
   image: {fileID: 21300000, guid: 07a54f0fd6b6f4f2bb63a7f654dbfeb5, type: 3}
   minLevel: 1
+  cooldownBuff: {fileID: 11400000, guid: 58b9f0dc3a41548cbbe4df5b9e5cbd22, type: 2}
   usageHealth: 20
   usageMana: 0
   usageExperience: 0

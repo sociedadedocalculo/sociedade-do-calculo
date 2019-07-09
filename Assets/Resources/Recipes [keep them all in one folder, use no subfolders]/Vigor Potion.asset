@@ -4,19 +4,27 @@
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab354a6a0e048234cafb7172cd4b4a11, type: 3}
+  m_Script: {fileID: 11500000, guid: e56c3572016bd405fbbd6a92834f581e, type: 3}
   m_Name: Vigor Potion
   m_EditorClassIdentifier: 
-  maxStack: 0
-  buyPrice: 0
-  sellPrice: 0
-  itemMallPrice: 0
-  sellable: 0
-  tradable: 0
-  destroyable: 0
-  toolTip: 
-  image: {fileID: 0}
+  ingredients:
+  - item: {fileID: 11400000, guid: ae0314505b06f4f1280aa735db1c70e8, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: 2608a09a88215491fbe878f632afe522, type: 2}
+    amount: 1
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  - item: {fileID: 0}
+    amount: 0
+  result: {fileID: 11400000, guid: 23bf22ba24d3447968ce8b813ab51fb4, type: 2}
+  craftingTime: 2
+  probability: 0.5

@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -25,53 +26,58 @@ MonoBehaviour:
   showCastBar: 0
   cancelCastIfTargetDied: 0
   predecessor: {fileID: 0}
-  requiresWeapon: 0
+  predecessorLevel: 1
+  requiredWeaponCategory: 
   requiredLevel:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   requiredSkillExperience:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   maxLevel: 1
   manaCosts:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   castTime:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   cooldown:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
   castRange:
-    baseValue: 0
     bonusPerLevel: 0
+    baseValue: 0
+  castSound: {fileID: 0}
+  bonusHealthMax:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusManaMax:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusDamage:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusDefense:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusBlockChance:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusCriticalChance:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusHealthPercentPerSecond:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusManaPercentPerSecond:
+    bonusPerLevel: 0
+    baseValue: 0
+  bonusSpeed:
+    bonusPerLevel: 0
+    baseValue: 0
   buffTime:
+    bonusPerLevel: 0
     baseValue: 60
-    bonusPerLevel: 0
-  buffsHealthMax:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsManaMax:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsDamage:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsDefense:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsBlockChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsCriticalChance:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsHealthPercentPerSecond:
-    baseValue: 0
-    bonusPerLevel: 0
-  buffsManaPercentPerSecond:
-    baseValue: 0
-    bonusPerLevel: 0
   effect: {fileID: 0}
   canBuffSelf: 0
   canBuffOthers: 0

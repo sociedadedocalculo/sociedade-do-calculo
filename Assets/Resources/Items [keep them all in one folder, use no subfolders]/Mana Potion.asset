@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -20,7 +21,7 @@ MonoBehaviour:
   destroyable: 1
   toolTip: '<b>{NAME}</b>
 
-    Restores some mana.
+    Restores some Mana.
 
 
     Restores {USAGEMANA} Mana on use.
@@ -41,6 +42,7 @@ MonoBehaviour:
     <i>Sells for: {SELLPRICE} Gold</i>'
   image: {fileID: 21300000, guid: 1614d37db5f264a82b4d3770a66f1501, type: 3}
   minLevel: 1
+  cooldownBuff: {fileID: 11400000, guid: 42687364833164a899350537f185eb8f, type: 2}
   usageHealth: 0
   usageMana: 20
   usageExperience: 0

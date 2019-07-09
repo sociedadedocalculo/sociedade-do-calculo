@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -36,35 +37,35 @@ MonoBehaviour:
   cancelCastIfTargetDied: 1
   predecessor: {fileID: 0}
   predecessorLevel: 1
-  requiresWeapon: 1
+  requiredWeaponCategory: WeaponBow
   requiredLevel:
-    baseValue: 1
     bonusPerLevel: 1
+    baseValue: 1
   requiredSkillExperience:
-    baseValue: 5
     bonusPerLevel: 5
+    baseValue: 5
   maxLevel: 4
   manaCosts:
-    baseValue: 5
     bonusPerLevel: 0
+    baseValue: 5
   castTime:
+    bonusPerLevel: 0
     baseValue: 1.867
-    bonusPerLevel: 0
   cooldown:
+    bonusPerLevel: 0
     baseValue: 5
-    bonusPerLevel: 0
   castRange:
-    baseValue: 15
     bonusPerLevel: 0
+    baseValue: 15
   castSound: {fileID: 0}
   damage:
-    baseValue: 15
     bonusPerLevel: 5
+    baseValue: 15
   stunChance:
+    bonusPerLevel: 0
     baseValue: 1
-    bonusPerLevel: 0
   stunTime:
-    baseValue: 2
     bonusPerLevel: 0
+    baseValue: 2
   projectile: {fileID: 114423741089805692, guid: 0f4948efce538432191cef46aef01d26,
-    type: 2}
+    type: 3}

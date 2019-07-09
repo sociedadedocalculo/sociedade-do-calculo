@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -31,32 +32,34 @@ MonoBehaviour:
   showCastBar: 1
   cancelCastIfTargetDied: 1
   predecessor: {fileID: 0}
-  requiresWeapon: 1
+  predecessorLevel: 1
+  requiredWeaponCategory: 
   requiredLevel:
-    baseValue: 2
     bonusPerLevel: 1
+    baseValue: 2
   requiredSkillExperience:
-    baseValue: 20
     bonusPerLevel: 20
+    baseValue: 20
   maxLevel: 2
   manaCosts:
-    baseValue: 5
     bonusPerLevel: 0
+    baseValue: 5
   castTime:
+    bonusPerLevel: 0
     baseValue: 0.5
-    bonusPerLevel: 0
   cooldown:
+    bonusPerLevel: 0
     baseValue: 60
-    bonusPerLevel: 0
   castRange:
+    bonusPerLevel: 0
     baseValue: 5
-    bonusPerLevel: 0
+  castSound: {fileID: 0}
   healsHealth:
+    bonusPerLevel: 0
     baseValue: 20
-    bonusPerLevel: 0
   healsMana:
-    baseValue: 0
     bonusPerLevel: 0
-  effect: {fileID: 114038526120822526, guid: 09a383191462944fbabc9965a1fd8c2b, type: 2}
+    baseValue: 0
+  effect: {fileID: 114038526120822526, guid: 09a383191462944fbabc9965a1fd8c2b, type: 3}
   canHealSelf: 1
   canHealOthers: 1
