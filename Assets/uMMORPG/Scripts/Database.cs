@@ -698,7 +698,7 @@ public partial class Database : MonoBehaviour
             //       NetworkTime.time is 0 then.
             ExecuteNonQuery("INSERT INTO character_buffs VALUES (@character, @name, @level, @buffTimeEnd)",
                             new SqliteParameter("@character", player.name),
-                            new SqliteParameter("@name", buff.name),
+                            new SqliteParameter("@name", buff.Name),
                             new SqliteParameter("@level", buff.level),
                             new SqliteParameter("@buffTimeEnd", buff.BuffTimeRemaining()));
     }

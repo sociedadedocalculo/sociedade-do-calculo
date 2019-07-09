@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 [RequireComponent(typeof(Animator))]
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
 public class Mount : NetworkBehaviour
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 {
 	[Header("Mount Stuff")]
 	[HideInInspector]
@@ -18,8 +20,9 @@ public class Mount : NetworkBehaviour
 	public Collider collision;
 	[SerializeField]
 	public GameObject seat;
+    private bool isClient;
 
-	void LateUpdate()
+    void LateUpdate()
 	{
 		if (isClient && owner)
 		{ // no need for animations on the server

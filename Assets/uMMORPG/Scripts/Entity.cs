@@ -547,7 +547,7 @@ public abstract partial class Entity : NetworkBehaviour
     // helper function to find a buff index
     public int GetBuffIndexByName(string buffName)
     {
-        return buffs.FindIndex(buff => buff.name == buffName);
+        return buffs.FindIndex(buff => buff.Name == buffName);
     }
 
     // we need a function to check if an entity can attack another.
@@ -638,7 +638,7 @@ public abstract partial class Entity : NetworkBehaviour
     public void AddOrRefreshBuff(Buff buff)
     {
         // reset if already in buffs list, otherwise add
-        int index = buffs.FindIndex(b => b.name == buff.name);
+        int index = buffs.FindIndex(b => b.Name == buff.Name);
         if (index != -1) buffs[index] = buff;
         else buffs.Add(buff);
     }

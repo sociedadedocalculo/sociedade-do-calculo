@@ -21,8 +21,9 @@ public partial struct Buff
     public Buff(BuffSkill data, int level)
     {
         hash = data.name.GetStableHashCode();
+        Data = data;
         this.level = level;
-        buffTimeEnd = NetworkTime.time + data.buffTime.Get(level); // start buff immediately
+        buffTimeEnd = NetworkTime.time + data.buffTime.GetType(level); // start buff immediately
     }
 
     // wrappers for easier access
@@ -39,8 +40,8 @@ public partial struct Buff
             return (BuffSkill)ScriptableSkill.dict[hash];
         }
     }
-    public string name => data.name;
-    public Sprite image => data.image;
+    public string Name => data.name;
+    public Sprite Image => data.image;
     public float buffTime => data.buffTime.Get(level);
     public int bonusHealthMax => data.bonusHealthMax.Get(level);
     public int bonusManaMax => data.bonusManaMax.Get(level);
@@ -52,6 +53,8 @@ public partial struct Buff
     public float bonusManaPercentPerSecond => data.bonusManaPercentPerSecond.Get(level);
     public float bonusSpeed => data.bonusSpeed.Get(level);
     public int maxLevel => data.maxLevel;
+
+    public BuffSkill Data { get; }
 
     // tooltip - runtime part
     public string ToolTip()
@@ -70,6 +73,17 @@ public partial struct Buff
     {
         // how much time remaining until the buff ends? (using server time)
         return NetworkTime.time >= buffTimeEnd ? 0 : (float)(buffTimeEnd - NetworkTime.time);
+    }
+}
+
+public class BuffSkill
+{
+    internal object name;
+    internal object buffTime;
+
+    public static explicit operator BuffSkill(ScriptableSkill v)
+    {
+        throw new NotImplementedException();
     }
 }
 

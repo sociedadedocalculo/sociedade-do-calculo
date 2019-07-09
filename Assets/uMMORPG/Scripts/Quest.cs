@@ -89,4 +89,30 @@ public partial struct Quest
     }
 }
 
-public class SyncListQuest : SyncList<Quest> {}
+public class SyncListQuest : SyncList<Quest>
+{
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
+
+    protected override Quest DeserializeItem(NetworkReader reader)
+    {
+        return base.DeserializeItem(reader);
+    }
+
+    protected override void SerializeItem(NetworkWriter writer, Quest item)
+    {
+        base.SerializeItem(writer, item);
+    }
+}

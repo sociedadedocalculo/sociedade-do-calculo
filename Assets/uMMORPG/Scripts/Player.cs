@@ -2618,12 +2618,12 @@ public partial class Player : Entity
     // that we need here.
     public bool IsOffender()
     {
-        return offenderBuff != null && buffs.Any(buff => buff.name == offenderBuff.name);
+        return offenderBuff != null && buffs.Any(buff => buff.Name == offenderBuff.name);
     }
 
     public bool IsMurderer()
     {
-        return murdererBuff != null && buffs.Any(buff => buff.name == murdererBuff.name);
+        return murdererBuff != null && buffs.Any(buff => buff.Name == murdererBuff.name);
     }
 
     public void StartOffender()

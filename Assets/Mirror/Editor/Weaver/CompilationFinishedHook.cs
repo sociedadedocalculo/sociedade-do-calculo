@@ -39,7 +39,11 @@ namespace Mirror.Weaver
         // error message handler that also calls OnErrorMethod delegate
         static void HandleError(string msg)
         {
-            if (UnityLogEnabled) Debug.LogError(msg);
+            if (UnityLogEnabled)
+            {
+                Debug.LogError(msg);
+            }
+
             if (OnWeaverError != null) OnWeaverError.Invoke(msg);
         }
 
