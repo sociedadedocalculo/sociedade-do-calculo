@@ -83,7 +83,7 @@ public partial class Monster : Entity
         base.OnStartServer();
 
         // all monsters should spawn with full health and mana
-        health = healthMax;
+        health = HealthMax;
         mana = manaMax;
 
         // load skills based on skill templates

@@ -35,7 +35,7 @@ public partial class UICharacterInfo : MonoBehaviour
         {
             damageText.text = player.damage.ToString();
             defenseText.text = player.defense.ToString();
-            healthText.text = player.healthMax.ToString();
+            healthText.text = player.HealthMax.ToString();
             manaText.text = player.manaMax.ToString();
             speedText.text = player.speed.ToString();
             levelText.text = player.level.ToString();
