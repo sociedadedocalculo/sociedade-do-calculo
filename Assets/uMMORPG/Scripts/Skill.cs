@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Skill
@@ -120,4 +121,36 @@ public partial struct Skill
     public bool IsReady() => !IsCasting() && !IsOnCooldown();
 }
 
-public class SyncListSkill : SyncList<Skill> {}
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+public class SyncListSkill : SyncList<Skill>
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+{
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
+
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+    protected override Skill DeserializeItem(UnityEngine.Networking.NetworkReader reader)
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+    {
+        throw new NotImplementedException();
+    }
+
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+    protected override void SerializeItem(UnityEngine.Networking.NetworkWriter writer, Skill item)
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+    {
+        throw new NotImplementedException();
+    }
+}

@@ -3,6 +3,7 @@
 // (summonables are entities that belong to the player, like pets and mounts)
 using UnityEngine;
 using Mirror;
+using System;
 
 public abstract class SummonableItem : UsableItem
 {
@@ -36,5 +37,13 @@ public abstract class SummonableItem : UsableItem
 
         // set risky action time (1s should be okay)
         player.nextRiskyActionTime = NetworkTime.time + 1;
+    }
+}
+
+public class UsableItem
+{
+    internal bool CanUse(Player player, int inventoryIndex)
+    {
+        throw new NotImplementedException();
     }
 }

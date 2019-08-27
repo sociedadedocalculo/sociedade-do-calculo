@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Buff
@@ -87,4 +88,32 @@ public class BuffSkill
     }
 }
 
-public class SyncListBuff : SyncList<Buff> {}
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+public class SyncListBuff : SyncList<Buff>
+{
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return base.ToString();
+    }
+
+    protected override Buff DeserializeItem(UnityEngine.Networking.NetworkReader reader)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void SerializeItem(UnityEngine.Networking.NetworkWriter writer, Buff item)
+    {
+        throw new NotImplementedException();
+    }
+}
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto

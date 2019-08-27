@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Mirror;
+using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Quest
@@ -89,7 +90,9 @@ public partial struct Quest
     }
 }
 
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
 public class SyncListQuest : SyncList<Quest>
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 {
     public override bool Equals(object obj)
     {
@@ -106,13 +109,27 @@ public class SyncListQuest : SyncList<Quest>
         return base.ToString();
     }
 
-    protected override Quest DeserializeItem(NetworkReader reader)
+    protected override Quest DeserializeItem(Mirror.NetworkReader reader)
     {
         return base.DeserializeItem(reader);
     }
 
-    protected override void SerializeItem(NetworkWriter writer, Quest item)
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+    protected override Quest DeserializeItem(UnityEngine.Networking.NetworkReader reader)
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void SerializeItem(Mirror.NetworkWriter writer, Quest item)
     {
         base.SerializeItem(writer, item);
+    }
+
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+    protected override void SerializeItem(UnityEngine.Networking.NetworkWriter writer, Quest item)
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+    {
+        throw new NotImplementedException();
     }
 }

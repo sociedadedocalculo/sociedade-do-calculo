@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using UnityEngine;
 
 [CreateAssetMenu(menuName="uMMORPG Item/Weapon", order=999)]
@@ -12,7 +13,20 @@ public class WeaponItem : EquipmentItem
     {
         StringBuilder tip = new StringBuilder(base.ToolTip());
         if (requiredAmmo != null)
-            tip.Replace("{REQUIREDAMMO}", requiredAmmo.name);
+        {
+            const string V = "{REQUIREDAMMO}";
+            const string v = V;
+            tip.Replace(v, requiredAmmo.name);
+        }
+
         return tip.ToString();
+    }
+}
+
+public class EquipmentItem
+{
+    internal int ToolTip()
+    {
+        throw new NotImplementedException();
     }
 }
