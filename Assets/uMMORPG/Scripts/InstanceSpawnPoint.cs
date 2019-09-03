@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class InstanceSpawnPoint : MonoBehaviour
 {
-	public NetworkIdentity prefab;
+    public NetworkIdentity prefab;
 }

@@ -37,7 +37,7 @@ public partial class Mount : Summonable
         Utils.InvokeMany(typeof(Mount), this, "Start_");
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
         // pass parameters to animation state machine
         // => passing the states directly is the most reliable way to avoid all
@@ -135,7 +135,7 @@ public partial class Mount : Summonable
             OnDeath();
             return "DEAD";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
 
         return "IDLE"; // nothing interesting happened
     }
@@ -157,8 +157,8 @@ public partial class Mount : Summonable
             NetworkServer.Destroy(gameObject);
             return "DEAD";
         }
-        if (EventOwnerDied()) {} // don't care
-        if (EventDied()) {} // don't care, of course we are dead
+        if (EventOwnerDied()) { } // don't care
+        if (EventDied()) { } // don't care, of course we are dead
 
         return "DEAD"; // nothing interesting happened
     }
@@ -166,8 +166,8 @@ public partial class Mount : Summonable
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE")    return UpdateServer_IDLE();
-        if (state == "DEAD")    return UpdateServer_DEAD();
+        if (state == "IDLE") return UpdateServer_IDLE();
+        if (state == "DEAD") return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
     }

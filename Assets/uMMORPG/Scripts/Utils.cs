@@ -22,19 +22,31 @@ public class Utils
     // is any of the keys UP?
     public static bool AnyKeyUp(KeyCode[] keys)
     {
-        return keys.Any(k => Input.GetKeyUp(k));
+        // avoid Linq.Any because it is HEAVY(!) on GC and performance
+        foreach (KeyCode key in keys)
+            if (Input.GetKeyUp(key))
+                return true;
+        return false;
     }
 
     // is any of the keys DOWN?
     public static bool AnyKeyDown(KeyCode[] keys)
     {
-        return keys.Any(k => Input.GetKeyDown(k));
+        // avoid Linq.Any because it is HEAVY(!) on GC and performance
+        foreach (KeyCode key in keys)
+            if (Input.GetKeyDown(key))
+                return true;
+        return false;
     }
 
     // is any of the keys PRESSED?
     public static bool AnyKeyPressed(KeyCode[] keys)
     {
-        return keys.Any(k => Input.GetKey(k));
+        // avoid Linq.Any because it is HEAVY(!) on GC and performance
+        foreach (KeyCode key in keys)
+            if (Input.GetKey(key))
+                return true;
+        return false;
     }
 
     // Distance between two ClosestPoints
@@ -140,7 +152,7 @@ public class Utils
     {
         float scroll = Input.GetAxisRaw("Mouse ScrollWheel");
         if (scroll < 0) return -1;
-        if (scroll > 0) return  1;
+        if (scroll > 0) return 1;
         return 0;
     }
 
@@ -184,7 +196,7 @@ public class Utils
     public static string ParseLastNoun(string text)
     {
         MatchCollection matches = new Regex(@"([A-Z][a-z]*)").Matches(text);
-        return matches.Count > 0 ? matches[matches.Count-1].Value : "";
+        return matches.Count > 0 ? matches[matches.Count - 1].Value : "";
     }
 
     // check if the cursor is over a UI or OnGUI element right now
@@ -219,10 +231,10 @@ public class Utils
     // invoke multiple functions by prefix via reflection.
     // -> works for static classes too if object = null
     // -> cache it so it's fast enough for Update calls
-    static Dictionary<KeyValuePair<Type,string>, MethodInfo[]> lookup = new Dictionary<KeyValuePair<Type,string>, MethodInfo[]>();
+    static Dictionary<KeyValuePair<Type, string>, MethodInfo[]> lookup = new Dictionary<KeyValuePair<Type, string>, MethodInfo[]>();
     public static MethodInfo[] GetMethodsByPrefix(Type type, string methodPrefix)
     {
-        KeyValuePair<Type,string> key = new KeyValuePair<Type,string>(type, methodPrefix);
+        KeyValuePair<Type, string> key = new KeyValuePair<Type, string>(type, methodPrefix);
         if (!lookup.ContainsKey(key))
         {
             MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)
@@ -236,6 +248,6 @@ public class Utils
     public static void InvokeMany(Type type, object onObject, string methodPrefix, params object[] args)
     {
         foreach (MethodInfo method in GetMethodsByPrefix(type, methodPrefix))
-            method.Invoke(onObject, args.ToArray());
+            method.Invoke(onObject, args);
     }
 }

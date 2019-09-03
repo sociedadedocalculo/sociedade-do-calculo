@@ -24,13 +24,12 @@
 // enabled. So for now it's important to disable Interpolation - which is a good
 // idea in general to increase performance.
 using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Mirror;
 using TMPro;
 
-public enum DamageType : byte {Normal, Block, Crit};
+public enum DamageType : byte { Normal, Block, Crit };
 
 // note: no animator required, towers, dummies etc. may not have one
 [RequireComponent(typeof(Rigidbody))] // kinematic, only needed for OnTrigger
@@ -62,7 +61,7 @@ public abstract partial class Entity : NetworkBehaviour
     [SyncVar] GameObject _target;
     public Entity target
     {
-        get { return _target != null  ? _target.GetComponent<Entity>() : null; }
+        get { return _target != null ? _target.GetComponent<Entity>() : null; }
         set { _target = value != null ? value.gameObject : null; }
     }
 
@@ -70,16 +69,22 @@ public abstract partial class Entity : NetworkBehaviour
     [SyncVar] public int level = 1;
 
     [Header("Health")]
-    [SerializeField] protected LinearInt _healthMax = new LinearInt{baseValue=100};
+    [SerializeField] protected LinearInt _healthMax = new LinearInt { baseValue = 100 };
     public virtual int healthMax
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusHealthMax.Get(skill.level);
+
+            int buffBonus = 0;
+            for (int i = 0; i < buffs.Count; ++i)
+                buffBonus += buffs[i].bonusHealthMax;
+
             // base + passives + buffs
-            int passiveBonus = (from skill in skills
-                                where skill.level > 0 && skill.data is PassiveSkill
-                                select ((PassiveSkill)skill.data).bonusHealthMax.Get(skill.level)).Sum();
-            int buffBonus = buffs.Sum(buff => buff.bonusHealthMax);
             return _healthMax.Get(level) + passiveBonus + buffBonus;
         }
     }
@@ -92,31 +97,43 @@ public abstract partial class Entity : NetworkBehaviour
     }
 
     public bool healthRecovery = true; // can be disabled in combat etc.
-    [SerializeField] protected LinearInt _healthRecoveryRate = new LinearInt{baseValue=1};
+    [SerializeField] protected LinearInt _healthRecoveryRate = new LinearInt { baseValue = 1 };
     public virtual int healthRecoveryRate
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float passivePercent = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passivePercent += ((PassiveSkill)skill.data).bonusHealthPercentPerSecond.Get(skill.level);
+
+            float buffPercent = 0;
+            for (int i = 0; i < buffs.Count; ++i)
+                buffPercent += buffs[i].bonusHealthPercentPerSecond;
+
             // base + passives + buffs
-            float passivePercent = (from skill in skills
-                                    where skill.level > 0 && skill.data is PassiveSkill
-                                    select ((PassiveSkill)skill.data).bonusHealthPercentPerSecond.Get(skill.level)).Sum();
-            float buffPercent = buffs.Sum(buff => buff.bonusHealthPercentPerSecond);
             return _healthRecoveryRate.Get(level) + Convert.ToInt32(passivePercent * healthMax) + Convert.ToInt32(buffPercent * healthMax);
         }
     }
 
     [Header("Mana")]
-    [SerializeField] protected LinearInt _manaMax = new LinearInt{baseValue=100};
+    [SerializeField] protected LinearInt _manaMax = new LinearInt { baseValue = 100 };
     public virtual int manaMax
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusManaMax.Get(skill.level);
+
+            int buffBonus = 0;
+            for (int i = 0; i < buffs.Count; ++i)
+                buffBonus += buffs[i].bonusManaMax;
+
             // base + passives + buffs
-            int passiveBonus = (from skill in skills
-                                  where skill.level > 0 && skill.data is PassiveSkill
-                                  select ((PassiveSkill)skill.data).bonusManaMax.Get(skill.level)).Sum();
-            int buffBonus = buffs.Sum(buff => buff.bonusManaMax);
             return _manaMax.Get(level) + passiveBonus + buffBonus;
         }
     }
@@ -128,46 +145,64 @@ public abstract partial class Entity : NetworkBehaviour
     }
 
     public bool manaRecovery = true; // can be disabled in combat etc.
-    [SerializeField] protected LinearInt _manaRecoveryRate = new LinearInt{baseValue=1};
+    [SerializeField] protected LinearInt _manaRecoveryRate = new LinearInt { baseValue = 1 };
     public int manaRecoveryRate
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float passivePercent = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passivePercent += ((PassiveSkill)skill.data).bonusManaPercentPerSecond.Get(skill.level);
+
+            float buffPercent = 0;
+            foreach (Buff buff in buffs)
+                buffPercent += buff.bonusManaPercentPerSecond;
+
             // base + passives + buffs
-            float passivePercent = (from skill in skills
-                                    where skill.level > 0 && skill.data is PassiveSkill
-                                    select ((PassiveSkill)skill.data).bonusManaPercentPerSecond.Get(skill.level)).Sum();
-            float buffPercent = buffs.Sum(buff => buff.bonusManaPercentPerSecond);
             return _manaRecoveryRate.Get(level) + Convert.ToInt32(passivePercent * manaMax) + Convert.ToInt32(buffPercent * manaMax);
         }
     }
 
     [Header("Damage")]
-    [SerializeField] protected LinearInt _damage = new LinearInt{baseValue=1};
+    [SerializeField] protected LinearInt _damage = new LinearInt { baseValue = 1 };
     public virtual int damage
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusDamage.Get(skill.level);
+
+            int buffBonus = 0;
+            foreach (Buff buff in buffs)
+                buffBonus += buff.bonusDamage;
+
             // base + passives + buffs
-            int passiveBonus = (from skill in skills
-                                where skill.level > 0 && skill.data is PassiveSkill
-                                select ((PassiveSkill)skill.data).bonusDamage.Get(skill.level)).Sum();
-            int buffBonus = buffs.Sum(buff => buff.bonusDamage);
             return _damage.Get(level) + passiveBonus + buffBonus;
         }
     }
 
     [Header("Defense")]
-    [SerializeField] protected LinearInt _defense = new LinearInt{baseValue=1};
+    [SerializeField] protected LinearInt _defense = new LinearInt { baseValue = 1 };
     public virtual int defense
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusDefense.Get(skill.level);
+
+            int buffBonus = 0;
+            foreach (Buff buff in buffs)
+                buffBonus += buff.bonusDefense;
+
             // base + passives + buffs
-            int passiveBonus = (from skill in skills
-                                where skill.level > 0 && skill.data is PassiveSkill
-                                select ((PassiveSkill)skill.data).bonusDefense.Get(skill.level)).Sum();
-            int buffBonus = buffs.Sum(buff => buff.bonusDefense);
             return _defense.Get(level) + passiveBonus + buffBonus;
         }
     }
@@ -178,11 +213,17 @@ public abstract partial class Entity : NetworkBehaviour
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusBlockChance.Get(skill.level);
+
+            float buffBonus = 0;
+            foreach (Buff buff in buffs)
+                buffBonus += buff.bonusBlockChance;
+
             // base + passives + buffs
-            float passiveBonus = (from skill in skills
-                                  where skill.level > 0 && skill.data is PassiveSkill
-                                  select ((PassiveSkill)skill.data).bonusBlockChance.Get(skill.level)).Sum();
-            float buffBonus = buffs.Sum(buff => buff.bonusBlockChance);
             return _blockChance.Get(level) + passiveBonus + buffBonus;
         }
     }
@@ -193,26 +234,38 @@ public abstract partial class Entity : NetworkBehaviour
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusCriticalChance.Get(skill.level);
+
+            float buffBonus = 0;
+            foreach (Buff buff in buffs)
+                buffBonus += buff.bonusCriticalChance;
+
             // base + passives + buffs
-            float passiveBonus = (from skill in skills
-                                  where skill.level > 0 && skill.data is PassiveSkill
-                                  select ((PassiveSkill)skill.data).bonusCriticalChance.Get(skill.level)).Sum();
-            float buffBonus = buffs.Sum(buff => buff.bonusCriticalChance);
             return _criticalChance.Get(level) + passiveBonus + buffBonus;
         }
     }
 
     [Header("Speed")]
-    [SerializeField] protected LinearFloat _speed = new LinearFloat{baseValue=5};
+    [SerializeField] protected LinearFloat _speed = new LinearFloat { baseValue = 5 };
     public virtual float speed
     {
         get
         {
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float passiveBonus = 0;
+            foreach (Skill skill in skills)
+                if (skill.level > 0 && skill.data is PassiveSkill)
+                    passiveBonus += ((PassiveSkill)skill.data).bonusSpeed.Get(skill.level);
+
+            float buffBonus = 0;
+            foreach (Buff buff in buffs)
+                buffBonus += buff.bonusSpeed;
+
             // base + passives + buffs
-            float passiveBonus = (from skill in skills
-                                where skill.level > 0 && skill.data is PassiveSkill
-                                select ((PassiveSkill)skill.data).bonusSpeed.Get(skill.level)).Sum();
-            float buffBonus = buffs.Sum(buff => buff.bonusSpeed);
             return _speed.Get(level) + passiveBonus + buffBonus;
         }
     }
@@ -426,7 +479,7 @@ public abstract partial class Entity : NetworkBehaviour
     // deal damage at another entity
     // (can be overwritten for players etc. that need custom functionality)
     [Server]
-    public virtual void DealDamageAt(Entity entity, int amount, float stunChance=0, float stunTime=0)
+    public virtual void DealDamageAt(Entity entity, int amount, float stunChance = 0, float stunTime = 0)
     {
         int damageDealt = 0;
         DamageType damageType = DamageType.Normal;
@@ -479,8 +532,8 @@ public abstract partial class Entity : NetworkBehaviour
         lastCombatTime = NetworkTime.time;
         entity.lastCombatTime = NetworkTime.time;
 
-        // addon system hooks
-        Utils.InvokeMany(typeof(Entity), this, "DealDamageAt_", entity, amount);
+        // addon system hooks - pass anything that an addon might need here
+        Utils.InvokeMany(typeof(Entity), this, "DealDamageAt_", entity, amount, damageDealt, damageType);
     }
 
     // no need to instantiate damage popups on the server
@@ -535,19 +588,27 @@ public abstract partial class Entity : NetworkBehaviour
 
     // aggro ///////////////////////////////////////////////////////////////////
     // this function is called by the AggroArea (if any) on clients and server
-    public virtual void OnAggro(Entity entity) {}
+    public virtual void OnAggro(Entity entity) { }
 
     // skill system ////////////////////////////////////////////////////////////
     // helper function to find a skill index
     public int GetSkillIndexByName(string skillName)
     {
-        return skills.FindIndex(skill => skill.name == skillName);
+        // (avoid FindIndex to minimize allocations)
+        for (int i = 0; i < skills.Count; ++i)
+            if (skills[i].name == skillName)
+                return i;
+        return -1;
     }
 
     // helper function to find a buff index
     public int GetBuffIndexByName(string buffName)
     {
-        return buffs.FindIndex(buff => buff.Name == buffName);
+        // (avoid FindIndex to minimize allocations)
+        for (int i = 0; i < buffs.Count; ++i)
+            if (buffs[i].name == buffName)
+                return i;
+        return -1;
     }
 
     // we need a function to check if an entity can attack another.
@@ -597,7 +658,9 @@ public abstract partial class Entity : NetworkBehaviour
         skills[currentSkill] = skill;
 
         // rpc for client sided effects
-        RpcSkillCastStarted();
+        // -> pass that skill because skillIndex might be reset in the mean
+        //    time, we never know
+        RpcSkillCastStarted(skill);
     }
 
     // finishes casting. casting and waiting has to be done in the state machine
@@ -638,7 +701,7 @@ public abstract partial class Entity : NetworkBehaviour
     public void AddOrRefreshBuff(Buff buff)
     {
         // reset if already in buffs list, otherwise add
-        int index = buffs.FindIndex(b => b.Name == buff.Name);
+        int index = GetBuffIndexByName(buff.name);
         if (index != -1) buffs[index] = buff;
         else buffs.Add(buff);
     }
@@ -659,12 +722,13 @@ public abstract partial class Entity : NetworkBehaviour
     // skill cast started rpc for client sided effects
     // note: no need to pass skillIndex, currentSkill is synced anyway
     [ClientRpc]
-    public void RpcSkillCastStarted()
+    public void RpcSkillCastStarted(Skill skill)
     {
-        // validate: still alive and valid skill?
-        if (health > 0 && 0 <= currentSkill && currentSkill < skills.Count)
+        // validate: still alive?
+        if (health > 0)
         {
-            skills[currentSkill].data.OnCastStarted(this);
+            // call scriptableskill event
+            skill.data.OnCastStarted(this);
         }
     }
 
@@ -688,22 +752,37 @@ public abstract partial class Entity : NetworkBehaviour
     // helper function to find an item in the inventory
     public int GetInventoryIndexByName(string itemName)
     {
-        return inventory.FindIndex(slot => slot.amount > 0 && slot.item.name == itemName);
+        // (avoid FindIndex to minimize allocations)
+        for (int i = 0; i < inventory.Count; ++i)
+        {
+            ItemSlot slot = inventory[i];
+            if (slot.amount > 0 && slot.item.name == itemName)
+                return i;
+        }
+        return -1;
     }
 
     // helper function to count the free slots
     public int InventorySlotsFree()
     {
-        return inventory.Count(slot => slot.amount == 0);
+        // count manually. Linq is HEAVY(!) on GC and performance
+        int free = 0;
+        foreach (ItemSlot slot in inventory)
+            if (slot.amount == 0)
+                ++free;
+        return free;
     }
 
     // helper function to calculate the total amount of an item type in inventory
     // note: .Equals because name AND dynamic variables matter (petLevel etc.)
     public int InventoryCount(Item item)
     {
-        return (from slot in inventory
-                where slot.amount > 0 && slot.item.Equals(item)
-                select slot.amount).Sum();
+        // count manually. Linq is HEAVY(!) on GC and performance
+        int amount = 0;
+        foreach (ItemSlot slot in inventory)
+            if (slot.amount > 0 && slot.item.Equals(item))
+                amount += slot.amount;
+        return amount;
     }
 
     // helper function to remove 'n' items from the inventory

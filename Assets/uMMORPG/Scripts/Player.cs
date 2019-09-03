@@ -27,8 +27,8 @@ using System.Linq;
 using System.Collections.Generic;
 using TMPro;
 
-public enum TradeStatus : byte {Free, Locked, Accepted}
-public enum CraftingState : byte {None, InProgress, Success, Failed}
+public enum TradeStatus : byte { Free, Locked, Accepted }
+public enum CraftingState : byte { None, InProgress, Success, Failed }
 
 [Serializable]
 public partial struct SkillbarEntry
@@ -89,9 +89,11 @@ public partial class Player : Entity
         get
         {
             // calculate equipment bonus
-            int equipmentBonus = (from slot in equipment
-                                  where slot.amount > 0
-                                  select ((EquipmentItem)slot.item.data).healthBonus).Sum();
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int equipmentBonus = 0;
+            foreach (ItemSlot slot in equipment)
+                if (slot.amount > 0)
+                    equipmentBonus += ((EquipmentItem)slot.item.data).healthBonus;
 
             // calculate strength bonus (1 strength means 1% of hpMax bonus)
             int attributeBonus = Convert.ToInt32(_healthMax.Get(level) * (strength * 0.01f));
@@ -107,9 +109,11 @@ public partial class Player : Entity
         get
         {
             // calculate equipment bonus
-            int equipmentBonus = (from slot in equipment
-                                  where slot.amount > 0
-                                  select ((EquipmentItem)slot.item.data).manaBonus).Sum();
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int equipmentBonus = 0;
+            foreach (ItemSlot slot in equipment)
+                if (slot.amount > 0)
+                    equipmentBonus += ((EquipmentItem)slot.item.data).manaBonus;
 
             // calculate intelligence bonus (1 intelligence means 1% of hpMax bonus)
             int attributeBonus = Convert.ToInt32(_manaMax.Get(level) * (intelligence * 0.01f));
@@ -125,9 +129,11 @@ public partial class Player : Entity
         get
         {
             // calculate equipment bonus
-            int equipmentBonus = (from slot in equipment
-                                  where slot.amount > 0
-                                  select ((EquipmentItem)slot.item.data).damageBonus).Sum();
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int equipmentBonus = 0;
+            foreach (ItemSlot slot in equipment)
+                if (slot.amount > 0)
+                    equipmentBonus += ((EquipmentItem)slot.item.data).damageBonus;
 
             // return base (damage + buff) + equip
             return base.damage + equipmentBonus;
@@ -140,9 +146,11 @@ public partial class Player : Entity
         get
         {
             // calculate equipment bonus
-            int equipmentBonus = (from slot in equipment
-                                  where slot.amount > 0
-                                  select ((EquipmentItem)slot.item.data).defenseBonus).Sum();
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            int equipmentBonus = 0;
+            foreach (ItemSlot slot in equipment)
+                if (slot.amount > 0)
+                    equipmentBonus += ((EquipmentItem)slot.item.data).defenseBonus;
 
             // return base (defense + buff) + equip
             return base.defense + equipmentBonus;
@@ -155,9 +163,11 @@ public partial class Player : Entity
         get
         {
             // calculate equipment bonus
-            float equipmentBonus = (from slot in equipment
-                                    where slot.amount > 0
-                                    select ((EquipmentItem)slot.item.data).blockChanceBonus).Sum();
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float equipmentBonus = 0;
+            foreach (ItemSlot slot in equipment)
+                if (slot.amount > 0)
+                    equipmentBonus += ((EquipmentItem)slot.item.data).blockChanceBonus;
 
             // return base (blockChance + buff) + equip
             return base.blockChance + equipmentBonus;
@@ -170,9 +180,11 @@ public partial class Player : Entity
         get
         {
             // calculate equipment bonus
-            float equipmentBonus = (from slot in equipment
-                                    where slot.amount > 0
-                                    select ((EquipmentItem)slot.item.data).criticalChanceBonus).Sum();
+            // sum up manually. Linq.Sum() is HEAVY(!) on GC and performance (190 KB/call!)
+            float equipmentBonus = 0;
+            foreach (ItemSlot slot in equipment)
+                if (slot.amount > 0)
+                    equipmentBonus += ((EquipmentItem)slot.item.data).criticalChanceBonus;
 
             // return base (criticalChance + buff) + equip
             return base.criticalChance + equipmentBonus;
@@ -231,7 +243,7 @@ public partial class Player : Entity
     }
 
     // required experience grows by 10% each level (like Runescape)
-    [SerializeField] protected ExponentialLong _experienceMax = new ExponentialLong{multiplier=100, baseValue=1.1f};
+    [SerializeField] protected ExponentialLong _experienceMax = new ExponentialLong { multiplier = 100, baseValue = 1.1f };
     public long experienceMax { get { return _experienceMax.Get(level); } }
 
     [Header("Skill Experience")]
@@ -244,7 +256,7 @@ public partial class Player : Entity
     [Header("Inventory")]
     public int inventorySize = 30;
     public ScriptableItemAndAmount[] defaultItems;
-    public KeyCode[] inventorySplitKeys = {KeyCode.LeftShift, KeyCode.RightShift};
+    public KeyCode[] inventorySplitKeys = { KeyCode.LeftShift, KeyCode.RightShift };
 
     [Header("Trash")]
     [SyncVar] public ItemSlot trash;
@@ -322,7 +334,7 @@ public partial class Player : Entity
     [SyncVar] GameObject _activePet;
     public Pet activePet
     {
-        get { return _activePet != null  ? _activePet.GetComponent<Pet>() : null; }
+        get { return _activePet != null ? _activePet.GetComponent<Pet>() : null; }
         set { _activePet = value != null ? value.gameObject : null; }
     }
 
@@ -347,7 +359,7 @@ public partial class Player : Entity
     [SyncVar] GameObject _activeMount;
     public Mount activeMount
     {
-        get { return _activeMount != null  ? _activeMount.GetComponent<Mount>() : null; }
+        get { return _activeMount != null ? _activeMount.GetComponent<Mount>() : null; }
         set { _activeMount = value != null ? value.gameObject : null; }
     }
 
@@ -370,7 +382,7 @@ public partial class Player : Entity
     [SyncVar] GameObject _nextTarget;
     public Entity nextTarget
     {
-        get { return _nextTarget != null  ? _nextTarget.GetComponent<Entity>() : null; }
+        get { return _nextTarget != null ? _nextTarget.GetComponent<Entity>() : null; }
         set { _nextTarget = value != null ? value.gameObject : null; }
     }
 
@@ -715,13 +727,13 @@ public partial class Player : Entity
                 }
             }
         }
-        if (EventSkillFinished()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventTradeDone()) {} // don't care
-        if (EventCraftingDone()) {} // don't care
-        if (EventRespawn()) {} // don't care
-        if (EventTargetDied()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventTradeDone()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
+        if (EventRespawn()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
 
         return "IDLE"; // nothing interesting happened
     }
@@ -797,13 +809,13 @@ public partial class Player : Entity
                 }
             }
         }
-        if (EventMoveStart()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventTradeDone()) {} // don't care
-        if (EventCraftingDone()) {} // don't care
-        if (EventRespawn()) {} // don't care
-        if (EventTargetDied()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
+        if (EventMoveStart()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventTradeDone()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
+        if (EventRespawn()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
 
         return "MOVING"; // nothing interesting happened
     }
@@ -929,12 +941,12 @@ public partial class Player : Entity
             // go back to IDLE
             return "IDLE";
         }
-        if (EventMoveEnd()) {} // don't care
-        if (EventTradeDone()) {} // don't care
-        if (EventCraftingStarted()) {} // don't care
-        if (EventCraftingDone()) {} // don't care
-        if (EventRespawn()) {} // don't care
-        if (EventSkillRequest()) {} // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventTradeDone()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
+        if (EventRespawn()) { } // don't care
+        if (EventSkillRequest()) { } // don't care
 
         return "CASTING"; // nothing interesting happened
     }
@@ -1008,13 +1020,13 @@ public partial class Player : Entity
             TradeCleanup();
             return "IDLE";
         }
-        if (EventMoveEnd()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventCraftingStarted()) {} // don't care
-        if (EventCraftingDone()) {} // don't care
-        if (EventRespawn()) {} // don't care
-        if (EventTradeStarted()) {} // don't care
-        if (EventSkillRequest()) {} // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
+        if (EventRespawn()) { } // don't care
+        if (EventTradeStarted()) { } // don't care
+        if (EventSkillRequest()) { } // don't care
 
         return "TRADING"; // nothing interesting happened
     }
@@ -1047,16 +1059,16 @@ public partial class Player : Entity
             Craft();
             return "IDLE";
         }
-        if (EventCancelAction()) {} // don't care. user pressed craft, we craft.
-        if (EventTargetDisappeared()) {} // don't care
-        if (EventTargetDied()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventRespawn()) {} // don't care
-        if (EventTradeStarted()) {} // don't care
-        if (EventTradeDone()) {} // don't care
-        if (EventCraftingStarted()) {} // don't care
-        if (EventSkillRequest()) {} // don't care
+        if (EventCancelAction()) { } // don't care. user pressed craft, we craft.
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventRespawn()) { } // don't care
+        if (EventTradeStarted()) { } // don't care
+        if (EventTradeDone()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventSkillRequest()) { } // don't care
 
         return "CRAFTING"; // nothing interesting happened
     }
@@ -1080,17 +1092,17 @@ public partial class Player : Entity
             Debug.LogWarning("Player " + name + " moved while dead. This should not happen.");
             return "DEAD";
         }
-        if (EventMoveEnd()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventDied()) {} // don't care
-        if (EventCancelAction()) {} // don't care
-        if (EventTradeStarted()) {} // don't care
-        if (EventTradeDone()) {} // don't care
-        if (EventCraftingStarted()) {} // don't care
-        if (EventCraftingDone()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
-        if (EventTargetDied()) {} // don't care
-        if (EventSkillRequest()) {} // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventDied()) { } // don't care
+        if (EventCancelAction()) { } // don't care
+        if (EventTradeStarted()) { } // don't care
+        if (EventTradeDone()) { } // don't care
+        if (EventCraftingStarted()) { } // don't care
+        if (EventCraftingDone()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventSkillRequest()) { } // don't care
 
         return "DEAD"; // nothing interesting happened
     }
@@ -1098,13 +1110,13 @@ public partial class Player : Entity
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE")     return UpdateServer_IDLE();
-        if (state == "MOVING")   return UpdateServer_MOVING();
-        if (state == "CASTING")  return UpdateServer_CASTING();
-        if (state == "STUNNED")  return UpdateServer_STUNNED();
-        if (state == "TRADING")  return UpdateServer_TRADING();
+        if (state == "IDLE") return UpdateServer_IDLE();
+        if (state == "MOVING") return UpdateServer_MOVING();
+        if (state == "CASTING") return UpdateServer_CASTING();
+        if (state == "STUNNED") return UpdateServer_STUNNED();
+        if (state == "TRADING") return UpdateServer_TRADING();
         if (state == "CRAFTING") return UpdateServer_CRAFTING();
-        if (state == "DEAD")     return UpdateServer_DEAD();
+        if (state == "DEAD") return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
     }
@@ -1193,9 +1205,9 @@ public partial class Player : Entity
                 if (Input.GetKeyDown(cancelActionKey)) CmdCancelAction();
             }
         }
-        else if (state == "TRADING") {}
-        else if (state == "CRAFTING") {}
-        else if (state == "DEAD") {}
+        else if (state == "TRADING") { }
+        else if (state == "CRAFTING") { }
+        else if (state == "DEAD") { }
         else Debug.LogError("invalid state:" + state);
 
         // addon system hooks
@@ -1312,7 +1324,7 @@ public partial class Player : Entity
     public static long CalculatePartyExperienceShare(long total, int memberCount, float bonusPercentagePerMember, int memberLevel, int killedLevel)
     {
         // bonus percentage based on how many members there are
-        float bonusPercentage = (memberCount-1) * bonusPercentagePerMember;
+        float bonusPercentage = (memberCount - 1) * bonusPercentagePerMember;
 
         // calculate the share via ceil, so that uneven numbers still result in
         // at least 'total' in the end. for example:
@@ -1421,7 +1433,7 @@ public partial class Player : Entity
     // custom DealDamageAt function that also rewards experience if we killed
     // the monster
     [Server]
-    public override void DealDamageAt(Entity entity, int amount, float stunChance=0, float stunTime=0)
+    public override void DealDamageAt(Entity entity, int amount, float stunChance = 0, float stunTime = 0)
     {
         // deal damage with the default function
         base.DealDamageAt(entity, amount, stunChance, stunTime);
@@ -1633,7 +1645,8 @@ public partial class Player : Entity
     }
 
     [Command]
-    public void CmdSwapInventoryInventory(int fromIndex, int toIndex) {
+    public void CmdSwapInventoryInventory(int fromIndex, int toIndex)
+    {
         // note: should never send a command with complex types!
         // validate: make sure that the slots actually exist in the inventory
         // and that they are not equal
@@ -1751,7 +1764,11 @@ public partial class Player : Entity
     bool CanReplaceAllBones(SkinnedMeshRenderer equipmentSkin)
     {
         // are all equipment SkinnedMeshRenderer bones in the player bones?
-        return equipmentSkin.bones.All(bone => skinBones.ContainsKey(bone.name));
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        foreach (Transform bone in equipmentSkin.bones)
+            if (!skinBones.ContainsKey(bone.name))
+                return false;
+        return true;
     }
 
     // replace all equipment SkinnedMeshRenderer bones with the original player
@@ -1900,7 +1917,7 @@ public partial class Player : Entity
 
     // helper function: try to use a skill and walk into range if necessary
     [Client]
-    public void TryUseSkill(int skillIndex, bool ignoreState=false)
+    public void TryUseSkill(int skillIndex, bool ignoreState = false)
     {
         // only if not casting already
         // (might need to ignore that when coming from pending skill where
@@ -1937,12 +1954,17 @@ public partial class Player : Entity
 
     public bool HasLearnedSkill(string skillName)
     {
-        return skills.Any(skill => skill.name == skillName && skill.level > 0);
+        // has this skill with at least level 1 (=learned)?
+        return HasLearnedSkillWithLevel(skillName, 1);
     }
 
     public bool HasLearnedSkillWithLevel(string skillName, int skillLevel)
     {
-        return skills.Any(skill => skill.name == skillName && skill.level >= skillLevel);
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        foreach (Skill skill in skills)
+            if (skill.level >= skillLevel && skill.name == skillName)
+                return true;
+        return false;
     }
 
     // helper function for command and UI
@@ -2024,19 +2046,41 @@ public partial class Player : Entity
     // quests //////////////////////////////////////////////////////////////////
     public int GetQuestIndexByName(string questName)
     {
-        return quests.FindIndex(quest => quest.name == questName);
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        for (int i = 0; i < quests.Count; ++i)
+            if (quests[i].name == questName)
+                return i;
+        return -1;
     }
 
     // helper function to check if the player has completed a quest before
     public bool HasCompletedQuest(string questName)
     {
-        return quests.Any(q => q.name == questName && q.completed);
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        foreach (Quest quest in quests)
+            if (quest.name == questName && quest.completed)
+                return true;
+        return false;
+    }
+
+    // count the completed quests
+    public int CountIncompleteQuests()
+    {
+        int count = 0;
+        foreach (Quest quest in quests)
+            if (!quest.completed)
+                ++count;
+        return count;
     }
 
     // helper function to check if a player has an active (not completed) quest
     public bool HasActiveQuest(string questName)
     {
-        return quests.Any(q => q.name == questName && !q.completed);
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        foreach (Quest quest in quests)
+            if (quest.name == questName && !quest.completed)
+                return true;
+        return false;
     }
 
     [Server]
@@ -2066,7 +2110,7 @@ public partial class Player : Entity
         // has required level?
         // not accepted yet?
         // has finished predecessor quest (if any)?
-        return quests.Count(q => !q.completed) < activeQuestLimit &&
+        return CountIncompleteQuests() < activeQuestLimit &&
                level >= quest.requiredLevel &&          // has required level?
                GetQuestIndexByName(quest.name) == -1 && // not accepted yet?
                (quest.predecessor == null || HasCompletedQuest(quest.predecessor.name));
@@ -2099,7 +2143,7 @@ public partial class Player : Entity
         {
             // fulfilled?
             Quest quest = quests[index];
-            if(quest.IsFulfilled(this))
+            if (quest.IsFulfilled(this))
             {
                 // enough space for reward item (if any)?
                 return quest.rewardItem == null || InventoryCanAdd(new Item(quest.rewardItem), 1);
@@ -2367,16 +2411,36 @@ public partial class Player : Entity
     [Server]
     bool IsTradeOfferStillValid()
     {
-        // enough gold and all offered items are -1 or valid?
-        return gold >= tradeOfferGold &&
-               tradeOfferItems.All(index => index == -1 ||
-                                            (0 <= index && index < inventory.Count && inventory[index].amount > 0));
+        // not enough gold? then invalid
+        if (gold < tradeOfferGold)
+            return false;
+
+        // all offered items are -1 or valid?
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        foreach (int index in tradeOfferItems)
+        {
+            if (index == -1 || (0 <= index && index < inventory.Count && inventory[index].amount > 0))
+            {
+                // good
+            }
+            else
+            {
+                // invalid item
+                return false;
+            }
+        }
+        return true;
     }
 
     [Server]
     int TradeOfferItemSlotAmount()
     {
-        return tradeOfferItems.Count(i => i != -1);
+        // (avoid Linq because it is HEAVY(!) on GC and performance)
+        int count = 0;
+        foreach (int index in tradeOfferItems)
+            if (index != -1)
+                ++count;
+        return count;
     }
 
     [Server]
@@ -2618,12 +2682,12 @@ public partial class Player : Entity
     // that we need here.
     public bool IsOffender()
     {
-        return offenderBuff != null && buffs.Any(buff => buff.Name == offenderBuff.name);
+        return offenderBuff != null && GetBuffIndexByName(offenderBuff.name) != -1;
     }
 
     public bool IsMurderer()
     {
-        return murdererBuff != null && buffs.Any(buff => buff.Name == murdererBuff.name);
+        return murdererBuff != null && GetBuffIndexByName(murdererBuff.name) != -1;
     }
 
     public void StartOffender()
@@ -2837,14 +2901,18 @@ public partial class Player : Entity
     // find party members in proximity for item/exp sharing etc.
     public List<Player> GetPartyMembersInProximity()
     {
+        List<Player> players = new List<Player>();
         if (InParty())
         {
-            return netIdentity.observers.Values
-                                        .Select(conn => conn.playerController.GetComponent<Player>())
-                                        .Where(p => party.Contains(p.name))
-                                        .ToList();
+            // (avoid Linq because it is HEAVY(!) on GC and performance)
+            foreach (NetworkConnection conn in netIdentity.observers.Values)
+            {
+                Player player = conn.playerController.GetComponent<Player>();
+                if (party.Contains(player.name))
+                    players.Add(player);
+            }
         }
-        return new List<Player>();
+        return players;
     }
 
     // party invite by name (not by target) so that chat commands are possible
@@ -2960,7 +3028,7 @@ public partial class Player : Entity
     {
         // only while pet and owner aren't fighting
         return activePet != null &&
-               (          state == "IDLE" ||           state == "MOVING") &&
+               (state == "IDLE" || state == "MOVING") &&
                (activePet.state == "IDLE" || activePet.state == "MOVING");
     }
 

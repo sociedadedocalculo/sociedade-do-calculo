@@ -710,7 +710,7 @@ public partial class Database : MonoBehaviour
         foreach (Quest quest in player.quests)
             ExecuteNonQuery("INSERT INTO character_quests VALUES (@character, @name, @progress, @completed)",
                             new SqliteParameter("@character", player.name),
-                            new SqliteParameter("@name", quest.name),
+                            new SqliteParameter("@name", quest.Name),
                             new SqliteParameter("@progress", quest.progress),
                             new SqliteParameter("@completed", Convert.ToInt32(quest.completed)));
     }

@@ -17,9 +17,9 @@ using UnityEditor;
 // we need a clearly defined state to know if we are offline/in world/in lobby
 // otherwise UICharacterSelection etc. never know 100% if they should be visible
 // or not.
-public enum NetworkState {Offline, Handshake, Lobby, World}
+public enum NetworkState { Offline, Handshake, Lobby, World }
 
-[RequireComponent(requiredComponent: typeof(Database))]
+[RequireComponent(typeof(Database))]
 public partial class NetworkManagerMMO : NetworkManager
 {
     // current network manager state on client
@@ -31,7 +31,7 @@ public partial class NetworkManagerMMO : NetworkManager
 
     // UI components to avoid FindObjectOfType
     [Header("UI")]
-    private UIPopup uiPopup;
+    public UIPopup uiPopup;
 
     // login info for the local player
     // we don't just name it 'account' to avoid collisions in handshake
@@ -77,8 +77,6 @@ public partial class NetworkManagerMMO : NetworkManager
     // store characters available message on client so that UI can access it
     [HideInInspector] public CharactersAvailableMsg charactersAvailableMsg;
 
-    public UIPopup UiPopup { get => uiPopup; set => uiPopup = value; }
-
     // name checks /////////////////////////////////////////////////////////////
     public bool IsAllowedAccountName(string account)
     {
@@ -123,7 +121,7 @@ public partial class NetworkManagerMMO : NetworkManager
     // error messages //////////////////////////////////////////////////////////
     void ServerSendError(NetworkConnection conn, string error, bool disconnect)
     {
-        conn.Send(new ErrorMsg{text=error, causesDisconnect=disconnect});
+        conn.Send(new ErrorMsg { text = error, causesDisconnect = disconnect });
     }
 
     void OnClientError(NetworkConnection conn, ErrorMsg message)
@@ -131,7 +129,7 @@ public partial class NetworkManagerMMO : NetworkManager
         print("OnClientError: " + message.text);
 
         // show a popup
-        UiPopup.Show(message.text);
+        uiPopup.Show(message.text);
 
         // disconnect if it was an important network error
         // (this is needed because the login failure message doesn't disconnect
@@ -199,7 +197,7 @@ public partial class NetworkManagerMMO : NetworkManager
         // Application.version can be modified under:
         // Edit -> Project Settings -> Player -> Bundle Version
         string hash = Utils.PBKDF2Hash(loginPassword, passwordSalt + loginAccount);
-        LoginMsg message = new LoginMsg{account=loginAccount, password=hash, version=Application.version};
+        LoginMsg message = new LoginMsg { account = loginAccount, password = hash, version = Application.version };
         conn.Send(message);
         print("login message was sent");
 
@@ -220,7 +218,7 @@ public partial class NetworkManagerMMO : NetworkManager
     // -> setting client as ready will cause 'already set as ready' errors if
     //    we call StartClient before loading a new scene (e.g. for zones)
     // -> it's best to just overwrite this with an empty function
-    public override void OnClientSceneChanged(NetworkConnection conn) {}
+    public override void OnClientSceneChanged(NetworkConnection conn) { }
 
     bool AccountLoggedIn(string account)
     {
@@ -275,7 +273,7 @@ public partial class NetworkManagerMMO : NetworkManager
                     }
                     else
                     {
-                        print("account already logged in: " + message.account);
+                        //print("account already logged in: " + message.account); <- don't show on live server
                         ServerSendError(conn, "already logged in", true);
 
                         // note: we should disconnect the client here, but we can't as
@@ -286,19 +284,19 @@ public partial class NetworkManagerMMO : NetworkManager
                 }
                 else
                 {
-                    print("invalid account or password for: " + message.account);
+                    //print("invalid account or password for: " + message.account); <- don't show on live server
                     ServerSendError(conn, "invalid account", true);
                 }
             }
             else
             {
-                print("account name not allowed: " + message.account);
+                //print("account name not allowed: " + message.account); <- don't show on live server
                 ServerSendError(conn, "account name not allowed", true);
             }
         }
         else
         {
-            print("version mismatch: " + message.account + " expected:" + Application.version + " received: " + message.version);
+            //print("version mismatch: " + message.account + " expected:" + Application.version + " received: " + message.version); <- don't show on live server
             ServerSendError(conn, "outdated version", true);
         }
     }
@@ -499,31 +497,31 @@ public partial class NetworkManagerMMO : NetworkManager
                         }
                         else
                         {
-                            print("character invalid class: " + message.classIndex);
+                            //print("character invalid class: " + message.classIndex);  <- don't show on live server
                             ServerSendError(conn, "character invalid class", false);
                         }
                     }
                     else
                     {
-                        print("character limit reached: " + message.name);
+                        //print("character limit reached: " + message.name); <- don't show on live server
                         ServerSendError(conn, "character limit reached", false);
                     }
                 }
                 else
                 {
-                    print("character name already exists: " + message.name);
+                    //print("character name already exists: " + message.name); <- don't show on live server
                     ServerSendError(conn, "name already exists", false);
                 }
             }
             else
             {
-                print("character name not allowed: " + message.name);
+                //print("character name not allowed: " + message.name); <- don't show on live server
                 ServerSendError(conn, "character name not allowed", false);
             }
         }
         else
         {
-            print("CharacterCreate: not in lobby");
+            //print("CharacterCreate: not in lobby"); <- don't show on live server
             ServerSendError(conn, "CharacterCreate: not in lobby", true);
         }
     }
@@ -600,13 +598,12 @@ public partial class NetworkManagerMMO : NetworkManager
 
         //print("DoServerDisconnect " + conn);
 
-        // save player (if any)
+        // save player (if any. nothing to save if disconnecting while in lobby.)
         if (conn.playerController != null)
         {
             Database.singleton.CharacterSave(conn.playerController.GetComponent<Player>(), false);
             print("saved:" + conn.playerController.name);
         }
-        else print("no player to save for: " + conn);
 
         // addon system hooks
         Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerDisconnect_", conn);
@@ -624,7 +621,7 @@ public partial class NetworkManagerMMO : NetworkManager
         print("OnClientDisconnect");
 
         // show a popup so that users know what happened
-        UiPopup.Show("Disconnected.");
+        uiPopup.Show("Disconnected.");
 
         // call base function to guarantee proper functionality
         base.OnClientDisconnect(conn);
@@ -650,20 +647,6 @@ public partial class NetworkManagerMMO : NetworkManager
 #endif
     }
 
-    // called when quitting the application by closing the window / pressing
-    // stop in the editor
-    // -> we want to send the quit packet to the server instead of waiting for a
-    //    timeout
-    public override void OnApplicationQuit()
-    {
-        base.OnApplicationQuit();
-        if (NetworkClient.isConnected)
-        {
-            StopClient();
-            print("OnApplicationQuit: stopped client");
-        }
-    }
-
     public override void OnValidate()
     {
         base.OnValidate();
@@ -685,9 +668,5 @@ public partial class NetworkManagerMMO : NetworkManager
             // use new array
             selectionLocations = newArray;
         }
-    }
-
-    private class UIPopup
-    {
     }
 }
