@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Mirror;
-using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Buff
@@ -22,9 +21,8 @@ public partial struct Buff
     public Buff(BuffSkill data, int level)
     {
         hash = data.name.GetStableHashCode();
-        Data = data;
         this.level = level;
-        buffTimeEnd = NetworkTime.time + data.buffTime.GetType(level); // start buff immediately
+        buffTimeEnd = NetworkTime.time + data.buffTime.Get(level); // start buff immediately
     }
 
     // wrappers for easier access
@@ -41,8 +39,8 @@ public partial struct Buff
             return (BuffSkill)ScriptableSkill.dict[hash];
         }
     }
-    public string Name => data.name;
-    public Sprite Image => data.image;
+    public string name => data.name;
+    public Sprite image => data.image;
     public float buffTime => data.buffTime.Get(level);
     public int bonusHealthMax => data.bonusHealthMax.Get(level);
     public int bonusManaMax => data.bonusManaMax.Get(level);
@@ -54,8 +52,6 @@ public partial struct Buff
     public float bonusManaPercentPerSecond => data.bonusManaPercentPerSecond.Get(level);
     public float bonusSpeed => data.bonusSpeed.Get(level);
     public int maxLevel => data.maxLevel;
-
-    public BuffSkill Data { get; }
 
     // tooltip - runtime part
     public string ToolTip()
@@ -77,43 +73,4 @@ public partial struct Buff
     }
 }
 
-public class BuffSkill
-{
-    internal object name;
-    internal object buffTime;
-
-    public static explicit operator BuffSkill(ScriptableSkill v)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-public class SyncListBuff : SyncList<Buff>
-{
-    public override bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-        return base.ToString();
-    }
-
-    protected override Buff DeserializeItem(UnityEngine.Networking.NetworkReader reader)
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void SerializeItem(UnityEngine.Networking.NetworkWriter writer, Buff item)
-    {
-        throw new NotImplementedException();
-    }
-}
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+public class SyncListBuff : SyncList<Buff> { }

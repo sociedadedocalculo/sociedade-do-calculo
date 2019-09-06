@@ -8,7 +8,6 @@ using System;
 using System.Text;
 using UnityEngine;
 using Mirror;
-using UnityEngine.Networking;
 
 [Serializable]
 public partial struct ItemSlot
@@ -17,7 +16,7 @@ public partial struct ItemSlot
     public int amount;
 
     // constructors
-    public ItemSlot(Item item, int amount=1)
+    public ItemSlot(Item item, int amount = 1)
     {
         this.item = item;
         this.amount = amount;
@@ -54,36 +53,4 @@ public partial struct ItemSlot
     }
 }
 
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-public class SyncListItemSlot : SyncList<ItemSlot>
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
-{
-    public override bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-        return base.ToString();
-    }
-
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-    protected override ItemSlot DeserializeItem(UnityEngine.Networking.NetworkReader reader)
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
-    {
-        throw new NotImplementedException();
-    }
-
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-    protected override void SerializeItem(UnityEngine.Networking.NetworkWriter writer, ItemSlot item)
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
-    {
-        throw new NotImplementedException();
-    }
-}
+public class SyncListItemSlot : SyncList<ItemSlot> { }

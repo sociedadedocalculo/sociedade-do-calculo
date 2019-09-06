@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using Mirror;
-using UnityEngine.Networking;
 
 [Serializable]
 public partial struct Skill
@@ -70,11 +69,11 @@ public partial struct Skill
     public ScriptableSkill predecessor => data.predecessor;
     public int predecessorLevel => data.predecessorLevel;
     public string requiredWeaponCategory => data.requiredWeaponCategory;
-    public int upgradeRequiredLevel => data.requiredLevel.Get(level+1);
-    public long upgradeRequiredSkillExperience => data.requiredSkillExperience.Get(level+1);
+    public int upgradeRequiredLevel => data.requiredLevel.Get(level + 1);
+    public long upgradeRequiredSkillExperience => data.requiredSkillExperience.Get(level + 1);
 
     // events
-    public bool CheckSelf(Entity caster, bool checkSkillReady=true)
+    public bool CheckSelf(Entity caster, bool checkSkillReady = true)
     {
         return (!checkSkillReady || IsReady()) &&
                data.CheckSelf(caster, level);
@@ -121,36 +120,4 @@ public partial struct Skill
     public bool IsReady() => !IsCasting() && !IsOnCooldown();
 }
 
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-public class SyncListSkill : SyncList<Skill>
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
-{
-    public override bool Equals(object obj)
-    {
-        return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-        return base.ToString();
-    }
-
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-    protected override Skill DeserializeItem(UnityEngine.Networking.NetworkReader reader)
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
-    {
-        throw new NotImplementedException();
-    }
-
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
-    protected override void SerializeItem(UnityEngine.Networking.NetworkWriter writer, Skill item)
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
-    {
-        throw new NotImplementedException();
-    }
-}
+public class SyncListSkill : SyncList<Skill> { }
