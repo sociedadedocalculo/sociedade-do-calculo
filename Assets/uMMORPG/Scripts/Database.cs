@@ -260,9 +260,9 @@ public partial class Database : MonoBehaviour
 
     // run a query that returns several values
     // note: sqlite has long instead of int, so use Convert.ToInt32 etc.
-    public List< List<object> > ExecuteReader(string sql, params SqliteParameter[] args)
+    public List<List<object>> ExecuteReader(string sql, params SqliteParameter[] args)
     {
-        List< List<object> > result = new List< List<object> >();
+        List<List<object>> result = new List<List<object>>();
 
         using (SqliteCommand command = new SqliteCommand(sql, connection))
         {
@@ -377,7 +377,7 @@ public partial class Database : MonoBehaviour
     // => all the other values can be read with CharacterLoad!
     public List<string> CharactersForAccount(string account)
     {
-        List< List<object> > table = ExecuteReader("SELECT name FROM characters WHERE account=@account AND deleted=0", new SqliteParameter("@account", account));
+        List<List<object>> table = ExecuteReader("SELECT name FROM characters WHERE account=@account AND deleted=0", new SqliteParameter("@account", account));
         return table.Select(row => (string)row[0]).ToList();
     }
 
@@ -389,7 +389,7 @@ public partial class Database : MonoBehaviour
 
         // then load valid items and put into their slots
         // (one big query is A LOT faster than querying each slot separately)
-        List< List<object> > table = ExecuteReader("SELECT name, slot, amount, summonedHealth, summonedLevel, summonedExperience FROM character_inventory WHERE character=@character", new SqliteParameter("@character", player.name));
+        List<List<object>> table = ExecuteReader("SELECT name, slot, amount, summonedHealth, summonedLevel, summonedExperience FROM character_inventory WHERE character=@character", new SqliteParameter("@character", player.name));
         foreach (List<object> row in table)
         {
             string itemName = (string)row[0];
@@ -403,7 +403,7 @@ public partial class Database : MonoBehaviour
                     item.summonedHealth = Convert.ToInt32((long)row[3]);
                     item.summonedLevel = Convert.ToInt32((long)row[4]);
                     item.summonedExperience = (long)row[5];
-                    player.inventory[slot] = new ItemSlot(item, amount);;
+                    player.inventory[slot] = new ItemSlot(item, amount); ;
                 }
                 else Debug.LogWarning("LoadInventory: skipped item " + itemName + " for " + player.name + " because it doesn't exist anymore. If it wasn't removed intentionally then make sure it's in the Resources folder.");
             }
@@ -419,7 +419,7 @@ public partial class Database : MonoBehaviour
 
         // then load valid equipment and put into their slots
         // (one big query is A LOT faster than querying each slot separately)
-        List< List<object> > table = ExecuteReader("SELECT name, slot, amount FROM character_equipment WHERE character=@character", new SqliteParameter("@character", player.name));
+        List<List<object>> table = ExecuteReader("SELECT name, slot, amount FROM character_equipment WHERE character=@character", new SqliteParameter("@character", player.name));
         foreach (List<object> row in table)
         {
             string itemName = (string)row[0];
@@ -451,7 +451,7 @@ public partial class Database : MonoBehaviour
 
         // then load learned skills and put into their slots
         // (one big query is A LOT faster than querying each slot separately)
-        List< List<object> > table = ExecuteReader("SELECT name, level, castTimeEnd, cooldownEnd FROM character_skills WHERE character=@character", new SqliteParameter("@character", player.name));
+        List<List<object>> table = ExecuteReader("SELECT name, level, castTimeEnd, cooldownEnd FROM character_skills WHERE character=@character", new SqliteParameter("@character", player.name));
         foreach (List<object> row in table)
         {
             string skillName = (string)row[0];
@@ -481,7 +481,7 @@ public partial class Database : MonoBehaviour
         // load buffs
         // note: no check if we have learned the skill for that buff
         //       since buffs may come from other people too
-        List< List<object> > table = ExecuteReader("SELECT name, level, buffTimeEnd FROM character_buffs WHERE character=@character", new SqliteParameter("@character", player.name));
+        List<List<object>> table = ExecuteReader("SELECT name, level, buffTimeEnd FROM character_buffs WHERE character=@character", new SqliteParameter("@character", player.name));
         foreach (List<object> row in table)
         {
             string buffName = (string)row[0];
@@ -506,7 +506,7 @@ public partial class Database : MonoBehaviour
     void LoadQuests(Player player)
     {
         // load quests
-        List< List<object> > table = ExecuteReader("SELECT name, progress, completed FROM character_quests WHERE character=@character", new SqliteParameter("@character", player.name));
+        List<List<object>> table = ExecuteReader("SELECT name, progress, completed FROM character_quests WHERE character=@character", new SqliteParameter("@character", player.name));
         foreach (List<object> row in table)
         {
             string questName = (string)row[0];
@@ -547,7 +547,7 @@ public partial class Database : MonoBehaviour
 
     public GameObject CharacterLoad(string characterName, List<Player> prefabs, bool isPreview)
     {
-        List< List<object> > table = ExecuteReader("SELECT * FROM characters WHERE name=@name AND deleted=0", new SqliteParameter("@name", characterName));
+        List<List<object>> table = ExecuteReader("SELECT * FROM characters WHERE name=@name AND deleted=0", new SqliteParameter("@name", characterName));
         if (table.Count == 1)
         {
             List<object> mainrow = table[0];
@@ -560,22 +560,22 @@ public partial class Database : MonoBehaviour
                 GameObject go = Instantiate(prefab.gameObject);
                 Player player = go.GetComponent<Player>();
 
-                player.name               = (string)mainrow[0];
-                player.account            = (string)mainrow[1];
-                player.className          = (string)mainrow[2];
-                float x                   = (float)mainrow[3];
-                float y                   = (float)mainrow[4];
-                float z                   = (float)mainrow[5];
-                Vector3 position          = new Vector3(x, y, z);
-                player.level              = Convert.ToInt32((long)mainrow[6]);
-                int health                = Convert.ToInt32((long)mainrow[7]);
-                int mana                  = Convert.ToInt32((long)mainrow[8]);
-                player.strength           = Convert.ToInt32((long)mainrow[9]);
-                player.intelligence       = Convert.ToInt32((long)mainrow[10]);
-                player.experience         = (long)mainrow[11];
-                player.skillExperience    = (long)mainrow[12];
-                player.gold               = (long)mainrow[13];
-                player.coins              = (long)mainrow[14];
+                player.name = (string)mainrow[0];
+                player.account = (string)mainrow[1];
+                player.className = (string)mainrow[2];
+                float x = (float)mainrow[3];
+                float y = (float)mainrow[4];
+                float z = (float)mainrow[5];
+                Vector3 position = new Vector3(x, y, z);
+                player.level = Convert.ToInt32((long)mainrow[6]);
+                int health = Convert.ToInt32((long)mainrow[7]);
+                int mana = Convert.ToInt32((long)mainrow[8]);
+                player.strength = Convert.ToInt32((long)mainrow[9]);
+                player.intelligence = Convert.ToInt32((long)mainrow[10]);
+                player.experience = (long)mainrow[11];
+                player.skillExperience = (long)mainrow[12];
+                player.gold = (long)mainrow[13];
+                player.coins = (long)mainrow[14];
 
                 // is the position on a navmesh?
                 // it might not be if we changed the terrain, or if the player
@@ -614,7 +614,7 @@ public partial class Database : MonoBehaviour
                 // => don't set it when loading previews though. only when
                 //    really joining the world (hence setOnline flag)
                 if (!isPreview)
-                    ExecuteNonQuery("UPDATE characters SET online=1, lastsaved=@lastsaved WHERE name=@name",new SqliteParameter("@name", characterName), new SqliteParameter("@lastsaved", DateTime.UtcNow));
+                    ExecuteNonQuery("UPDATE characters SET online=1, lastsaved=@lastsaved WHERE name=@name", new SqliteParameter("@name", characterName), new SqliteParameter("@lastsaved", DateTime.UtcNow));
 
                 // addon system hooks
                 Utils.InvokeMany(typeof(Database), this, "CharacterLoad_", player);
@@ -698,7 +698,7 @@ public partial class Database : MonoBehaviour
             //       NetworkTime.time is 0 then.
             ExecuteNonQuery("INSERT INTO character_buffs VALUES (@character, @name, @level, @buffTimeEnd)",
                             new SqliteParameter("@character", player.name),
-                            new SqliteParameter("@name", buff.Name),
+                            new SqliteParameter("@name", buff.name),
                             new SqliteParameter("@level", buff.level),
                             new SqliteParameter("@buffTimeEnd", buff.BuffTimeRemaining()));
     }
@@ -710,7 +710,7 @@ public partial class Database : MonoBehaviour
         foreach (Quest quest in player.quests)
             ExecuteNonQuery("INSERT INTO character_quests VALUES (@character, @name, @progress, @completed)",
                             new SqliteParameter("@character", player.name),
-                            new SqliteParameter("@name", quest.Name),
+                            new SqliteParameter("@name", quest.name),
                             new SqliteParameter("@progress", quest.progress),
                             new SqliteParameter("@completed", Convert.ToInt32(quest.completed)));
     }
@@ -776,8 +776,9 @@ public partial class Database : MonoBehaviour
         guild.name = guildName;
 
         // load guild info
-        List< List<object> > table = ExecuteReader("SELECT notice FROM guild_info WHERE name=@guild", new SqliteParameter("@guild", guildName));
-        if (table.Count == 1) {
+        List<List<object>> table = ExecuteReader("SELECT notice FROM guild_info WHERE name=@guild", new SqliteParameter("@guild", guildName));
+        if (table.Count == 1)
+        {
             List<object> row = table[0];
             guild.notice = (string)row[0];
         }
@@ -785,7 +786,8 @@ public partial class Database : MonoBehaviour
         // load members list
         List<GuildMember> members = new List<GuildMember>();
         table = ExecuteReader("SELECT character, rank FROM character_guild WHERE guild=@guild", new SqliteParameter("@guild", guildName));
-        foreach (List<object> row in table) {
+        foreach (List<object> row in table)
+        {
             GuildMember member = new GuildMember();
             member.name = (string)row[0];
             member.rank = (GuildRank)Convert.ToInt32((long)row[1]);
@@ -850,7 +852,7 @@ public partial class Database : MonoBehaviour
         // note: we could just delete processed orders, but keeping them in the
         // database is easier for debugging / support.
         List<long> result = new List<long>();
-        List< List<object> > table = ExecuteReader("SELECT orderid, coins FROM character_orders WHERE character=@character AND processed=0", new SqliteParameter("@character", characterName));
+        List<List<object>> table = ExecuteReader("SELECT orderid, coins FROM character_orders WHERE character=@character AND processed=0", new SqliteParameter("@character", characterName));
         foreach (List<object> row in table)
         {
             result.Add((long)row[1]);
