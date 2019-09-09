@@ -10,7 +10,7 @@ public class NetworkName : NetworkBehaviour
     // server-side serialization
     public override bool OnSerialize(NetworkWriter writer, bool initialState)
     {
-        writer.Write(name);
+        writer.WriteString(name);
         return true;
     }
 
