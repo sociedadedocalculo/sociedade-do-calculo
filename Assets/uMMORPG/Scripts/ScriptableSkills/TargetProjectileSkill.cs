@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
 
-[CreateAssetMenu(menuName="uMMORPG Skill/Target Projectile", order=999)]
+[CreateAssetMenu(menuName = "uMMORPG Skill/Target Projectile", order = 999)]
 public class TargetProjectileSkill : DamageSkill
 {
     [Header("Projectile")]
@@ -78,7 +78,7 @@ public class TargetProjectileSkill : DamageSkill
         // -> we try to spawn it at the weapon's projectile mount
         if (projectile != null)
         {
-            GameObject go = Instantiate(projectile.gameObject, caster.effectMount.position, caster.effectMount.rotation);
+            GameObject go = Instantiate(projectile.gameObject, caster.GeteffectMount().position, caster.GeteffectMount().rotation);
             ProjectileSkillEffect effect = go.GetComponent<ProjectileSkillEffect>();
             effect.target = caster.target;
             effect.caster = caster;

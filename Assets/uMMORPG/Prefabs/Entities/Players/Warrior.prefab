@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  serverOnly: 0
+  localPlayerAuthority: 0
   m_AssetId: a0d8d3ee1a9d34deab41d803ad7a6ddf
   m_SceneId: 0
 --- !u!195 &19543452
@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6705c6fca6a841a3b356d0bfc685b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   agent: {fileID: 19543452}
   entity: {fileID: 11460454}
@@ -138,6 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 587ba4e2210854080997af9ebf15b816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   agent: {fileID: 19543452}
   proxchecker: {fileID: 11466958}
@@ -145,6 +147,7 @@ MonoBehaviour:
   collider: {fileID: 136824822290913060}
   audioSource: {fileID: 82252748755917382}
   _state: IDLE
+  lastCombatTime: 0
   level: 1
   _healthMax:
     baseValue: 100
@@ -178,11 +181,11 @@ MonoBehaviour:
     bonusPerLevel: 0
   damagePopupPrefab: {fileID: 179236, guid: e81ebbaa55e254e31b9909cef04e3855, type: 3}
   skillTemplates:
-  - {fileID: 11400000, guid: 605fccd420d8e495891132829d3ac497, type: 2}
-  - {fileID: 11400000, guid: 88f51d092fdf64bb0bf352cae8c522a0, type: 2}
-  - {fileID: 11400000, guid: 77d6d092d0a8c45a2aec83e9196a2b47, type: 2}
-  - {fileID: 11400000, guid: 073a4171553974a489a856df15a164ce, type: 2}
-  - {fileID: 11400000, guid: 79a26c6c394964a128b4c784ec1ab655, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   currentSkill: -1
   _effectMount: {fileID: 4359707572896818}
   _gold: 0
@@ -208,18 +211,18 @@ MonoBehaviour:
   maxLevel: 4
   _experience: 0
   _experienceMax:
+    multiplier: 100
     baseValue: 10
-    bonusPerLevel: 10
   skillExperience: 0
   indicatorPrefab: {fileID: 120922, guid: 95fc72c38103b4c928f9e12db60c9f8e, type: 3}
   indicator: {fileID: 0}
   inventorySize: 30
   defaultItems:
-  - item: {fileID: 11400000, guid: ae0314505b06f4f1280aa735db1c70e8, type: 2}
+  - item: {fileID: 0}
     amount: 10
-  - item: {fileID: 11400000, guid: 2608a09a88215491fbe878f632afe522, type: 2}
+  - item: {fileID: 0}
     amount: 10
-  - item: {fileID: 11400000, guid: acadbc0e96f8b49299aa1d1a5453f6f0, type: 2}
+  - item: {fileID: 0}
     amount: 5
   inventorySplitKeys: 300100002f010000
   trash:
@@ -234,7 +237,7 @@ MonoBehaviour:
   - requiredCategory: WeaponSword
     location: {fileID: 4171031891706604}
     defaultItem:
-      item: {fileID: 11400000, guid: ebde5c85fd92e499493a5ae898bef3cb, type: 2}
+      item: {fileID: 0}
       amount: 1
   - requiredCategory: Head
     location: {fileID: 0}
@@ -244,32 +247,32 @@ MonoBehaviour:
   - requiredCategory: Chest
     location: {fileID: 4198953908008972}
     defaultItem:
-      item: {fileID: 11400000, guid: 5570618a929d842a182f7dbed42c0109, type: 2}
+      item: {fileID: 0}
       amount: 1
   - requiredCategory: Legs
     location: {fileID: 4243986275592090}
     defaultItem:
-      item: {fileID: 11400000, guid: 4eda55d5000d34ff89fa773edb90c52e, type: 2}
+      item: {fileID: 0}
       amount: 1
   - requiredCategory: Shield
     location: {fileID: 4949489154790112}
     defaultItem:
-      item: {fileID: 11400000, guid: 8383cafc85a494a16b426cb11e5efa49, type: 2}
+      item: {fileID: 0}
       amount: 1
   - requiredCategory: Shoulders
     location: {fileID: 4120466622854316}
     defaultItem:
-      item: {fileID: 11400000, guid: 1fb260ab728654b48ae767a1a0ad1bb5, type: 2}
+      item: {fileID: 0}
       amount: 1
   - requiredCategory: Hands
     location: {fileID: 4510607469047824}
     defaultItem:
-      item: {fileID: 11400000, guid: da80831a1b8414f508e394ac277cd825, type: 2}
+      item: {fileID: 0}
       amount: 1
   - requiredCategory: Feet
     location: {fileID: 4781025431511700}
     defaultItem:
-      item: {fileID: 11400000, guid: 9cf6a58fcc5134fb7abde173664fc8ff, type: 2}
+      item: {fileID: 0}
       amount: 1
   skillbar:
   - reference: 
@@ -297,8 +300,8 @@ MonoBehaviour:
   targetNearestKey: 9
   localPlayerClickThrough: 1
   cancelActionKey: 27
-  offenderBuff: {fileID: 11400000, guid: b8d2834a38f4c411595b27152678ce72, type: 2}
-  murdererBuff: {fileID: 11400000, guid: e806fbf7b375c497790f2f50e57c38d0, type: 2}
+  offenderBuff: {fileID: 0}
+  murdererBuff: {fileID: 0}
   tradeRequestFrom: 
   tradeStatus: 0
   tradeOfferGold: 0
@@ -308,22 +311,21 @@ MonoBehaviour:
   itemMallCategories:
   - category: Potions
     items:
-    - {fileID: 11400000, guid: ae0314505b06f4f1280aa735db1c70e8, type: 2}
-    - {fileID: 11400000, guid: 2608a09a88215491fbe878f632afe522, type: 2}
-    - {fileID: 11400000, guid: 23bf22ba24d3447968ce8b813ab51fb4, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
   - category: Equipment
     items:
-    - {fileID: 11400000, guid: f42a7dcc06fc94c438532de816782ea2, type: 2}
+    - {fileID: 0}
   - category: Pets
     items:
-    - {fileID: 11400000, guid: 0cb7a3a7a075643faabef79596574d0d, type: 2}
-    - {fileID: 11400000, guid: 90e9c9458aa864b979e83f5515e7ba0a, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
   - category: Monster Scrolls
     items:
-    - {fileID: 11400000, guid: acadbc0e96f8b49299aa1d1a5453f6f0, type: 2}
+    - {fileID: 0}
   coins: 0
   couponWaitSeconds: 3
-  guildName: 
   guildInviteFrom: 
   guildInviteWaitSeconds: 3
   partyInviteFrom: 
@@ -345,6 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f98afe75dce041e7a2345a056f73328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   player: {fileID: 11460454}
   whisper:
@@ -401,6 +404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68a5308094a8c746b26bd483c618126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
 --- !u!114 &11466958
 MonoBehaviour:
@@ -414,6 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a89e192f1fcf4f888374a5aeb19eb29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   visUpdateInterval: 1
   forceHidden: 0
@@ -706,7 +711,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_textAlignment: 514
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -733,6 +737,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -747,12 +752,9 @@ MonoBehaviour:
     lineCount: 0
     pageCount: 0
     materialCount: 1
-  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 2322287297642881396}
   m_subTextObjects:
@@ -2382,7 +2384,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_textAlignment: 514
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -2409,6 +2410,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -2423,12 +2425,9 @@ MonoBehaviour:
     lineCount: 0
     pageCount: 0
     materialCount: 1
-  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 8327844845895886132}
   m_subTextObjects:
@@ -3120,7 +3119,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 3
   m_textAlignment: 514
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -3147,6 +3145,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -3161,12 +3160,9 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7933427237666685928}
   m_subTextObjects:
