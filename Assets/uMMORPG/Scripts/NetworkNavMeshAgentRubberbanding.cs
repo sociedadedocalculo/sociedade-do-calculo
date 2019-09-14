@@ -154,10 +154,10 @@ public class NetworkNavMeshAgentRubberbanding : NetworkBehaviour
     {
         // always send position so client knows if he's too far off and needs warp
         // we also need it for wasd movement anyway
-        writer.Write(transform.position);
+        writer.WriteVector3(transform.position);
 
         // always send speed in case it's modified by something
-        writer.Write(agent.speed);
+        writer.WriteSingle(agent.speed);
 
         // note: we don't send stopping distance because we always use '0' here
         // (because we always send the latest position every sendInterval)
