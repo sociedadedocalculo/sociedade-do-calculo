@@ -16,6 +16,11 @@ public class AggroArea : MonoBehaviour
     {
         Entity entity = co.GetComponentInParent<Entity>();
         if (entity) owner.OnAggro(entity);
+
+
+        if (owner is Monster)
+            Utils.InvokeMany(typeof(Monster), (Entity)owner, "OnClientAggro_", entity);             // Fhiz Core Change
+
     }
 
     void OnTriggerStay(Collider co)
