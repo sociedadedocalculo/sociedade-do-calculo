@@ -1,0 +1,137 @@
+<style>
+@import "https://fonts.googleapis.com/css?family=Open Sans:regular,semibold,italic,italicsemibold|Inconsolata&amp;v2";
+body {
+  font-family: "Open Sans";
+  margin: 6em 2em 2em 2em;
+}
+body:before {
+  content: '';
+  position: fixed;
+  top: 2%;
+  right: 3%;
+  height: 256px;
+  width: 256px;
+  background: url(https://indie-mmo.net/addon-readmes/images/global/fhiz-watermark.png) no-repeat 100% 100%;
+  background-size: contain;
+  z-index: 10;
+  opacity: 0.5;
+}
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+h1 {
+  position: fixed;
+  background: -webkit-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -moz-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -ms-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -o-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  width: 100%;
+  height: 80px;
+  padding: 10px 10px 10px 1em;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+h1 img {
+  height: 30px;
+  vertical-align: middle;
+  margin-bottom: 8px;
+}
+a { color: navy; }
+pre {
+  background: #eee;
+  margin-left: 2em;
+  padding: 5px;
+  border-left: 3px solid #ccc;
+}
+</style>
+
+<h1>
+<a href="https://www.patreon.com/Fhizban" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/patreon-badge.png" style="width:196px; height:48px"></a>
+<a href="https://www.youtube.com/channel/UC31c_fqaRo7B-omggZcMhxA" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/youtube-icon.png" style="width:48px; height:48px"></a>
+<a href="https://discord.gg/YkMbDHs" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/discord-icon.png" style="width:48px; height:48px"></a>
+<a href="https://www.indie-mmo.net" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/link-icon.png" style="width:48px; height:48px"></a>
+TOOLS 2019.103
+</h1>
+
+<p>
+<i>This utility AddOn is required by all other UCE AddOns, as it contains several shared functions and UI elements. Most notably are the universal "CastBarUI", "InfoBoxUI" and
+a universal "PopupUI". Those UI elements also come with options that can be edited via the Inspector. Besides that, this AddOn adds a lot of new functions to the core asset, those functions are required in order for the UCE AddOns to work as expected.</i>
+</p>
+
+<center>
+<img width="50%" src="https://indie-mmo.net/addon-readmes/images/tools/tools-1.jpg">
+<img width="50%" src="https://indie-mmo.net/addon-readmes/images/tools/tools-2.jpg">
+</center>
+
+<hr />
+
+<h3>Additional Requirements</h3>
+<p>
+Some UCE AddOns require other AddOns to be installed first in order to work properly:
+<br><br>
+This AddOn requires the following AddOns(s):
+<pre>
+<code><a href="https://unity3d.com/get-unity/download" target="_blank">Unity Engine</a>, <a href="http://ummorpg.net" target="_blank">uMMORPG3d Asset</a></code>
+</pre>
+</p>
+
+<h3>Scripting Defines</h3>
+<p>
+Most UCE AddOns use "Scripting Defines" that are added automatically on import. Sometimes you might be required to manually add or remove such a define. In that case, locate your defines list and remove the define (including the semicolon ; at the end). You find defines in your project here: Edit -> Project Settings -> Player - > Scripting Define Symbols (you can learn more about Defines <a href="https://indie-mmo.net/scripting-define-symbols/">HERE</a>).
+<br><br>
+This AddOn uses the following define(s):
+<pre>
+<code>_FHIZTOOLS</code>
+</pre>
+</p>
+
+<h3>Core Changes</h3>
+<p>
+Many AddOns require changes to the uMMORPG3d core scripts in order to function. The most common core changes are listed in a extra ReadMe contained in the UCE Tools AddOn (see <a href="https://indie-mmo.net/addon-readmes/_required-core-changes.html">HERE</a>). The changes for this AddOn are repeated below as well:
+<br><br>
+This AddOn requires the following core change(s):
+<pre>
+<code>Apply the global core changes, as stated in the <a href="_required-core-changes.html">Core Changes Readme</a></code>
+</pre>
+
+</p>
+
+<hr>
+
+<h2>INSTALLATION PROCESS</h2>
+
+<h3>Integration Steps</h3>
+<p>
+<ol>
+<li>[Required] Apply core changes as stated in the Core Changes ReadMe first.</li>
+<li>[Recommended] Remove the "AddOn Example" CS script file in uMMORPG AddOns folder, it can cause errors with AddOns (it's not required anyway, never)</li>
+<li>[Required] <b>Note:</b> Even if you do not plan to use the mySQL database, go to your NetworkManager on the scene and in its inspector switch your database to mySQL, then back again to SQLite and let Unity update everything.</li>
+<li>[Required] Add all objects from "Required UI" to your <b>Canvas</b> via drag-n-drop.</li>
+<li>[Required] Make sure <b>not</b> to put them into another object.</li>
+<li>[Optional] Edit the properties of "UCE_UI_Popup" and "UCE_UI_InfoBox" in the <b>Inspector</b>. This is especially important for text colors of the "UCE_UI_InfoBox".</li>
+<li>[Required] Add all scripts from "Required Scripts" to <b>each one</b> of your player prefabs as new component (Player Prefab > Inspector > Add Component).</li>
+<li>[Optional] Edit the properties of the "UCE_Popup" on your player prefab. Add up to 255 icons and up to 255 sounds of your choice to it. Those will be used by other AddOns to customize your Popup window.</li>
+<li>[Optional] Add any game objects from "Optional Prefabs" to your scene via drag-n-drop. And edit the properties in the <b>Inspector</b> - you can already test the Icons and Sounds this way: Start your game and walk into a prefab you placed and edited this way.
+<li>[Optional] Move the content of "Plugins" folder to your projects "Plugins" folder for consistency (not required but recommended).</li>
+<li>[Optional] You can also create speed modifying Buffs and passive Skills now, but be sure to set a max Speed to each player and monster prefab. Otherwise it won't work.</li>
+<li>[Optional] If you do not set a max speed manually, all of your entities max speed will be capped at 1.5 times their original speed.</li>
+</ol>
+</p>
+
+<h3>Additional Information</h3>
+
+<p><i>When updating from an older version, be sure to delete the <b>UCE_Tools.Buff.cs</b> - as this file is now obsolete and not used anymore!</i></p>
+
+<p><i>Copyright Note: Contains several free (MIT) plugins: "Paul's mySQL AddOn", "Suriyun Editor Tools", "WeightedRandomization", "iTween" , "LeanTween" and "Naughty Attributes", all available from the asset store (free) and elsewhere on the web. If you imported one or more of those free assets into your project already, delete the obsolete copy to prevent errors.</i></p>
+
+<hr />
+
+<h3>Videos</h3>
+
+<p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gN71p0Z3lFQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+
+<hr />
+<p>(c) Fhiz - for personal and commercial game projects, not for sharing or re-sale</p>

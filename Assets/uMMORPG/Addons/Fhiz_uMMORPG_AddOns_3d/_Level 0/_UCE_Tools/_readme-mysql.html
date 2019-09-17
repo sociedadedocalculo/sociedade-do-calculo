@@ -1,0 +1,244 @@
+<style>
+@import "https://fonts.googleapis.com/css?family=Open Sans:regular,semibold,italic,italicsemibold|Inconsolata&amp;v2";
+body {
+  font-family: "Open Sans";
+  margin: 6em 2em 2em 2em;
+}
+body:before {
+  content: '';
+  position: fixed;
+  top: 2%;
+  right: 3%;
+  height: 256px;
+  width: 256px;
+  background: url(https://indie-mmo.net/addon-readmes/images/global/fhiz-watermark.png) no-repeat 100% 100%;
+  background-size: contain;
+  z-index: 10;
+  opacity: 0.5;
+}
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+h1 {
+  position: fixed;
+  background: -webkit-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -moz-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -ms-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -o-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  width: 100%;
+  height: 80px;
+  padding: 10px 10px 10px 1em;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+h1 img {
+  height: 30px;
+  vertical-align: middle;
+  margin-bottom: 8px;
+}
+a { color: navy; }
+pre {
+  background: #eee;
+  margin-left: 2em;
+  padding: 5px;
+  border-left: 3px solid #ccc;
+}
+</style>
+
+<h1>
+<a href="https://www.patreon.com/Fhizban" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/patreon-badge.png" style="width:196px; height:48px"></a>
+<a href="https://www.youtube.com/channel/UC31c_fqaRo7B-omggZcMhxA" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/youtube-icon.png" style="width:48px; height:48px"></a>
+<a href="https://discord.gg/YkMbDHs" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/discord-icon.png" style="width:48px; height:48px"></a>
+<a href="https://www.indie-mmo.net" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/link-icon.png" style="width:48px; height:48px"></a>
+mySQL DATABASE INTEGRATION
+</h1>
+
+<p>
+The UCE Tools AddOn now provides both AddOn users and AddOn developers with a way to integrate mySQL into their projects. This integration is optional, more or less seamless and you can revert back to SQLite anytime.
+<br><br>
+If you never ever plan to use mySQL, you can ignore all modifications in this file and continue to use the default SQLite database. The script files in UCE Tools won't harm or affect your project in any way.
+<br><br>
+If you want to switch to mySQL, read the instructions below carefully and apply all changes. As this is a major core modification there are several steps required. When you are done, further integration of my AddOns will be seamless and they will also auto-adjust to mySQL. Finally, you can revert back to SQLite anytime.
+<br><br>
+<font color="red">Attention: When switching to mySQL, ALL AddOns and all of your script files will be forced to use it - I cannot provide you support or fixes for the community AddOns out there. I doubt the AddOns out there support mySQL, so they will break. You will have to update them yourself or contact their authors.</font>
+<br><br>
+<font color="red">Note: If you are already using Paul's mySQL AddOn - remove it and all mySQL.dlls with it. It is not required as it is part of my Tools now. Also make sure to remove all mySQL modifications applied already - they are now obsolete. UCE Tools takes care of this all!</font>
+
+
+</p>
+<hr />
+
+<h3>Scripting Defines</h3>
+<p>
+Most UCE AddOns use "Scripting Defines" that are added automatically on import. Sometimes you might be required to manually add or remove such a define. In that case, locate your defines list and remove the define (including the semicolon ; at the end). You find defines in your project here: Edit -> Project Settings -> Player - > Scripting Define Symbols (you can learn more about Defines <a href="https://indie-mmo.net/scripting-define-symbols/">HERE</a>).
+<br><br>
+This AddOn uses the following define(s):
+<pre>
+<code>_SQLITE <i>or</i> _MYSQL</code>
+</pre>
+</p>
+
+<h2>INSTALLATION PROCESS</h2>
+
+<h3>Core Changes</h3>
+<p>
+Requires a few additonal core changes:
+
+<details>
+<summary><b><font color="red">[Click]</font></b> Scripts/NetworkManagerMMO.cs</summary>
+<h3>NetworkManagerMMO.cs (ca. line 691)</h3>
+<p> 
+Exchange this code block:
+<pre><code>
+public override void OnValidate()
+    {
+        base.OnValidate();
+
+        // ip has to be changed in the server list. make it obvious to users.
+        if (!Application.isPlaying && networkAddress != "")
+            networkAddress = "Use the Server List below!";
+
+        // need enough character selection locations for character limit
+        if (selectionLocations.Length != characterLimit)
+        {
+            // create new array with proper size
+            Transform[] newArray = new Transform[characterLimit];
+
+            // copy old values
+            for (int i = 0; i < Mathf.Min(characterLimit, selectionLocations.Length); ++i)
+                newArray[i] = selectionLocations[i];
+
+            // use new array
+            selectionLocations = newArray;
+        }
+    }
+</code></pre>
+...with the code block below (adds a new hook at the end):
+<pre><code>
+public override void OnValidate()
+    {
+        base.OnValidate();
+
+        // ip has to be changed in the server list. make it obvious to users.
+        if (!Application.isPlaying && networkAddress != "")
+            networkAddress = "Use the Server List below!";
+
+        // need enough character selection locations for character limit
+        if (selectionLocations.Length != characterLimit)
+        {
+            // create new array with proper size
+            Transform[] newArray = new Transform[characterLimit];
+
+            // copy old values
+            for (int i = 0; i < Mathf.Min(characterLimit, selectionLocations.Length); ++i)
+                newArray[i] = selectionLocations[i];
+
+            // use new array
+            selectionLocations = newArray;
+        }
+        
+        Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnValidate_");		// Fhiz Core Change
+    }
+</code></pre>
+</p>
+</details>
+
+<details>
+<summary><b><font color="red">[Click]</font></b>  Scripts/Database.cs</summary>
+<h3>Database.cs (at the very beginning and the very end of the file)</h3>
+<p> 
+Add a new line at the very beginning of the file:
+<pre><code>
+#if _SQLITE
+</code></pre>
+And add another line at the very end of the file:
+<pre><code>
+#endif
+</code></pre>
+</p>
+</details>
+
+</p>
+
+<h3>Integration Steps</h3>
+<p>
+<ol>
+<li>[Required] Apply core changes as stated above first.</li>
+<li>[Required] Make sure that you updated all UCE AddOns (by Fhiz) to the latest version.</li>
+<li>[Required] <font color="red">Double check if you are using third party AddOns, if they support mySQL or better remove them (they will break).</font></li>
+<li>[Required] Install latest mySQL on your server <a href="https://dev.mysql.com/downloads/">https://dev.mysql.com/downloads/</a></li>
+<li>[Required] You can find some basic information about mySQL installation and setup here: <a href="https://www.ionos.com/community/hosting/mysql/install-and-use-mysqlmariadb/">https://www.ionos.com/community/hosting/mysql/install-and-use-mysqlmariadb/</a></li>
+<li>[Optioanl] Set character encoding (if MySQL version 7 or earlier) If using MySQL 7 or earlier,  the default character set is `latin1`, which causes problems for the mysql driver. You need to change it to utf8mb4 or you will get exceptions edit my.cnf or my.ini and add these settings:<br>
+<pre><code>
+[mysqld]<br>
+init_connect='SET collation_connection = utf8mb4_unicode_ci' <br>
+init_connect='SET NAMES utf8mb4' <br>
+character-set-server=utf8mb4 <br>
+collation-server=utf8mb4_unicode_ci<br> 
+</code></pre>
+<li>[Required] Create a database. For example:<br>
+<pre><code>
+create database ummorpg;
+</code></pre>
+</li>
+</li>
+<li>[Required] Create a user for your database. For example:<br>
+<pre><code>
+create user 'ummorpg'@'%'  identified by 'db_password';
+</code></pre>
+</li>
+<li>[Required] Grant your user the required privileges. For example:</li>
+<pre><code>
+grant all on ummorpg.* to 'ummorpg'@'%';
+</code></pre>
+<li>[Required] Restart mySQL. e.g. via linux command line:</li>
+<pre><code>
+/etc/init.d/mysqld restart
+</code></pre>
+<li>[Required] Go to your NetworkManager, in the inspector locate the new "Database Type" Setting and switch from SQLite to mySQL.<br>
+<img src="https://indie-mmo.net/addon-readmes/images/sqlite.png">
+</li>
+<li>[Required] Wait a few seconds and allow the UnityEditor to update everything.</li>
+<li>[Required] Edit the new property slots that are now showing by entering your mySQL database credentials.<br>
+<img src="https://indie-mmo.net/addon-readmes/images/mysql.png">
+</li>
+<li>[Optional] Now build and/or run your game.</li>
+</ol>
+</p>
+
+<h3>Notes</h3>
+<p>
+
+<i>
+When switching databases back and forth, only the currently active database code is included in your build.
+<br><br>
+You can easily switch back and forth on NetworkManager, this allows for quick testing using SQLite and mySQL in your game production environment.
+<br><br>
+When running from the editor while using a remotely hosted database, expect lag. Especially when saving characters. Imagine your server is your local Editor while the database is hosted somewhere else.
+<br><br>
+When you cannot connect from editor to a remote database, make sure it accepts remote connections.
+<br><br>
+The two scripting defines that are used are _MYSQL and _SQLITE - should you ever have to add/remove them manually.
+
+<br><br>
+While there are red console errors in your project, the AddOn won't be able to add the _MYSQL / _SQLITE defines. This can result in the fact that the whole database is not working as expected. You should therefore fix all errors first and then make sure the defines have been set. Its a good idea to switch back/forth database once to trigger the defines being set. Or add manually when in doubt.
+
+<br><br>
+<font color="red">Do not play around with the database setting on Network Manager before you finished all the integration steps first!</font><br>
+
+</i>
+</p>
+
+<h3>Security Considerations</h3>
+<p>
+<i>
+Before compiling a client, delete your database credentials from the NetworkManager (or overwrite them with junk). This way they won't be available at the client at all and cannot be exposed by hacking.<br>
+<br>
+Just note your credentials somewhere and dont forget to re-enter them when compiling a server.
+</i>
+
+</p>
+
+<hr />
+<p>(c) Fhizban - for personal and commercial game projects, not for sharing or re-sale</p>

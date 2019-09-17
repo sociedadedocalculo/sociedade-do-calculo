@@ -57,7 +57,9 @@ namespace UnityEditor.AI
         static Color s_HandleColorDisabled = new Color(127f * 0.75f, 214f * 0.75f, 244f * 0.75f, 100f) / 255;
 
         static int s_HandleControlIDHint = typeof(NavMeshSurfaceEditor).Name.GetHashCode();
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
         BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle(s_HandleControlIDHint);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
         bool editingCollider
         {
@@ -111,11 +113,17 @@ namespace UnityEditor.AI
 
         static NavMeshData GetNavMeshAssetToDelete(NavMeshSurface navSurface)
         {
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             var prefabType = PrefabUtility.GetPrefabType(navSurface);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             if (prefabType == PrefabType.PrefabInstance || prefabType == PrefabType.DisconnectedPrefabInstance)
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
             {
                 // Don't allow deleting the asset belonging to the prefab parent
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
                 var parentSurface = PrefabUtility.GetPrefabParent(navSurface) as NavMeshSurface;
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
                 if (parentSurface && navSurface.navMeshData == parentSurface.navMeshData)
                     return null;
             }
@@ -440,6 +448,7 @@ namespace UnityEditor.AI
             var navSurface = (NavMeshSurface)target;
             var bounds = new Bounds(navSurface.transform.position, navSurface.size);
 
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             EditMode.DoEditModeInspectorModeButton(
                 EditMode.SceneViewEditMode.Collider,
                 "Edit Volume",
@@ -447,6 +456,7 @@ namespace UnityEditor.AI
                 bounds,
                 this
                 );
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
         }
 
         void OnSceneGUI()

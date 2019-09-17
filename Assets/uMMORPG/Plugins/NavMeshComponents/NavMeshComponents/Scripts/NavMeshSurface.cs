@@ -368,12 +368,20 @@ namespace UnityEngine.AI
                 return false;
 
             // Prefab parent owns the asset reference
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             var prefabType = UnityEditor.PrefabUtility.GetPrefabType(this);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             if (prefabType == UnityEditor.PrefabType.Prefab)
+            {
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
                 return false;
+            }
 
             // An instance can share asset reference only with its prefab parent
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             var prefab = UnityEditor.PrefabUtility.GetPrefabParent(this) as NavMeshSurface;
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
             if (prefab != null && prefab.navMeshData == navMeshData)
                 return false;
 

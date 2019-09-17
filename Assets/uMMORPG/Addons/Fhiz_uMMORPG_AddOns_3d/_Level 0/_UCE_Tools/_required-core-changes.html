@@ -1,0 +1,1216 @@
+<style>
+@import "https://fonts.googleapis.com/css?family=Open Sans:regular,semibold,italic,italicsemibold|Inconsolata&amp;v2";
+body {
+  font-family: "Open Sans";
+  margin: 6em 2em 2em 2em;
+}
+body:before {
+  content: '';
+  position: fixed;
+  top: 2%;
+  right: 3%;
+  height: 256px;
+  width: 256px;
+  background: url(https://indie-mmo.net/addon-readmes/images/global/fhiz-watermark.png) no-repeat 100% 100%;
+  background-size: contain;
+  z-index: 10;
+  opacity: 0.5;
+}
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+h1 {
+  position: fixed;
+  background: -webkit-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -moz-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -ms-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -o-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  width: 100%;
+  height: 80px;
+  padding: 10px 10px 10px 1em;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+h1 img {
+  height: 30px;
+  vertical-align: middle;
+  margin-bottom: 8px;
+}
+a { color: navy; }
+pre {
+  background: #eee;
+  margin-left: 2em;
+  padding: 5px;
+  border-left: 3px solid #ccc;
+}
+</style>
+
+<h1>
+<a href="https://www.patreon.com/Fhizban" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/patreon-badge.png" style="width:196px; height:48px"></a>
+<a href="https://www.youtube.com/channel/UC31c_fqaRo7B-omggZcMhxA" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/youtube-icon.png" style="width:48px; height:48px"></a>
+<a href="https://discord.gg/YkMbDHs" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/discord-icon.png" style="width:48px; height:48px"></a>
+<a href="https://www.indie-mmo.net" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/link-icon.png" style="width:48px; height:48px"></a>
+CORE CHANGES
+</h1>
+
+<p>
+<p>Please apply the following core changes one by one, manually to the original and unmodified script files of uMMORPG3d of the latest version.</p>
+
+<p><b>Global Core Changes</b> can be applied without risk and all at once, even if you don't use all UCE AddOns. The changes won't break your project or interfere with any AddOns or other modifications at all.</p>
+
+<p><b>AddOn Specific Core Changes</b> should only be applied when you are using the AddOn that is stated in the core change headline. Might cause errors if you apply the changes while not using the corresponding AddOn.</p>
+
+<hr>
+
+<h4>GLOBAL CORE CHANGES</h4>
+
+<h4>Partial Classes</h4>
+
+<p>You should - and are encouraged to - add the keyword <b>partial</b> to <b>all</b> classes in the uMMORPG3d core scripts. You can also just do the important changes below (doing all of them prepares your project better for the future). This can easily be done via find+replace using a text editor, below is a list of the most important ones if you don't know how to do it:</p>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> EquipmentItem.cs (ca. line 5)</summary>
+<p> 
+Add the partial keyword to this line:
+<pre><code>
+public class EquipmentItem : UsableItem
+</code></pre>
+...should look like this now:
+<pre><code>
+public <font color="red">partial</font> class EquipmentItem : UsableItem
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> BonusSkill.cs (ca. line 18)</summary>
+<p> 
+Add the partial keyword to this line:
+<pre><code>
+public abstract class BonusSkill : ScriptableSkill
+</code></pre>
+...should look like this now:
+<pre><code>
+public abstract <font color="red">partial</font> class BonusSkill : ScriptableSkill
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> UsableItem.cs (ca. line 5)</summary>
+<p> 
+Add the partial keyword to this line:
+<pre><code>
+public abstract class UsableItem : ScriptableItem
+</code></pre>
+...should look like this now:
+<pre><code>
+public abstract <font color="red">partial</font> class UsableItem : ScriptableItem
+</code></pre>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> DamageSkill.cs (ca. line 6)</summary>
+<p> 
+Add the partial keyword to this line:
+<pre><code>
+public abstract class DamageSkill : ScriptableSkill
+</code></pre>
+...should look like this now:
+<pre><code>
+public abstract <font color="red">partial</font> class DamageSkill : ScriptableSkill
+</code></pre>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> WeaponItem.cs (ca. line 6)</summary>
+<p> 
+Add the partial keyword to this line:
+<pre><code>
+public class WeaponItem : EquipmentItem
+</code></pre>
+...should look like this now:
+<pre><code>
+public <font color="red">partial</font> class WeaponItem : EquipmentItem
+</code></pre>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> BuffSkill.cs (ca. line 6)</summary>
+<p> 
+Add the partial keyword to this line:
+<pre><code>
+public abstract class BuffSkill : BonusSkill
+</code></pre>
+...should look like this now:
+<pre><code>
+public abstract <font color="red">partial</font> class BuffSkill : BonusSkill
+</code></pre>
+</details>
+
+
+<h4>AddOn System Hooks</h4>
+
+<p>You have to add new "AddOn Hooks" to the core scripts, in order to allow the system to hook into. The hooks won't affect or harm your project, even if you do not use the corresponding AddOns. If another AddOn tells you do modify the same code block, you can do so without problems - just do <b>not</b> remove the hook (the hook won't mind 3rd party code at all).</p>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 1479)</summary>
+<p> 
+Add HOOK to this code block:
+<pre><code>
+void OnEquipmentChanged(SyncListItemSlot.Operation op, int index)
+{
+	// update the model
+	RefreshLocation(index);
+}</code></pre>
+At the end of the code block, before the final closing bracket:
+<pre><code>
+void OnEquipmentChanged(SyncListItemSlot.Operation op, int index, ItemSlot slot)
+{
+	// update the model
+	RefreshLocation(index);
+	<font color="red">
+	Utils.InvokeMany(typeof(Player), this, "OnEquipmentChanged_");</font>
+}
+</code></pre>
+</p>
+</details>
+
+
+
+
+
+
+<hr>
+
+<h4>ADDON SPECIFIC CORE CHANGES</h4>
+
+<h4>&middot; When using "UCE PayPal Payments" AddOn</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> UIItemMall.cs (ca. line 93)</summary>
+<p> 
+DELETE or COMMENT OUT:
+
+<pre><code>buyButton.onClick.SetListener(() => { Application.OpenURL(buyUrl); });
+</code></pre>
+
+COMMENT OUT is done by adding // in front of each line:
+
+<pre><code><font color="red">//</font>buyButton.onClick.SetListener(() => { Application.OpenURL(buyUrl); });
+</code></pre>
+
+</p>
+</details>
+
+<h4>When using "UCE Quests" AddOn</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 1888)</summary>
+<p> 
+DELETE or COMMENT OUT:
+<pre><code>
+	[Server]
+    public void QuestsOnKilled(Entity victim)
+    {
+        // call OnKilled in all active (not completed) quests
+        for (int i = 0; i < quests.Count; ++i)
+            if (!quests[i].completed)
+                quests[i].OnKilled(this, i, victim);
+    }
+</code></pre>
+
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 1411)</summary>
+<p> 
+DELETE or COMMENT OUT:
+<pre><code>
+[Server]
+    public void OnDamageDealtToPlayer(Player player)
+    {
+        // was he innocent?
+        if (!player.IsOffender() && !player.IsMurderer())
+        {
+            // did we kill him? then start/reset murder status
+            // did we just attack him? then start/reset offender status
+            // (unless we are already a murderer)
+            if (player.health == 0) StartMurderer();
+            else if (!IsMurderer()) StartOffender();
+        }
+    }
+</code></pre>
+
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Npc.cs (ca. line 58)</summary>
+<p> 
+DELETE or COMMENT OUT:
+<pre><code>
+//overlays //////////////////////////////////////////////////
+protected override void UpdateOverlays()
+{
+   base.UpdateOverlays();
+   
+   if (questOverlay != null)
+   {
+     //find local player (null while in character selection)
+     Player player = Player.localPlayer;
+     if (player != null)
+     {
+        if(quests.Any(q => player.CanCompleteQuest(q.name)))
+           questOverlay.text = "!";
+        else if (quests.Any(player.CanAcceptQuest))
+           questOverlay.text = "?";
+        else 
+            questOverlay.text = "";
+     }
+   }
+}
+</code></pre>
+
+</p>
+</details>
+
+<h4>&middot; When using "UCE PvP Zone & Realms" AddOn</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 1561)</summary>
+<p> 
+EXCHANGE this code block:
+<pre><code>
+// CanAttack check
+// we use 'is' instead of 'GetType' so that it works for inherited types too
+public override bool CanAttack(Entity entity)
+{
+	return base.CanAttack(entity) &&
+		   (entity is Monster ||
+			entity is Player ||
+			(entity is Pet && entity != activePet) ||
+			(entity is Mount && entity != activeMount));
+}     
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+// CanAttack check
+// we use 'is' instead of 'GetType' so that it works for inherited types too
+public override bool CanAttack(Entity entity)
+{
+	<font color="red">return UCE_CanAttack(entity);</font>
+}          
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Monster.cs (ca. line 547)</summary>
+<p> 
+EXCHANGE this code block:
+<pre><code>
+// CanAttack check
+// we use 'is' instead of 'GetType' so that it works for inherited types too
+public override bool CanAttack(Entity entity)
+{
+    return base.CanAttack(entity) &&
+           (entity is Player ||
+            entity is Pet ||
+            entity is Mount);
+}
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+// CanAttack check
+// we use 'is' instead of 'GetType' so that it works for inherited types too
+public override bool CanAttack(Entity entity)
+{
+    <font color="red">return UCE_CanAttack(entity);</font>
+}
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "UCE Npc Restrictions" AddOn</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 2893)</summary>
+<p> 
+EXCHANGE the following line...
+<pre><code>
+else if (entity is Npc && entity.health > 0 &&
+</code></pre>
+...COMPLETELY with this line:
+<pre><code>
+<font color="red">else if (UCE_SelectionHandling_Npc(entity) &&</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "LootRules" AddOn</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 2900)</summary>
+<p> 
+EXCHANGE the following line...
+<pre><code>
+else if (entity is Monster && entity.health == 0) &&
+</code></pre>
+...COMPLETELY with this line:
+<pre><code>
+<font color="red">else if (UCE_SelectionHandling_DeadMonster(entity) &&</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "Attributes" AddOn</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Entity.cs (starts ca. line 408)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+// combat //////////////////////////////////////////////////////////////////
+    // deal damage at another entity
+    // (can be overwritten for players etc. that need custom functionality)
+    [Server]
+    public virtual void DealDamageAt(Entity entity, int amount, float stunChance=0, float stunTime=0)
+    {
+        int damageDealt = 0;
+        DamageType damageType = DamageType.Normal;
+
+        // don't deal any damage if entity is invincible
+        if (!entity.invincible)
+        {
+            // block? (we use < not <= so that block rate 0 never blocks)
+            if (UnityEngine.Random.value < entity.blockChance)
+            {
+                damageType = DamageType.Block;
+            }
+            // deal damage
+            else
+            {
+                // subtract defense (but leave at least 1 damage, otherwise
+                // it may be frustrating for weaker players)
+                damageDealt = Mathf.Max(amount - entity.defense, 1);
+
+                // critical hit?
+                if (UnityEngine.Random.value < criticalChance)
+                {
+                    damageDealt *= 2;
+                    damageType = DamageType.Crit;
+                }
+
+                // deal the damage
+                entity.health -= damageDealt;
+
+                // stun?
+                if (UnityEngine.Random.value < stunChance)
+                {
+                    // dont allow a short stun to overwrite a long stun
+                    // => if a player is hit with a 10s stun, immediately
+                    //    followed by a 1s stun, we don't want it to end in 1s!
+                    double newStunEndTime = NetworkTime.time + stunTime;
+                    entity.stunTimeEnd = Math.Max(newStunEndTime, stunTimeEnd);
+                }
+            }
+        }
+
+        // let's make sure to pull aggro in any case so that archers
+        // are still attacked if they are outside of the aggro range
+        entity.OnAggro(this);
+
+        // show effects on clients
+        entity.RpcOnDamageReceived(damageDealt, damageType);
+
+        // reset last combat time for both
+        lastCombatTime = NetworkTime.time;
+        entity.lastCombatTime = NetworkTime.time;
+
+        // addon system hooks
+        Utils.InvokeMany(typeof(Entity), this, "DealDamageAt_", entity, amount);
+    }</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// health
+    public override int healthMax
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).healthBonus).Sum();
+
+            // calculate strength bonus (1 strength means 1% of hpMax bonus)
+            int attributeBonus = Convert.ToInt32(_healthMax.Get(level) * (strength * 0.01f));
+
+            // base (health + buff) + equip + attributes
+            return base.healthMax + equipmentBonus + attributeBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+ 	// mana
+    public override int manaMax
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).manaBonus).Sum();
+
+            // calculate intelligence bonus (1 intelligence means 1% of hpMax bonus)
+            int attributeBonus = Convert.ToInt32(_manaMax.Get(level) * (intelligence * 0.01f));
+
+            // base (mana + buff) + equip + attributes
+            return base.manaMax + equipmentBonus + attributeBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// damage
+    public override int damage
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).damageBonus).Sum();
+
+            // return base (damage + buff) + equip
+            return base.damage + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// defense
+    public override int defense
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).defenseBonus).Sum();
+
+            // return base (defense + buff) + equip
+            return base.defense + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// block
+    public override float blockChance
+    {
+        get
+        {
+            // calculate equipment bonus
+            float equipmentBonus = (from slot in equipment
+                                    where slot.amount > 0
+                                    select ((EquipmentItem)slot.item.data).blockChanceBonus).Sum();
+
+            // return base (blockChance + buff) + equip
+            return base.blockChance + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// crit
+    public override float criticalChance
+    {
+        get
+        {
+            // calculate equipment bonus
+            float equipmentBonus = (from slot in equipment
+                                    where slot.amount > 0
+                                    select ((EquipmentItem)slot.item.data).criticalChanceBonus).Sum();
+
+            // return base (criticalChance + buff) + equip
+            return base.criticalChance + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "CantGoNaked" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 40) </summary>
+<p> 
+Exchange this code block:
+<pre><code>
+[Serializable]
+public struct EquipmentInfo
+{
+    public string requiredCategory;
+    public Transform location;
+    public ScriptableItem defaultItem;
+    public int defaultItemAmount;
+}
+</code></pre>
+...with the code block below:
+<pre><code>
+<font color="red">#pragma warning disable</font>
+[Serializable]
+public partial struct EquipmentInfo												// Fhiz Core Change
+{
+    public string requiredCategory;
+    public Transform location;
+    public ScriptableItem defaultItem;
+    public int defaultItemAmount;
+}
+<font color="red">#pragma warning restore</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "UsageRequirements" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> UsableItem.cs (ca. line 23)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+// check level etc. and make sure that cooldown buff elapsed (if any)
+        return player.level >= minLevel &&
+               (cooldownBuff == null ||
+                player.GetBuffIndexByName(cooldownBuff.name) == -1);
+</code></pre>
+...COMPLETELY with this code block:
+<pre><code>
+// check level etc. and make sure that cooldown buff elapsed (if any)
+        return <font color="red">UCE_CanUse(player) &&									// Fhiz Core Change</font>
+        		player.level >= minLevel &&
+               (cooldownBuff == null ||
+                player.GetBuffIndexByName(cooldownBuff.name) == -1);
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> ScriptableSkill.cs (ca. line 56) </summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+    public virtual bool CheckSelf(Entity caster, int skillLevel)
+    {
+        // has a weapon (important for projectiles etc.), no cooldown, hp, mp?
+        return caster.health > 0 &&
+               caster.mana >= manaCosts.Get(skillLevel) &&
+               caster.GetEquippedWeaponCategory().StartsWith(requiredWeaponCategory);
+    }
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+    public virtual bool CheckSelf(Entity caster, int skillLevel)
+    {
+        // has a weapon (important for projectiles etc.), no cooldown, hp, mp?
+        return <font color="red">UCE_CanCast(caster, skillLevel) &&							// Fhiz Core Change</font>
+        		caster.health > 0 &&
+               caster.mana >= manaCosts.Get(skillLevel) &&
+               caster.GetEquippedWeaponCategory().StartsWith(requiredWeaponCategory);
+    }
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "PrestigeClasses" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 1920)</summary>
+<p> 
+EXCHANGE this code block:
+<pre><code>
+// helper function for command and UI
+    // -> this is for learning and upgrading!
+    public bool CanUpgradeSkill(Skill skill)
+    {
+        return skill.level < skill.maxLevel &&
+               level >= skill.upgradeRequiredLevel &&
+               skillExperience >= skill.upgradeRequiredSkillExperience &&
+               (skill.predecessor == null || (HasLearnedSkillWithLevel(skill.predecessor.name, skill.predecessorLevel)));
+    }
+
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+// helper function for command and UI
+    // -> this is for learning and upgrading!
+    public bool CanUpgradeSkill(Skill skill)
+    {
+        return <font color="red">UCE_CanUpgradeSkill(skill) &&							// Fhiz Core Change</font>
+        		skill.level < skill.maxLevel &&
+               level >= skill.upgradeRequiredLevel &&
+               skillExperience >= skill.upgradeRequiredSkillExperience &&
+               (skill.predecessor == null || (HasLearnedSkillWithLevel(skill.predecessor.name, skill.predecessorLevel)));
+    }
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "MeshSwitcher" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font>Player.cs (ca. line 333)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        // setup synclist callbacks on client. no need to update and show and
+        // animate equipment on server
+        equipment.Callback += OnEquipmentChanged;
+		
+        // refresh all locations once (on synclist changed won't be called
+        // for initial lists)
+        // -> needs to happen before ProximityChecker's initial SetVis call,
+        //    otherwise we get a hidden character with visible equipment
+        //    (hence OnStartClient and not Start)
+        for (int i = 0; i < equipment.Count; ++i)
+            RefreshLocation(i);
+    }
+</code></pre>
+...COMPLETELY with the code block below (adds a new hook):
+<pre><code>
+public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        // setup synclist callbacks on client. no need to update and show and
+        // animate equipment on server
+        equipment.Callback += OnEquipmentChanged;
+		
+		<font color="red">Utils.InvokeMany(typeof(Player), this, "OnStartClient_");    // Fhiz Core Change</font>
+		
+        // refresh all locations once (on synclist changed won't be called
+        // for initial lists)
+        // -> needs to happen before ProximityChecker's initial SetVis call,
+        //    otherwise we get a hidden character with visible equipment
+        //    (hence OnStartClient and not Start)
+        for (int i = 0; i < equipment.Count; ++i)
+            RefreshLocation(i);
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 1744)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+public void RefreshLocation(int index)
+    {
+       // ....
+       
+       .... lots of code here ...
+       
+       .... //
+    }
+
+</code></pre>
+...COMPLETELY with the code line below (adds a hook in the last part):
+<pre><code>
+public void RefreshLocation(int index)
+    {
+        //....
+        
+        .... still lots of code here ...
+        
+        ....//
+        
+        // addon system hooks
+        <font color="red">Utils.InvokeMany(typeof(Player), this, "OnRefreshLocation_", index);</font>
+        
+    }
+
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "AggroOverlay" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> AggroArea.cs (ca. line 15)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+// same as OnTriggerStay
+    void OnTriggerEnter(Collider co)
+    {
+        Entity entity = co.GetComponentInParent&lt;Entity&gt;();
+        if (entity) owner.OnAggro(entity);
+    }
+</code></pre>
+...COMPLETELY with the code block below (adds a new hook):
+<pre><code>
+// same as OnTriggerStay
+    void OnTriggerEnter(Collider co)
+    {
+        Entity entity = co.GetComponentInParent&lt;Entity&gt;();
+        if (entity) owner.OnAggro(entity);
+        
+        <font color="red">
+        if (owner is Monster)
+        	Utils.InvokeMany(typeof(Monster), (Entity)owner, "OnClientAggro_", entity);
+        </font>
+    }
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "TimedSkillFinish" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Monster.cs (ca. line 472 )</summary>
+<p>
+EXCHANGE this code block (everything, the function name, both curly brackes and all therein):
+<pre><code>
+if (EventSkillFinished())
+{
+	... lots of code here ...
+}
+</code></pre>
+...COMPELTELY with the code block below:
+<pre><code>
+#if _FHIZTIMEDSKILLFINISH
+		if (UCE_StateSkillFinished())
+			return "IDLE";
+#else
+        if (EventSkillFinished())
+        {
+            // finished casting. apply the skill on the target.
+            FinishCastSkill(skills[currentSkill]);
+
+            // did the target die? then clear it so that the monster doesn't
+            // run towards it if the target respawned
+            if (target.health == 0) target = null;
+
+            // go back to IDLE
+            lastSkill = currentSkill;
+            currentSkill = -1;
+            return "IDLE";
+        }
+#endif
+</code></pre>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 805)</summary>
+<p>
+Exchange this code block (everything, the function name, both curly brackes and all therein):
+<pre><code>
+if (EventSkillFinished())
+{
+	... lots of code here ...
+}
+</code></pre>
+...with the code block below:
+<pre><code>
+#if _FHIZTIMEDSKILLFINISH
+		if (UCE_StateSkillFinished())
+		return "IDLE";
+#else
+        if (EventSkillFinished())
+        {
+            // apply the skill after casting is finished
+            // note: we don't check the distance again. it's more fun if players
+            //       still cast the skill if the target ran a few steps away
+            Skill skill = skills[currentSkill];
+
+            // apply the skill on the target
+            FinishCastSkill(skill);
+
+            // clear current skill for now
+            currentSkill = -1;
+
+            // target-based skill and no more valid target? then clear
+            // (otherwise IDLE will get an unnecessary skill request and mess
+            //  with targeting)
+            bool validTarget = target != null && target.health > 0;
+            if (currentSkill != -1 && skills[currentSkill].cancelCastIfTargetDied && !validTarget)
+                currentSkill = -1;
+
+            // use next target if the user tried to target another while casting
+            UseNextTargetIfAny();
+
+            // go back to IDLE
+            return "IDLE";
+        }
+#endif
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "WordFilter" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> NetworkManagerMMO.cs (ca. line 81)</summary>
+<p>
+EXCHANGE this code block (everything, the function name, both curly brackes and all therein):
+<pre><code>
+    public bool IsAllowedCharacterName(string characterName)
+    {
+        // not too long?
+        // only contains letters, number and underscore and not empty (+)?
+        // (important for database safety etc.)
+        return characterName.Length <= characterNameMaxLength &&
+               Regex.IsMatch(characterName, @"^[a-zA-Z0-9_]+$");
+    }
+</code></pre>
+...COMPLETELY with the code block below (commenting out the codeblock):
+<pre><code>
+<font color="red">/*</font>
+    public bool IsAllowedCharacterName(string characterName)
+    {
+        // not too long?
+        // only contains letters, number and underscore and not empty (+)?
+        // (important for database safety etc.)
+        return characterName.Length <= characterNameMaxLength &&
+               Regex.IsMatch(characterName, @"^[a-zA-Z0-9_]+$");
+    }
+<font color="red">*/</font>
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><b>[Click]</b></font> PlayerChat.cs (ca. line 98)</summary>
+<p>
+Exchange this line:
+<pre><code>
+        if (!string.IsNullOrWhiteSpace(text))
+</code></pre>
+...with the line below:
+<pre><code>
+        <font color="red">if (UCE_IsAllowedChatText(text))					// Fhiz Core Change</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "WalkingNpc" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Npc.cs (ca. line 50)</summary>
+<p>
+EXCHANGE this line:
+<pre><code>
+    [Server] protected override string UpdateServer() { return state; }
+</code></pre>
+...COMPLETELY with the line below (this comments out the line):
+<pre><code>
+    <font color=red">//</font>[Server] protected override string UpdateServer() { return state; }
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "CharacterCreation" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> UICharacterSelection.cs (ca. line 11)</summary>
+<p>
+EXCHANGE this line:
+<pre><code>
+    public UICharacterCreation uiCharacterCreation;
+</code></pre>
+...COMPLETELY with the line below:
+<pre><code>
+    <font color="red">public UCE_UI_CharacterCreation uiCharacterCreation;</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "UnlockableClasses" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> NetworkManagerMMO.cs (ca. line 287)</summary>
+<p>
+EXCHANGE this line:
+<pre><code>
+    Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerLogin_", message);
+</code></pre>
+...COMPLETELY with the line below (adds the word "conn" before "message" - separate with a colon ,):
+<pre><code>
+    <font color="red">Utils.InvokeMany(typeof(NetworkManagerMMO), this, "OnServerLogin_", conn, message);</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "Exploration" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> UIMinimap.cs (ca. line 32)</summary>
+<p>
+EXCHANGE this line:
+<pre><code>
+    sceneText.text = SceneManager.GetActiveScene().name;
+</code></pre>
+...COMPLETELY with the line below (comments the line out):
+<pre><code>
+    <font color="red">//</font>sceneText.text = SceneManager.GetActiveScene().name;
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "CursedEquipment" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 3354)</summary>
+<p>
+DELETE or COMMENT OUT:
+<pre><code>
+    void OnDragAndDrop_EquipmentSlot_InventorySlot(int[] slotIndices)
+    {
+        // slotIndices[0] = slotFrom; slotIndices[1] = slotTo
+        CmdSwapInventoryEquip(slotIndices[1], slotIndices[0]); // reversed
+    }
+</code></pre>
+</p>
+</details>
+
+</p>
+</details>
+
+<h4>&middot; When using "EquipableBag" AddOn:</h4>
+
+<details>
+<summary><font color="red"><b>[Click]</b></font> Player.cs (ca. line 242)</summary>
+<p>
+EXCHANGE this line:
+<pre><code>
+    public int inventorySize = 30;
+</code></pre>
+...COMPLETELY with the line below (comments the line out):
+<pre><code>
+    <font color="red">//</font>public int inventorySize = 30;
+</code></pre>
+</p>
+</details>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (ca. line 1802)</summary>
+<p> 
+REPLACE this:
+<pre><code>
+    equipment[equipmentIndex] = slot;
+    inventory[inventoryIndex] = temp;
+</code></pre>
+COMPLETELEY with this:
+<pre><code>
+    inventory[inventoryIndex] = temp;
+    equipment[equipmentIndex] = slot;
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "ConfirmDelete" AddOn:</h4>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> UICharacterSelection.cs (ca. line 40)</summary>
+<p>
+DELETE or COMMENT OUT this code block:
+<pre><code>
+deleteButton.onClick.SetListener(() => {
+                    manager.client.Send(new CharacterDeleteMsg{value=manager.selection});
+                });
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "ClickRemoval" AddOn:</h4>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> UIEquipment.cs (ca. line 40)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+slot.categoryText.text = overlay != "" ? overlay : "?";
+</code></pre>
+...COMPLETELY with the code block below (adds a new hook):
+<pre><code>
+slot.categoryText.text = overlay != "" ? overlay : "?";
+<font color="red">RemoveEquipmentItem(i, slot, player);</font>
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "CombatRemastered" AddOn:</h4>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (ca. line 1735 - 1743)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+    // equipment ///////////////////////////////////////////////////////////////
+    private void OnEquipmentChanged(SyncListItemSlot.Operation op, int index, ItemSlot slot)
+    {
+        // update the model
+        RefreshLocation(index);
+
+        // addon system hooks
+        Utils.InvokeMany(typeof(Player), this, "OnEquipmentChanged_"); // Fhiz Core Change
+    }
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+    // equipment ///////////////////////////////////////////////////////////////
+    private void OnEquipmentChanged(SyncListItemSlot.Operation op, int index, ItemSlot slot)
+    {
+<font color="red">
+#if _FHIZCURSEDEQUIPMENT
+        if (((EquipmentItem)slot.item.data).CanUnequipClick(this, (EquipmentItem)slot.item.data))
+            combatRemastered.AutoRemoveEquipment(slot);
+#else
+        combatRemastered.AutoRemoveEquipment(slot);
+#endif
+</font>
+        // addon system hooks
+        Utils.InvokeMany(typeof(Player), this, "OnEquipmentChanged_"); // Fhiz Core Change
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "NetworkZones" AddOn:</h4>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> NetworkManagerMMO.cs (ca. line 324)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+        // add selection script
+        preview.AddComponent&lt;SelectableCharacter&gt;();
+        preview.GetComponent&lt;SelectableCharacter&gt;().index = selectionIndex;
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+        // add selection script
+        preview.AddComponent&lt;SelectableCharacter&gt;();
+        preview.GetComponent&lt;SelectableCharacter&gt;().index = selectionIndex;
+        <font color="red">preview.GetComponent&lt;SelectableCharacter&gt;().manager = this;</font>
+
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "SpeechBubbles" AddOn:</h4>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> PlayerChat.cs (ca. line 281)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+[ClientRpc]
+    public void RpcMsgLocal(string sender, string message)
+    {
+        // add message with identifierIn or Out depending on who sent it
+        string identifier = sender != name ? local.identifierIn : local.identifierOut;
+        string reply = local.command + " " + sender + " "; // whisper
+        UIChat.singleton.AddMessage(new ChatMessage(sender, identifier, message, reply, local.textPrefab));
+    }
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+[ClientRpc]
+    public void RpcMsgLocal(string sender, string message)
+    {
+        // add message with identifierIn or Out depending on who sent it
+        string identifier = sender != name ? local.identifierIn : local.identifierOut;
+        string reply = local.command + " " + sender + " "; // whisper
+        UIChat.singleton.AddMessage(new ChatMessage(sender, identifier, message, reply, local.textPrefab));
+<font color="red">Utils.InvokeMany(typeof(PlayerChat), this, "RpcMsgLocal_", sender, message);</font>
+    }
+</code></pre>
+</p>
+</details>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (ca. line 485)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+foreach (Animator anim in GetComponentsInChildren&lt;Animator&gt;())
+            {
+                anim.SetBool("MOVING", IsMoving() && !IsMounted());
+                anim.SetBool("CASTING", state == "CASTING");
+                anim.SetBool("STUNNED", state == "STUNNED");
+                anim.SetBool("MOUNTED", IsMounted()); // for seated animation
+                anim.SetBool("DEAD", state == "DEAD");
+                foreach (Skill skill in skills)
+                    if (skill.level > 0 && !(skill.data is PassiveSkill))
+                        anim.SetBool(skill.name, skill.CastTimeRemaining() > 0);
+            }
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+foreach (Animator anim in GetComponentsInChildren&lt;Animator&gt;())
+            {
+				if (anim.parameters.Any(x => x.name == "MOVING"))
+                	anim.SetBool("MOVING", IsMoving() && state != "CASTING" && !IsMounted());
+                if (anim.parameters.Any(x => x.name == "CASTING"))
+                	anim.SetBool("CASTING", state == "CASTING");
+                if (anim.parameters.Any(x => x.name == "STUNNED"))
+                	anim.SetBool("STUNNED", state == "STUNNED");
+                if (anim.parameters.Any(x => x.name == "MOUNTED"))
+                	anim.SetBool("MOUNTED", IsMounted()); // for seated animation
+                if (anim.parameters.Any(x => x.name == "DEAD"))
+                	anim.SetBool("DEAD", state == "DEAD");
+                
+                foreach (Skill skill in skills)
+                    if (skill.level > 0 && !(skill.data is PassiveSkill) && anim.parameters.Any(x => x.name == skill.name))
+                        anim.SetBool(skill.name, skill.CastTimeRemaining() > 0);
+            }
+</code></pre>
+</p>
+</details>
+
+<h4>&middot; When using "ItemRarity" AddOn:</h4>
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> UIItemMall.cs (ca. line 18)</summary>
+<p>
+EXCHANGE this code block:
+<pre><code>
+int currentCategory = 0;
+</code></pre>
+...COMPLETELY with the code block below:
+<pre><code>
+<font color="red">public int currentCategory = 0;</font>
+</code></pre>
+</p>
+</details>
+
+
+<hr />
+<p>(c) Fhiz - for personal and commercial game projects, not for sharing or re-sale</p>

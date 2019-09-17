@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "uMMORPG Item/Equipment", order = 999)]
-public class EquipmentItem : UsableItem
+public partial class EquipmentItem : UsableItem
 {
     [Header("Equipment")]
     public string category;
