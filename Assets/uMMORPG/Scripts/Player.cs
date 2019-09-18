@@ -1759,6 +1759,8 @@ public partial class Player : Entity
     {
         // update the model
         RefreshLocation(index);
+
+        Utils.InvokeMany(typeof(Player), this, "OnEquipmentChanged_");
     }
 
     bool CanReplaceAllBones(SkinnedMeshRenderer equipmentSkin)

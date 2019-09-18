@@ -33,7 +33,7 @@ public class ProjectileSkillEffect : SkillEffect
         // -> the best solution is to correct it here once
         if (target != null && caster != null)
         {
-            transform.position = caster.GeteffectMount().position;
+            transform.position = caster.effectMount.position;
             transform.LookAt(target.collider.bounds.center);
             onSetInitialPosition.Invoke();
         }

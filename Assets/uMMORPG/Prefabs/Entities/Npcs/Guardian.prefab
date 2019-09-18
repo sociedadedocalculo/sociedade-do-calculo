@@ -192,7 +192,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_textAlignment: 514
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -219,6 +218,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -233,12 +233,9 @@ MonoBehaviour:
     lineCount: 0
     pageCount: 0
     materialCount: 1
-  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 3953570726179860510}
   m_subTextObjects:
@@ -325,8 +322,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  serverOnly: 0
+  localPlayerAuthority: 0
   m_AssetId: 61bd196ebd1f443018c1a0e65e4d3d17
   m_SceneId: 0
 --- !u!195 &19585248
@@ -363,6 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9fea8bb6f9efa4d8485e22bf9a6645, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   agent: {fileID: 19585248}
 --- !u!54 &5476574
@@ -393,7 +391,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a95139274a94348bdabd8bbd5d4f2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
+  _cannotCast: 0
   agent: {fileID: 19585248}
   proxchecker: {fileID: 11494822}
   animator: {fileID: 9534278}
@@ -403,35 +403,35 @@ MonoBehaviour:
   lastCombatTime: 0
   level: 1
   _healthMax:
-    bonusPerLevel: 0
     baseValue: 1
+    bonusPerLevel: 0
   invincible: 0
   healthRecovery: 0
   _healthRecoveryRate:
-    bonusPerLevel: 0
     baseValue: 0
+    bonusPerLevel: 0
   _manaMax:
-    bonusPerLevel: 0
     baseValue: 0
+    bonusPerLevel: 0
   manaRecovery: 0
   _manaRecoveryRate:
-    bonusPerLevel: 0
     baseValue: 1
+    bonusPerLevel: 0
   _damage:
-    bonusPerLevel: 0
     baseValue: 0
+    bonusPerLevel: 0
   _defense:
-    bonusPerLevel: 0
     baseValue: 0
+    bonusPerLevel: 0
   _blockChance:
-    bonusPerLevel: 0
     baseValue: 0
+    bonusPerLevel: 0
   _criticalChance:
-    bonusPerLevel: 0
     baseValue: 0
-  _speed:
     bonusPerLevel: 0
+  _speed:
     baseValue: 5
+    bonusPerLevel: 0
   damagePopupPrefab: {fileID: 179236, guid: e81ebbaa55e254e31b9909cef04e3855, type: 3}
   skillTemplates: []
   currentSkill: -1
@@ -439,12 +439,13 @@ MonoBehaviour:
   _gold: 0
   stunnedOverlay: {fileID: 6354264500740619222}
   inSafeZone: 0
+  accessingPlayers: 0
   questOverlay: {fileID: 6116666996474382310}
-  welcome: How can I help you today?
+  welcome: "Como posso ajud\xE1-lo?"
   saleItems:
-  - {fileID: 11400000, guid: acadbc0e96f8b49299aa1d1a5453f6f0, type: 2}
+  - {fileID: 0}
   quests:
-  - quest: {fileID: 11400000, guid: d4690eec448a34931911f6c93102b4c0, type: 2}
+  - quest: {fileID: 0}
     acceptHere: 0
     completeHere: 1
   teleportTo: {fileID: 0}
@@ -462,6 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a89e192f1fcf4f888374a5aeb19eb29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
   syncInterval: 0.1
   visUpdateInterval: 1
   forceHidden: 0
@@ -754,7 +756,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_textAlignment: 514
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -781,6 +782,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -795,12 +797,9 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5674396574150296669}
   m_subTextObjects:
@@ -3397,7 +3396,6 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 3
   m_textAlignment: 514
-  m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -3424,6 +3422,7 @@ MonoBehaviour:
   m_verticalMapping: 0
   m_uvLineOffset: 0
   m_geometrySortingOrder: 0
+  m_VertexBufferAutoSizeReduction: 1
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
@@ -3438,12 +3437,9 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 0
-  m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5443436623843537387}
   m_subTextObjects:
