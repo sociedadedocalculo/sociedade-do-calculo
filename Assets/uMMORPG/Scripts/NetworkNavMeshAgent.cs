@@ -104,22 +104,32 @@ public class NetworkNavMeshAgent : NetworkBehaviour
     public override bool OnSerialize(NetworkWriter writer, bool initialState)
     {
         // always send position so client knows if he's too far off and needs warp
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
         writer.Write(transform.position);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
         // always send speed in case it's modified by something
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
         writer.Write(agent.speed);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
         // click or wasd movement?
         // (no need to send everything all the time, saves bandwidth)
         bool hasPath = HasPath();
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
         writer.Write(hasPath);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
         if (hasPath)
         {
             // destination
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             writer.Write(agent.destination);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
             // always send stopping distance because monsters might stop early etc.
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             writer.Write(agent.stoppingDistance);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
             // remember last serialized path so we do it again if it changed.
             // (first OnSerialize never seems to detect path yet for whatever
@@ -130,7 +140,9 @@ public class NetworkNavMeshAgent : NetworkBehaviour
         else
         {
             // velocity
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
             writer.Write(agent.velocity);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
             // remember last serialized velocity
             lastSerializedVelocity = agent.velocity;

@@ -17,7 +17,10 @@ namespace UnityEditor.AI
         static Color s_HandleColor = new Color(187f, 138f, 240f, 210f) / 255;
         static Color s_HandleColorDisabled = new Color(187f * 0.75f, 138f * 0.75f, 240f * 0.75f, 100f) / 255;
 
-        BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle();
+        static int s_HandleControlIDHint = typeof(NavMeshModifierVolumeEditor).Name.GetHashCode();
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+        BoxBoundsHandle m_BoundsHandle = new BoxBoundsHandle(s_HandleControlIDHint);
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
 
         bool editingCollider
         {
@@ -39,18 +42,11 @@ namespace UnityEditor.AI
             NavMeshVisualizationSettings.showNavigation--;
         }
 
-        Bounds GetBounds()
-        {
-            var navModifier = (NavMeshModifierVolume)target;
-            return new Bounds(navModifier.transform.position, navModifier.size);
-        }
-
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
-            EditMode.DoEditModeInspectorModeButton(EditMode.SceneViewEditMode.Collider, "Edit Volume",
-                EditorGUIUtility.IconContent("EditCollider"), GetBounds, this);
+            InspectorEditButtonGUI();
 
             EditorGUILayout.PropertyField(m_Size);
             EditorGUILayout.PropertyField(m_Center);
@@ -104,6 +100,22 @@ namespace UnityEditor.AI
             }
 
             Gizmos.DrawIcon(navModifier.transform.position, "NavMeshModifierVolume Icon", true);
+        }
+
+        void InspectorEditButtonGUI()
+        {
+            var navModifier = (NavMeshModifierVolume)target;
+            var bounds = new Bounds(navModifier.transform.position, navModifier.size);
+
+#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+            EditMode.DoEditModeInspectorModeButton(
+                EditMode.SceneViewEditMode.Collider,
+                "Edit Volume",
+                EditorGUIUtility.IconContent("EditCollider"),
+                bounds,
+                this
+                );
+#pragma warning restore CS0618 // O tipo ou membro é obsoleto
         }
 
         void OnSceneGUI()

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "uMMORPG Item/Weapon", order = 999)]
-public class WeaponItem : EquipmentItem
+public partial class WeaponItem : EquipmentItem
 {
     [Header("Weapon")]
     public AmmoItem requiredAmmo; // null if no ammo is required

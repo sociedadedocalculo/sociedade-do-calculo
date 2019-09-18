@@ -288,7 +288,10 @@ public abstract partial class Entity : NetworkBehaviour
     //    mount
     // -> assign to right hand if in doubt!
     [SerializeField] Transform _effectMount;
-    public virtual Transform effectMount { get { return _effectMount; } }
+#pragma warning disable IDE1006 // Estilos de Nomenclatura
+    public virtual Transform GeteffectMount()
+    { return _effectMount; }
+#pragma warning restore IDE1006 // Estilos de Nomenclatura
 
     // all entities should have an inventory, not just the player.
     // useful for monster loot, chests, etc.
@@ -306,6 +309,8 @@ public abstract partial class Entity : NetworkBehaviour
     [Header("Gold")]
     [SyncVar, SerializeField] long _gold = 0;
     public long gold { get { return _gold; } set { _gold = Math.Max(value, 0); } }
+
+    public Transform EffectMount { get => _effectMount; set => _effectMount = value; }
 
     // 3D text mesh for name above the entity's head
     [Header("Text Meshes")]

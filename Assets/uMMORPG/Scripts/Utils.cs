@@ -29,6 +29,7 @@ public class Utils
         return false;
     }
 
+   
     // is any of the keys DOWN?
     public static bool AnyKeyDown(KeyCode[] keys)
     {
@@ -250,4 +251,17 @@ public class Utils
         foreach (MethodInfo method in GetMethodsByPrefix(type, methodPrefix))
             method.Invoke(onObject, args);
     }
+
+    public static Player FindPlayerFromName(string _name)
+    {
+        if (_name != "")
+
+            if (Player.onlinePlayers.ContainsKey(_name))
+            {
+                return Player.onlinePlayers[_name].GetComponent<Player>();
+            }
+        return null;
+    }
+
+
 }

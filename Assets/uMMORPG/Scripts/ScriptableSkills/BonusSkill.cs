@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using Mirror;
 
-public abstract class BonusSkill : ScriptableSkill
+public abstract partial class BonusSkill : ScriptableSkill
 {
     public LinearInt bonusHealthMax;
     public LinearInt bonusManaMax;

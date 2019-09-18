@@ -2,7 +2,7 @@
 using System.Text;
 using UnityEngine;
 
-public abstract class UsableItem : ScriptableItem
+public abstract partial class UsableItem : ScriptableItem
 {
     [Header("Usage")]
     public int minLevel; // level required to use the item

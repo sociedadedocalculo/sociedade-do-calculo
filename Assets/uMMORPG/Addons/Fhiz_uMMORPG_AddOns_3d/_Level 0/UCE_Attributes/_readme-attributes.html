@@ -1,0 +1,349 @@
+<style>
+@import "https://fonts.googleapis.com/css?family=Open Sans:regular,semibold,italic,italicsemibold|Inconsolata&amp;v2";
+body {
+  font-family: "Open Sans";
+  margin: 6em 2em 2em 2em;
+}
+body:before {
+  content: '';
+  position: fixed;
+  top: 2%;
+  right: 3%;
+  height: 256px;
+  width: 256px;
+  background: url(https://indie-mmo.net/addon-readmes/images/global/fhiz-watermark.png) no-repeat 100% 100%;
+  background-size: contain;
+  z-index: 10;
+  opacity: 0.5;
+}
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+h1 {
+  position: fixed;
+  background: -webkit-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -moz-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -ms-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  background: -o-linear-gradient(top, white 65%, rgba(255,255,255,0));
+  width: 100%;
+  height: 80px;
+  padding: 10px 10px 10px 1em;
+  left: 0;
+  top: 0;
+  margin: 0;
+}
+h1 img {
+  height: 30px;
+  vertical-align: middle;
+  margin-bottom: 8px;
+}
+a { color: navy; }
+pre {
+  background: #eee;
+  margin-left: 2em;
+  padding: 5px;
+  border-left: 3px solid #ccc;
+}
+</style>
+
+<h1>
+<a href="https://www.patreon.com/Fhizban" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/patreon-badge.png" style="width:196px; height:48px"></a>
+<a href="https://www.youtube.com/channel/UC31c_fqaRo7B-omggZcMhxA" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/youtube-icon.png" style="width:48px; height:48px"></a>
+<a href="https://discord.gg/YkMbDHs" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/discord-icon.png" style="width:48px; height:48px"></a>
+<a href="https://www.indie-mmo.net" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/link-icon.png" style="width:48px; height:48px"></a>
+ATTRIBUTES 2019.101
+</h1>
+
+<p>
+<i>
+Adds new, configureable Attributes to uMMORPG:
+
+<ul>
+<li><b>Accuracy</b>: Increases the chance to inflict a buff on the target (a negative buff in this case like "Poison")</li>
+<li><b>Resistance</b>: Increases the chance to resist a buff being applied on self (a negative buff in this case like "Poison")</li>
+<li><b>Critical Factor</b>: Increases the damage of critical hits (should be like 1.5 by default = 150%)</li>
+<li><b>Block Factor</b>: Increases the potency of blocking (should be around 0.5 by default = 50%)</li>
+<li><b>Drain Health Factor</b>: Drains health based on the damage dealt (0.5 = 50% of damage dealt is healed to own health)</li>
+<li><b>Drain Mana Factor</b>: Drains mana based on the damage dealt (0.5 = 50% of damage dealt is healed to own mana)</li>
+<li><b>Reflect Damage Factor</b>: Reflects damage based on damage received (0.5 = 50% of damage received is reflected back on attacker)</li>
+<li><b>Defense Break Factor</b>: Reduces the targets defense (0.5 = 50% defense reduction)</li>
+<li><b>Block Break Factor</b>: Reduces the targets chance to block (0.5 = 50% block rate reduction)</li>
+<li><b>Critical Evasion</b>: Reduces the chance to receive a critical hit (0.5 = 50% crit chance reduction)</li>
+</ul>
+</i>
+</p>
+
+<center>
+<img width="50%" src="https://indie-mmo.net/addon-readmes/images/attributes/attributes-1.jpg">
+</center>
+
+<hr />
+
+<h3>Additional Requirements</h3>
+<p>
+Some UCE AddOns require other AddOns to be installed first in order to work properly:
+<br><br>
+This AddOn requires the following AddOns(s):
+<pre>
+<code><a href="https://indie-mmo.net/addon-readmes/_readme-tools.html" target="_blank">UCE Tools</a></code>
+</pre>
+</p>
+
+<h3>Scripting Defines</h3>
+<p>
+Most UCE AddOns use "Scripting Defines" that are added automatically on import. Sometimes you might be required to manually add or remove such a define. In that case, locate your defines list and remove the define (including the semicolon ; at the end). You find defines in your project here: Edit -> Project Settings -> Player - > Scripting Define Symbols (you can learn more about Defines <a href="https://indie-mmo.net/scripting-define-symbols/">HERE</a>).
+<br><br>
+This AddOn uses the following define(s):
+<pre>
+<code>_FHIZATTRIBUTES</code>
+</pre>
+</p>
+
+<h3>Core Changes</h3>
+<p>
+Many AddOns require changes to the uMMORPG3d core scripts in order to function. The most common core changes are listed in a extra ReadMe contained in the UCE Tools AddOn (see <a href="https://indie-mmo.net/addon-readmes/_required-core-changes.html">HERE</a>). The changes for this AddOn are repeated below as well:
+<br><br>
+This AddOn requires the following core change(s):
+
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Entity.cs (starts ca. line 408)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// combat //////////////////////////////////////////////////////////////////
+    // deal damage at another entity
+    // (can be overwritten for players etc. that need custom functionality)
+    [Server]
+    public virtual void DealDamageAt(Entity entity, int amount, float stunChance=0, float stunTime=0)
+    {
+        int damageDealt = 0;
+        DamageType damageType = DamageType.Normal;
+
+        // don't deal any damage if entity is invincible
+        if (!entity.invincible)
+        {
+            // block? (we use < not <= so that block rate 0 never blocks)
+            if (UnityEngine.Random.value < entity.blockChance)
+            {
+                damageType = DamageType.Block;
+            }
+            // deal damage
+            else
+            {
+                // subtract defense (but leave at least 1 damage, otherwise
+                // it may be frustrating for weaker players)
+                damageDealt = Mathf.Max(amount - entity.defense, 1);
+
+                // critical hit?
+                if (UnityEngine.Random.value < criticalChance)
+                {
+                    damageDealt *= 2;
+                    damageType = DamageType.Crit;
+                }
+
+                // deal the damage
+                entity.health -= damageDealt;
+
+                // stun?
+                if (UnityEngine.Random.value < stunChance)
+                {
+                    // dont allow a short stun to overwrite a long stun
+                    // => if a player is hit with a 10s stun, immediately
+                    //    followed by a 1s stun, we don't want it to end in 1s!
+                    double newStunEndTime = NetworkTime.time + stunTime;
+                    entity.stunTimeEnd = Math.Max(newStunEndTime, stunTimeEnd);
+                }
+            }
+        }
+
+        // let's make sure to pull aggro in any case so that archers
+        // are still attacked if they are outside of the aggro range
+        entity.OnAggro(this);
+
+        // show effects on clients
+        entity.RpcOnDamageReceived(damageDealt, damageType);
+
+        // reset last combat time for both
+        lastCombatTime = NetworkTime.time;
+        entity.lastCombatTime = NetworkTime.time;
+
+        // addon system hooks
+        Utils.InvokeMany(typeof(Entity), this, "DealDamageAt_", entity, amount);
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// health
+    public override int healthMax
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).healthBonus).Sum();
+
+            // calculate strength bonus (1 strength means 1% of hpMax bonus)
+            int attributeBonus = Convert.ToInt32(_healthMax.Get(level) * (strength * 0.01f));
+
+            // base (health + buff) + equip + attributes
+            return base.healthMax + equipmentBonus + attributeBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+ 	// mana
+    public override int manaMax
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).manaBonus).Sum();
+
+            // calculate intelligence bonus (1 intelligence means 1% of hpMax bonus)
+            int attributeBonus = Convert.ToInt32(_manaMax.Get(level) * (intelligence * 0.01f));
+
+            // base (mana + buff) + equip + attributes
+            return base.manaMax + equipmentBonus + attributeBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// damage
+    public override int damage
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).damageBonus).Sum();
+
+            // return base (damage + buff) + equip
+            return base.damage + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// defense
+    public override int defense
+    {
+        get
+        {
+            // calculate equipment bonus
+            int equipmentBonus = (from slot in equipment
+                                  where slot.amount > 0
+                                  select ((EquipmentItem)slot.item.data).defenseBonus).Sum();
+
+            // return base (defense + buff) + equip
+            return base.defense + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// block
+    public override float blockChance
+    {
+        get
+        {
+            // calculate equipment bonus
+            float equipmentBonus = (from slot in equipment
+                                    where slot.amount > 0
+                                    select ((EquipmentItem)slot.item.data).blockChanceBonus).Sum();
+
+            // return base (blockChance + buff) + equip
+            return base.blockChance + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+<details>
+<summary><font color="red"><font color="red"><b>[Click]</b></font></font> Player.cs (starts ca. line 81)</summary>
+<p> 
+DELETE this code block:
+<pre><code>
+	// crit
+    public override float criticalChance
+    {
+        get
+        {
+            // calculate equipment bonus
+            float equipmentBonus = (from slot in equipment
+                                    where slot.amount > 0
+                                    select ((EquipmentItem)slot.item.data).criticalChanceBonus).Sum();
+
+            // return base (criticalChance + buff) + equip
+            return base.criticalChance + equipmentBonus;
+        }
+    }
+</code></pre>
+</p>
+</details>
+
+</p>
+
+<hr>
+
+<h2>INSTALLATION PROCESS</h2>
+
+<h3>Integration Steps</h3>
+<p>
+<ol>
+<li>[Required] Move the "UCE Attributes" folder to your projects main resources folder.</li>
+<li>[Required] Do not keep multiple Resources folders or Attributes of the same name.</li>
+<li>[Optional] Edit all Attributes to your liking.</li>
+<li>[Optional] Edit equipment to grant Attribute bonusses.</li>
+<li>[Optional] Edit Buffs and Passive Skills to grant Attribute bonusses.</li>
+<li>[Required] Check your player prefabs, as there is a new "UCE Attributes" section.</li>
+<li>[Required] Assign the Attributes to your player prefabs.</li>
+<li>[Optional] Edit how Attributes are increased to your liking.</li>
+<li>[Required] Canvas: deactivate the existing CharacterInfo window.</li>
+<li>[Required] Add everything from this "Prefabs [Drag to Canvas]" folder to your Canvas.</li>
+<li>[Required] Then we need to setup the CharacterInfo button. In the hierarchy panel, click on the Shortcuts element.  Replace the Character Info Panel with the new CharacterInfoPanel.</li>
+</ol>
+</p>
+
+<h3>Additional Information</h3>
+
+<p><i>Delete your database and create new characters after setup as this fully replaces the built-in attribute system.</i></p>
+<p><i>If your Critical Hits deal no damage anymore, make sure to increase the Critical Factor on the Entity as its 0 by default</i></p>
+<hr />
+
+<h3>Videos</h3>
+
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/zaH4hOlTE_c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+
+<hr />
+<p>(c) Fhiz - for personal and commercial game projects, not for sharing or re-sale</p>
