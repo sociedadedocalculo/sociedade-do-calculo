@@ -155,14 +155,21 @@ public class NetworkNavMeshAgentRubberbanding : NetworkBehaviour
         // always send position so client knows if he's too far off and needs warp
         // we also need it for wasd movement anyway
 <<<<<<< HEAD
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+<<<<<<< HEAD
+#pragma warning disable CS0618 // O tipo ou membro ï¿½ obsoleto
         writer.Write(transform.position);
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+#pragma warning restore CS0618 // O tipo ou membro ï¿½ obsoleto
 
         // always send speed in case it's modified by something
-#pragma warning disable CS0618 // O tipo ou membro é obsoleto
+#pragma warning disable CS0618 // O tipo ou membro ï¿½ obsoleto
         writer.Write(agent.speed);
-#pragma warning restore CS0618 // O tipo ou membro é obsoleto
+#pragma warning restore CS0618 // O tipo ou membro ï¿½ obsoleto
+=======
+        writer.WriteVector3(transform.position);
+
+        // always send speed in case it's modified by something
+        writer.WriteSingle(agent.speed);
+>>>>>>> e964c40e770bc973a3de3d341f9cb4e6d58be67b
 =======
         writer.WriteVector3(transform.position);
 
