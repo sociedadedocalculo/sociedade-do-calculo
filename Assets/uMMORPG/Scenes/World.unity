@@ -16134,7 +16134,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gold
+  m_Text: Ouro
 --- !u!222 &386044937
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17149,7 +17149,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Item Mall
+  m_Text: Loja de Item
 --- !u!222 &417221134
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19856,7 +19856,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Decline
+  m_Text: Recusar
 --- !u!222 &502760454
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20589,7 +20589,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Name
+  m_Text: Nome
 --- !u!222 &520926581
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -21295,7 +21295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiPopup: {fileID: 1165640891}
   manager: {fileID: 2072336950}
-  panel: {fileID: 1222219905}
+  panel: {fileID: 1928168833}
   statusText: {fileID: 647607421}
   accountInput: {fileID: 541225833}
   passwordInput: {fileID: 979694262}
@@ -26212,7 +26212,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Accept
+  m_Text: Aceito
 --- !u!222 &653688903
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31564,7 +31564,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Categories:'
+  m_Text: 'Categorias:'
 --- !u!222 &803416866
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -36716,7 +36716,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Has invited you to their Guild.
+  m_Text: "Convidou voc\xEA para a guilda deles."
 --- !u!222 &958735977
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -40343,9 +40343,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1032810971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9262e5f3d8204a78aac98758c3618e9, type: 3}
+  m_Script: {fileID: 11500000, guid: 458cfd9198114ab49a5013a49751fe92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panel: {fileID: 184455640}
+  healthSlider: {fileID: 184455642}
+  nameText: {fileID: 523035709}
+  buffsPanel: {fileID: 739718564}
+  buffSlotPrefab: {fileID: 114208148314110118, guid: 6df9d3d58f353554b8cf48dc661b2b97,
+    type: 3}
+  tradeButton: {fileID: 2077890625}
+  guildInviteButton: {fileID: 1428259854}
+  partyInviteButton: {fileID: 1882316819}
 --- !u!1 &1033494713
 GameObject:
   m_ObjectHideFlags: 0
@@ -43230,9 +43239,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1124083545}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdfdd6e6bbd9745cbac2db2c3fe2b814, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e559a7038f24834183a011d74c69345, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panel: {fileID: 262246798}
+  slider: {fileID: 262246801}
+  statusText: {fileID: 533502637}
 --- !u!1001 &1124997333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51958,9 +51970,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1340620816}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc08bfbad5dc2432097f2d1200ef10c6, type: 3}
+  m_Script: {fileID: 11500000, guid: a396841c09fb7e34d91d8ddf6666c384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClose: 1
 --- !u!114 &1340620819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52599,7 +52612,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Buy Coins
+  m_Text: Comprar Moedas
 --- !u!222 &1362509118
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -52794,7 +52807,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Name
+  m_Text: Nome
 --- !u!222 &1366239915
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -52964,9 +52977,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1377993831}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb999048c578448a49edc4c9cab34bd7, type: 3}
+  m_Script: {fileID: 11500000, guid: e57766f16a3730a49b38ab0408450d60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: 0
+  drageePrefab: {fileID: 136608, guid: 16fde07111210364f80e4410bd04fc66, type: 3}
+  dragable: 1
+  dropable: 1
+  draggedToSlot: 0
 --- !u!114 &1377993834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52976,9 +52994,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1377993831}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13476da72aeeb4ff1b41d4c7d33a01a1, type: 3}
+  m_Script: {fileID: 11500000, guid: d56cc229ed56f7044825bcdcc335bcd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tooltipPrefab: {fileID: 171736, guid: 8ec610059644a1847b2ae6dcef33d90b, type: 3}
+  text: 
 --- !u!114 &1377993835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57084,7 +57104,6 @@ GameObject:
   - component: {fileID: 1488334805}
   - component: {fileID: 1488334802}
   - component: {fileID: 1488334801}
-  - component: {fileID: 1488334806}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -57148,31 +57167,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1488334800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1488334805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488334800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da3cf03c51ae5478ba91e7318f7e6cc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  databaseFile: Database.sqlite
---- !u!114 &1488334806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488334800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85426ca387621ba4cb2d9611a5fb9ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -57215,9 +57209,22 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Mirror.UnityEventInt, Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   port: 7777
-  NoDelay: 1
+  NoDelay: 0
   serverMaxMessageSize: 16384
   clientMaxMessageSize: 16384
+--- !u!114 &1488334805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488334800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da3cf03c51ae5478ba91e7318f7e6cc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  databaseFile: Database.sqlite
 --- !u!1 &1488448394
 GameObject:
   m_ObjectHideFlags: 0
@@ -58060,9 +58067,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1517584654}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e11a626ec1854463caa68aaba30ffe2e, type: 3}
+  m_Script: {fileID: 11500000, guid: f397eaf03f5b2b847827d5123a2c1ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hotKey: 120
+  panel: {fileID: 2018940362}
+  categorySlotPrefab: {fileID: 114211806386149246, guid: cf54d97279b7f8e43bee51fa74bfcbb9,
+    type: 3}
+  categoryContent: {fileID: 688175140}
+  scrollRect: {fileID: 1603606629}
+  itemSlotPrefab: {fileID: 114795214046327500, guid: 50d71d8e8b7531841809975cea181aa5,
+    type: 3}
+  itemContent: {fileID: 2097594805}
+  buyUrl: http://unity3d.com/
+  nameText: {fileID: 1366239914}
+  levelText: {fileID: 6098262}
+  currencyAmountText: {fileID: 791991083}
+  buyButton: {fileID: 1736891573}
+  couponInput: {fileID: 1428972885}
+  couponButton: {fileID: 259529775}
+  inventoryPanel: {fileID: 1394922958}
 --- !u!1 &1518558430
 GameObject:
   m_ObjectHideFlags: 0
@@ -62551,7 +62575,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Coins
+  m_Text: Moedas
 --- !u!222 &1625439129
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -62923,9 +62947,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1636420280}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb071741575394cd4bc1485e2fcc84c5, type: 3}
+  m_Script: {fileID: 11500000, guid: e51bbfecbc6e20f45b8caea9c99a9d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panel: {fileID: 512038981}
+  image: {fileID: 404252505}
 --- !u!1 &1643338683
 GameObject:
   m_ObjectHideFlags: 0
@@ -67534,7 +67560,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Coupon...
+  m_Text: Cupom...
 --- !u!222 &1767303388
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -78480,7 +78506,7 @@ MonoBehaviour:
   showDebugMessages: 0
   offlineScene: 
   onlineScene: 
-  transport: {fileID: 1488334806}
+  transport: {fileID: 1488334804}
   networkAddress: Use the Server List below!
   maxConnections: 1000
   playerPrefab: {fileID: 0}
@@ -79108,7 +79134,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter
+  m_Text: entrar
 --- !u!222 &2079744406
 CanvasRenderer:
   m_ObjectHideFlags: 0

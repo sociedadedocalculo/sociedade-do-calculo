@@ -28,7 +28,6 @@
 // gold between a minimum and a maximum amount.
 using UnityEngine;
 using Mirror;
-using System.Linq;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NetworkNavMeshAgent))]
@@ -329,11 +328,11 @@ public partial class Monster : Entity
             agent.destination = startPosition + new Vector3(circle2D.x, 0, circle2D.y);
             return "MOVING";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
-        if (EventRespawnTimeElapsed()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
+        if (EventRespawnTimeElapsed()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
 
         return "IDLE"; // nothing interesting happened
     }
@@ -411,12 +410,12 @@ public partial class Monster : Entity
             agent.ResetMovement();
             return "IDLE";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
-        if (EventRespawnTimeElapsed()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
-        if (EventSkillRequest()) {} // don't care, finish movement first
-        if (EventMoveRandomly()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
+        if (EventRespawnTimeElapsed()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventSkillRequest()) { } // don't care, finish movement first
+        if (EventMoveRandomly()) { } // don't care
 
         return "MOVING"; // nothing interesting happened
     }
@@ -496,14 +495,14 @@ public partial class Monster : Entity
             currentSkill = -1;
             return "IDLE";
         }
-        if (EventDeathTimeElapsed()) {} // don't care
-        if (EventRespawnTimeElapsed()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventTargetTooFarToAttack()) {} // don't care, we were close enough when starting to cast
-        if (EventTargetTooFarToFollow()) {} // don't care, we were close enough when starting to cast
-        if (EventAggro()) {} // don't care, always have aggro while casting
-        if (EventSkillRequest()) {} // don't care, that's why we are here
-        if (EventMoveRandomly()) {} // don't care
+        if (EventDeathTimeElapsed()) { } // don't care
+        if (EventRespawnTimeElapsed()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventTargetTooFarToAttack()) { } // don't care, we were close enough when starting to cast
+        if (EventTargetTooFarToFollow()) { } // don't care, we were close enough when starting to cast
+        if (EventAggro()) { } // don't care, always have aggro while casting
+        if (EventSkillRequest()) { } // don't care, that's why we are here
+        if (EventMoveRandomly()) { } // don't care
 
         return "CASTING"; // nothing interesting happened
     }
@@ -550,18 +549,18 @@ public partial class Monster : Entity
             else NetworkServer.Destroy(gameObject);
             return "DEAD";
         }
-        if (EventSkillRequest()) {} // don't care
-        if (EventSkillFinished()) {} // don't care
-        if (EventMoveEnd()) {} // don't care
-        if (EventTargetDisappeared()) {} // don't care
-        if (EventTargetDied()) {} // don't care
-        if (EventTargetTooFarToFollow()) {} // don't care
-        if (EventTargetTooFarToAttack()) {} // don't care
-        if (EventTargetEnteredSafeZone()) {} // don't care
-        if (EventAggro()) {} // don't care
-        if (EventMoveRandomly()) {} // don't care
-        if (EventStunned()) {} // don't care
-        if (EventDied()) {} // don't care, of course we are dead
+        if (EventSkillRequest()) { } // don't care
+        if (EventSkillFinished()) { } // don't care
+        if (EventMoveEnd()) { } // don't care
+        if (EventTargetDisappeared()) { } // don't care
+        if (EventTargetDied()) { } // don't care
+        if (EventTargetTooFarToFollow()) { } // don't care
+        if (EventTargetTooFarToAttack()) { } // don't care
+        if (EventTargetEnteredSafeZone()) { } // don't care
+        if (EventAggro()) { } // don't care
+        if (EventMoveRandomly()) { } // don't care
+        if (EventStunned()) { } // don't care
+        if (EventDied()) { } // don't care, of course we are dead
 
         return "DEAD"; // nothing interesting happened
     }
@@ -569,11 +568,11 @@ public partial class Monster : Entity
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE")    return UpdateServer_IDLE();
-        if (state == "MOVING")  return UpdateServer_MOVING();
+        if (state == "IDLE") return UpdateServer_IDLE();
+        if (state == "MOVING") return UpdateServer_MOVING();
         if (state == "CASTING") return UpdateServer_CASTING();
         if (state == "STUNNED") return UpdateServer_STUNNED();
-        if (state == "DEAD")    return UpdateServer_DEAD();
+        if (state == "DEAD") return UpdateServer_DEAD();
         Debug.LogError("invalid state:" + state);
         return "IDLE";
     }
@@ -641,7 +640,15 @@ public partial class Monster : Entity
     public bool HasLoot()
     {
         // any gold or valid items?
-        return gold > 0 || inventory.Any(slot => slot.amount > 0);
+        if (gold > 0)
+            return true;
+
+        // check slots manually. Linq is HEAVY(!) on GC and performance
+        foreach (ItemSlot slot in inventory)
+            if (slot.amount > 0)
+                return true;
+
+        return false;
     }
 
     // death ///////////////////////////////////////////////////////////////////
