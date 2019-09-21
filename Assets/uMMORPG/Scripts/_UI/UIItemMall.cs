@@ -12,7 +12,7 @@ public partial class UIItemMall : MonoBehaviour
     public UIItemMallSlot itemSlotPrefab;
     public Transform itemContent;
     public string buyUrl = "http://unity3d.com/";
-    int currentCategory = 0;
+    public int currentCategory = 0;
     public Text nameText;
     public Text levelText;
     public Text currencyAmountText;

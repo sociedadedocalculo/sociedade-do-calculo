@@ -585,7 +585,6 @@ public abstract partial class Entity : NetworkBehaviour
             if (manaRecovery) mana += manaRecoveryRate;
         }
     }
-
     // aggro ///////////////////////////////////////////////////////////////////
     // this function is called by the AggroArea (if any) on clients and server
     public virtual void OnAggro(Entity entity) { }
