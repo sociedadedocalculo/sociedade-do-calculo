@@ -1,0 +1,143 @@
+<style>
+
+    @import "https://fonts.googleapis.com/css?family=Open Sans:regular,semibold,italic,italicsemibold|Inconsolata&amp;v2";
+
+    body {
+        font-family: "Open Sans";
+        margin: 6em 2em 2em 2em;
+    }
+
+        body:before {
+            content: '';
+            position: fixed;
+            top: 2%;
+            right: 3%;
+            height: 256px;
+            width: 256px;
+            background: url(https://indie-mmo.net/addon-readmes/images/global/fhiz-watermark.png) no-repeat 100% 100%;
+            background-size: contain;
+            z-index: 10;
+            opacity: 0.5;
+        }
+
+    h1, h2, h3, h4 {
+        font-weight: 600;
+    }
+
+    h1 {
+        position: fixed;
+        background: -webkit-linear-gradient(top, white 65%, rgba(255,255,255,0));
+        background: -moz-linear-gradient(top, white 65%, rgba(255,255,255,0));
+        background: -ms-linear-gradient(top, white 65%, rgba(255,255,255,0));
+        background: -o-linear-gradient(top, white 65%, rgba(255,255,255,0));
+        width: 100%;
+        height: 80px;
+        padding: 10px 10px 10px 1em;
+        left: 0;
+        top: 0;
+        margin: 0;
+    }
+
+        h1 img {
+            height: 30px;
+            vertical-align: middle;
+            margin-bottom: 8px;
+        }
+
+    a {
+        color: navy;
+    }
+
+    pre {
+        background: #eee;
+        margin-left: 2em;
+        padding: 5px;
+        border-left: 3px solid #ccc;
+    }
+</style>
+<h1>
+    <a href="https://www.patreon.com/Fhizban" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/patreon-badge.png" style="width:196px; height:48px"></a>
+    <a href="https://www.youtube.com/channel/UC31c_fqaRo7B-omggZcMhxA" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/youtube-icon.png" style="width:48px; height:48px"></a>
+    <a href="https://discord.gg/YkMbDHs" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/discord-icon.png" style="width:48px; height:48px"></a>
+    <a href="https://www.indie-mmo.net" target="_blank"><img src="https://indie-mmo.net/addon-readmes/images/global/link-icon.png" style="width:48px; height:48px"></a>
+    ITEM RARITY 2019.100
+</h1>
+<p>
+    <i>
+        Item rarity adds flavor effects to your in-game items by bring a outline to your items based on the quality level you set.
+        It currently has the types: Poor (grey), Common (white), Uncommon (green), Rare (blue), Epic (magenta), and Legendary (yellow).
+        It also adds the color effect to the name of the item in the items tooltip. The following menus all display this flavor:
+        Equipment, Inventory, Loot, Item Mall, Player Trading, Npc Trading, and Crafting.
+    </i>
+</p>
+<center>
+    <img width="50%" src="http://indie-mmo.net/addon-readmes/images/itemrarity/itemrarity-1.jpg">
+    <img width="50%" src="http://indie-mmo.net/addon-readmes/images/itemrarity/itemrarity-2.jpg">
+    <img width="50%" src="http://indie-mmo.net/addon-readmes/images/itemrarity/itemrarity-3.jpg">
+    <img width="50%" src="http://indie-mmo.net/addon-readmes/images/itemrarity/itemrarity-4.jpg">
+</center>
+<hr />
+<h3>Additional Requirements</h3>
+<p>
+    Some UCE AddOns require other AddOns to be installed first in order to work properly:
+    <br><br>
+    This AddOn requires the following AddOns(s):
+<pre>
+<code><a href="https://indie-mmo.net/addon-readmes/_readme-tools.html" target="_blank">UCE Tools</a></code>
+</pre>
+</p>
+<h3>Scripting Defines</h3>
+<p>
+    Most UCE AddOns use "Scripting Defines" that are added automatically on import. Sometimes you might be required to manually add or remove such a define. In that case, locate your defines list and remove the define (including the semicolon ; at the end). You find defines in your project here: Edit -> Project Settings -> Player - > Scripting Define Symbols (you can learn more about Defines <a href="https://indie-mmo.net/scripting-define-symbols/">HERE</a>).
+    <br><br>
+    This AddOn uses the following define(s):
+<pre>
+<code>_FHIZITEMRARITY</code>
+</pre>
+</p>
+<h3>Core Changes</h3>
+<p>
+    Many AddOns require changes to the uMMORPG3d core scripts in order to function. The most common core changes are listed in a extra ReadMe contained in the UCE Tools AddOn (see <a href="https://indie-mmo.net/addon-readmes/_required-core-changes.html">HERE</a>). The changes for this AddOn are repeated below as well:
+    <br><br>
+    This AddOn requires the following core change(s):
+
+    <details>
+        <summary><font color="red"><font color="red"><b>[Click]</b></font></font> UIItemMall.cs (ca. line 18)</summary>
+<p>
+    EXCHANGE this code block:
+<pre><code>
+int currentCategory = 0;
+</code></pre>
+    ...COMPLETELY with the code block below:
+<pre><code>
+<font color="red">public int currentCategory = 0;</font>
+</code></pre>
+</p>
+</details>
+</p>
+
+<hr>
+<h3>Integration Steps</h3>
+<p>
+    <ol>
+        <li>[Required] Add the script "<b>UCE_ItemRarity</b>" from "<b>Scripts [Add to Windows]</b>" to all of the following windows: Equipment, Inventory, Loot, PlayerTrading, NpcTrading, ItemMall, and Crafting.</li>
+        <li>[Required] Set the "<b>Slot Type</b>" on all of the following windows based on the window, under "<b>UCE_ItemRarity</b>": Equipment, Inventory, Loot, PlayerTrading, NpcTrading, ItemMall, and Crafting.</li>
+        <li>[Required] Add the script "<b>UCE_RaritySlot</b>" to all of the following slot prefabs: Equipment, Inventory, Loot, PlayerTrading, NpcTrading, ItemMall, and Crafting.</li>
+        <li>[Required] Add the "<b>SquareBorder</b>" to all of the following slot prefabs, as a image UI above all children: Equipment, Inventory, Loot, PlayerTrading, NpcTrading, ItemMall, and Crafting. </li>
+        <li>[Required] Link the "<b>SquareBorder</b>" to the "<b>Outline</b>" on each slots "<b>UCE_RaritySlot</b>" script.</li>
+    </ol>
+</p>
+<h3>Additional Information</h3>
+<p>
+    <i>
+        Make sure you set the outline image to stretched.
+		ATTENTION: If you are using UCE Npc Shop make sure you set the shop you NPC Trading for the Item Rarity script. Setup the slot the same as the Item Mall slot.
+    </i>
+</p>
+<hr />
+<h3>Videos</h3>
+<p><i>None</i></p>
+
+
+<hr />
+<p>(c) Fhiz - for personal and commercial game projects, not for sharing or re-sale</p>
