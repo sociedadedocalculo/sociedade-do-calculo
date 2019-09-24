@@ -91,7 +91,7 @@ public partial class UCE_UI_InteractableAccessRequirement : UCE_UI_Requirement
 		UCE_InteractionRequirements ir = (UCE_InteractionRequirements)requirements;
 	
 		if (ir.goldCost > 0)
-			AddMessage(labelGoldCost + ir.goldCost.ToString(), player.gold >= ir.goldCost ? textColor : errorColor);
+			AddMessage(labelGoldCost + ir.goldCost.ToString(), player.Getgold() >= ir.goldCost ? textColor : errorColor);
 
 		if (ir.coinCost > 0)
 			AddMessage(labelCoinCost + ir.coinCost.ToString(), player.coins >= ir.coinCost ? textColor : errorColor);

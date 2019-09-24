@@ -42,7 +42,7 @@ public partial class UINpcRevive : MonoBehaviour
                 itemSlot.GetComponent<UIShowToolTip>().text = slot.ToolTip();
                 itemSlot.dragable = true;
                 costsText.text = itemData.revivePrice.ToString();
-                reviveButton.interactable = slot.item.summonedHealth == 0 && player.gold >= itemData.revivePrice;
+                reviveButton.interactable = slot.item.summonedHealth == 0 && player.Getgold() >= itemData.revivePrice;
                 reviveButton.onClick.SetListener(() => {
                     player.CmdNpcReviveSummonable(itemIndex);
                     itemIndex = -1;

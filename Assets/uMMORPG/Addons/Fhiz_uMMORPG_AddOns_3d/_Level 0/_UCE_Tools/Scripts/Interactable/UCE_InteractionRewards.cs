@@ -69,7 +69,7 @@ public partial class UCE_InteractionRewards
 
         if (g > 0)
         {
-            player.gold += g;
+            player.Setgold(player.Getgold() + g);
             player.UCE_TargetAddMessage(labelGainGold + g.ToString());
         }
 

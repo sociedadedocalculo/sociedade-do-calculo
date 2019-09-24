@@ -574,7 +574,7 @@ public partial class Database : MonoBehaviour
                 player.intelligence = Convert.ToInt32((long)mainrow[10]);
                 player.experience = (long)mainrow[11];
                 player.skillExperience = (long)mainrow[12];
-                player.gold = (long)mainrow[13];
+                player.Setgold((long)mainrow[13]);
                 player.coins = (long)mainrow[14];
 
                 // is the position on a navmesh?
@@ -735,7 +735,7 @@ public partial class Database : MonoBehaviour
                         new SqliteParameter("@intelligence", player.intelligence),
                         new SqliteParameter("@experience", player.experience),
                         new SqliteParameter("@skillExperience", player.skillExperience),
-                        new SqliteParameter("@gold", player.gold),
+                        new SqliteParameter("@gold", player.Getgold()),
                         new SqliteParameter("@coins", player.coins),
                         new SqliteParameter("@online", online ? 1 : 0),
                         new SqliteParameter("@lastsaved", DateTime.UtcNow));

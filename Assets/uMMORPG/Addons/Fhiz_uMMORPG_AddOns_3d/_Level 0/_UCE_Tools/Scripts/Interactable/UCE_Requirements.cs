@@ -271,13 +271,13 @@ public partial class UCE_Requirements
     {
         return
                 (stateType == StateType.Any) ||
-                (stateType == StateType.Idle && player.state == "IDLE" || player.state == "MOVING") ||
-                (stateType == StateType.Casting && player.state == "CASTING") ||
-                (stateType == StateType.Moving && player.state == "MOVING") ||
-                (stateType == StateType.IdleOrCasting && (player.state == "IDLE" || player.state == "CASTING")) ||
-                (stateType == StateType.IdleOrMoving && (player.state == "IDLE" || player.state == "MOVING")) ||
-                (stateType == StateType.IdleOrCastingOrMoving && (player.state == "IDLE" || player.state == "CASTING" || player.state == "MOVING")) ||
-                (stateType == StateType.Dead && player.state == "DEAD");
+                (stateType == StateType.Idle && player.State == "IDLE" || player.State == "MOVING") ||
+                (stateType == StateType.Casting && player.State == "CASTING") ||
+                (stateType == StateType.Moving && player.State == "MOVING") ||
+                (stateType == StateType.IdleOrCasting && (player.State == "IDLE" || player.State == "CASTING")) ||
+                (stateType == StateType.IdleOrMoving && (player.State == "IDLE" || player.State == "MOVING")) ||
+                (stateType == StateType.IdleOrCastingOrMoving && (player.State == "IDLE" || player.State == "CASTING" || player.State == "MOVING")) ||
+                (stateType == StateType.Dead && player.State == "DEAD");
     }
 
     // -----------------------------------------------------------------------------------

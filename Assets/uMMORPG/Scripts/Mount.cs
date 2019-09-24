@@ -53,7 +53,7 @@ public partial class Mount : Summonable
             // use owner's moving state for maximum precision (not if dead)
             // (if owner spawn reached us yet)
             animator.SetBool("MOVING", health > 0 && owner != null && owner.IsMoving());
-            animator.SetBool("DEAD", state == "DEAD");
+            animator.SetBool("DEAD", State == "DEAD");
         }
 
         // addon system hooks
@@ -107,7 +107,7 @@ public partial class Mount : Summonable
 
     bool EventDeathTimeElapsed()
     {
-        return state == "DEAD" && NetworkTime.time >= deathTimeEnd;
+        return State == "DEAD" && NetworkTime.time >= deathTimeEnd;
     }
 
     // finite state machine - server ///////////////////////////////////////////
@@ -166,9 +166,9 @@ public partial class Mount : Summonable
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE") return UpdateServer_IDLE();
-        if (state == "DEAD") return UpdateServer_DEAD();
-        Debug.LogError("invalid state:" + state);
+        if (State == "IDLE") return UpdateServer_IDLE();
+        if (State == "DEAD") return UpdateServer_DEAD();
+        Debug.LogError("invalid state:" + State);
         return "IDLE";
     }
 
@@ -176,7 +176,7 @@ public partial class Mount : Summonable
     [Client]
     protected override void UpdateClient()
     {
-        if (state == "IDLE" || state == "MOVING")
+        if (State == "IDLE" || State == "MOVING")
         {
             // copy owner's position and rotation. no need for NetworkTransform.
             CopyOwnerPositionAndRotation();

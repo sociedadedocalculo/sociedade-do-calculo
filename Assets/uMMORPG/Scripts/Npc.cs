@@ -58,7 +58,7 @@ public partial class Npc : Entity
     }
 
     // finite state machine states /////////////////////////////////////////////
-    [Server] protected override string UpdateServer() { return state; }
+    [Server] protected override string UpdateServer() { return State; }
     [Client] protected override void UpdateClient()
     {
         // addon system hooks

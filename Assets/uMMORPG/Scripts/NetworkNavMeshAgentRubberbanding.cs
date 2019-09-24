@@ -49,7 +49,7 @@ public class NetworkNavMeshAgentRubberbanding : NetworkBehaviour
         //    -> not while STUNNED.
         // -> maybe a distance check in case we get too far off from latency
         return entity.health > 0 &&
-               (entity.state == "IDLE" || entity.state == "MOVING");
+               (entity.State == "IDLE" || entity.State == "MOVING");
     }
 
     [Command]

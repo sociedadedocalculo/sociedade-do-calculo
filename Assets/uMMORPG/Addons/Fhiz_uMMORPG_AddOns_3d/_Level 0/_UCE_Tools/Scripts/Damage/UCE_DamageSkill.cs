@@ -212,7 +212,7 @@ public abstract partial class UCE_DamageSkill : ScriptableSkill
         // ------ create muzzle effect if any
         if (muzzleEffect != null)
         {
-            GameObject go = Instantiate(muzzleEffect.gameObject, caster.effectMount.position, caster.effectMount.rotation);
+            GameObject go = Instantiate(muzzleEffect.gameObject, caster.GeteffectMount().position, caster.GeteffectMount().rotation);
             NetworkServer.Spawn(go);
         }
 

@@ -15,7 +15,7 @@ public partial class UIPlayerTradeRequest : MonoBehaviour
         Player player = Player.localPlayer;
 
         // only if there is a request and if not accepted already
-        if (player != null && player.tradeRequestFrom != "" && player.state != "TRADING")
+        if (player != null && player.tradeRequestFrom != "" && player.State != "TRADING")
         {
             panel.SetActive(true);
             nameText.text = player.tradeRequestFrom;

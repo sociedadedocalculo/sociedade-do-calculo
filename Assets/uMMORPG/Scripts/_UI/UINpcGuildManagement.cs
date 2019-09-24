@@ -19,7 +19,7 @@ public partial class UINpcGuildManagement : MonoBehaviour
             Utils.ClosestDistance(player.collider, player.target.collider) <= player.interactionRange)
         {
             createNameInput.interactable = !player.InGuild() &&
-                                           player.gold >= GuildSystem.CreationPrice;
+                                           player.Getgold() >= GuildSystem.CreationPrice;
             createNameInput.characterLimit = GuildSystem.NameMaxLength;
 
             createPriceText.text = GuildSystem.CreationPrice.ToString();

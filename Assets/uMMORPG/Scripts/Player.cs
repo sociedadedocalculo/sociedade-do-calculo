@@ -514,11 +514,11 @@ public partial class Player : Entity
             // now pass parameters after any possible rebinds
             foreach (Animator anim in GetComponentsInChildren<Animator>())
             {
-                anim.SetBool("MOVING", IsMoving() && state != "CASTING" && !IsMounted());
-                anim.SetBool("CASTING", state == "CASTING");
-                anim.SetBool("STUNNED", state == "STUNNED");
+                anim.SetBool("MOVING", IsMoving() && State != "CASTING" && !IsMounted());
+                anim.SetBool("CASTING", State == "CASTING");
+                anim.SetBool("STUNNED", State == "STUNNED");
                 anim.SetBool("MOUNTED", IsMounted()); // for seated animation
-                anim.SetBool("DEAD", state == "DEAD");
+                anim.SetBool("DEAD", State == "DEAD");
                 foreach (Skill skill in skills)
                     if (skill.level > 0 && !(skill.data is PassiveSkill))
                         anim.SetBool(skill.name, skill.CastTimeRemaining() > 0);
@@ -598,12 +598,12 @@ public partial class Player : Entity
 
     bool EventMoveStart()
     {
-        return state != "MOVING" && IsMoving(); // only fire when started moving
+        return State != "MOVING" && IsMoving(); // only fire when started moving
     }
 
     bool EventMoveEnd()
     {
-        return state == "MOVING" && !IsMoving(); // only fire when stopped moving
+        return State == "MOVING" && !IsMoving(); // only fire when stopped moving
     }
 
     bool EventTradeStarted()
@@ -616,7 +616,7 @@ public partial class Player : Entity
     bool EventTradeDone()
     {
         // trade canceled or finished?
-        return state == "TRADING" && tradeRequestFrom == "";
+        return State == "TRADING" && tradeRequestFrom == "";
     }
 
     bool craftingRequested;
@@ -629,7 +629,7 @@ public partial class Player : Entity
 
     bool EventCraftingDone()
     {
-        return state == "CRAFTING" && NetworkTime.time > craftingTimeEnd;
+        return State == "CRAFTING" && NetworkTime.time > craftingTimeEnd;
     }
 
     bool EventStunned()
@@ -1110,14 +1110,14 @@ public partial class Player : Entity
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE") return UpdateServer_IDLE();
-        if (state == "MOVING") return UpdateServer_MOVING();
-        if (state == "CASTING") return UpdateServer_CASTING();
-        if (state == "STUNNED") return UpdateServer_STUNNED();
-        if (state == "TRADING") return UpdateServer_TRADING();
-        if (state == "CRAFTING") return UpdateServer_CRAFTING();
-        if (state == "DEAD") return UpdateServer_DEAD();
-        Debug.LogError("invalid state:" + state);
+        if (State == "IDLE") return UpdateServer_IDLE();
+        if (State == "MOVING") return UpdateServer_MOVING();
+        if (State == "CASTING") return UpdateServer_CASTING();
+        if (State == "STUNNED") return UpdateServer_STUNNED();
+        if (State == "TRADING") return UpdateServer_TRADING();
+        if (State == "CRAFTING") return UpdateServer_CRAFTING();
+        if (State == "DEAD") return UpdateServer_DEAD();
+        Debug.LogError("invalid state:" + State);
         return "IDLE";
     }
 
@@ -1125,7 +1125,7 @@ public partial class Player : Entity
     [Client]
     protected override void UpdateClient()
     {
-        if (state == "IDLE" || state == "MOVING")
+        if (State == "IDLE" || State == "MOVING")
         {
             if (isLocalPlayer)
             {
@@ -1175,7 +1175,7 @@ public partial class Player : Entity
                 }
             }
         }
-        else if (state == "CASTING")
+        else if (State == "CASTING")
         {
             // keep looking at the target for server & clients (only Y rotation)
             if (target) LookAtY(target.transform.position);
@@ -1192,7 +1192,7 @@ public partial class Player : Entity
                 if (Input.GetKeyDown(cancelActionKey)) CmdCancelAction();
             }
         }
-        else if (state == "STUNNED")
+        else if (State == "STUNNED")
         {
             if (isLocalPlayer)
             {
@@ -1205,10 +1205,10 @@ public partial class Player : Entity
                 if (Input.GetKeyDown(cancelActionKey)) CmdCancelAction();
             }
         }
-        else if (state == "TRADING") { }
-        else if (state == "CRAFTING") { }
-        else if (state == "DEAD") { }
-        else Debug.LogError("invalid state:" + state);
+        else if (State == "TRADING") { }
+        else if (State == "CRAFTING") { }
+        else if (State == "DEAD") { }
+        else Debug.LogError("invalid state:" + State);
 
         // addon system hooks
         Utils.InvokeMany(typeof(Player), this, "UpdateClient_");
@@ -1542,7 +1542,7 @@ public partial class Player : Entity
     {
         // validate: dead monster and close enough?
         // use collider point(s) to also work with big entities
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if ((State == "IDLE" || State == "MOVING" || State == "CASTING") &&
             target != null && target is Monster && target.health == 0 &&
             Utils.ClosestDistance(collider, target.collider) <= interactionRange)
         {
@@ -1558,19 +1558,19 @@ public partial class Player : Entity
                 // calculate the share via ceil, so that uneven numbers
                 // still result in at least total gold in the end.
                 // e.g. 4/2=2 (good); 5/2=2 (1 gold got lost)
-                long share = (long)Mathf.Ceil((float)target.gold / (float)closeMembers.Count);
+                long share = (long)Mathf.Ceil((float)target.Getgold() / (float)closeMembers.Count);
 
                 // now distribute
                 foreach (Player member in closeMembers)
-                    member.gold += share;
+                    member.Setgold(member.Getgold() + share);
             }
             else
             {
-                gold += target.gold;
+                Setgold(Getgold() + target.Getgold());
             }
 
             // reset target gold
-            target.gold = 0;
+            target.Setgold(0);
         }
     }
 
@@ -1579,7 +1579,7 @@ public partial class Player : Entity
     {
         // validate: dead monster and close enough and valid loot index?
         // use collider point(s) to also work with big entities
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if ((State == "IDLE" || State == "MOVING" || State == "CASTING") &&
             target != null && target is Monster && target.health == 0 &&
             Utils.ClosestDistance(collider, target.collider) <= interactionRange &&
             0 <= index && index < target.inventory.Count &&
@@ -1600,10 +1600,10 @@ public partial class Player : Entity
     // are inventory operations like swap, merge, split allowed at the moment?
     bool InventoryOperationsAllowed()
     {
-        return state == "IDLE" ||
-               state == "MOVING" ||
-               state == "CASTING" ||
-               (state == "TRADING" && tradeStatus == TradeStatus.Free);
+        return State == "IDLE" ||
+               State == "MOVING" ||
+               State == "CASTING" ||
+               (State == "TRADING" && tradeStatus == TradeStatus.Free);
     }
 
     [Command]
@@ -1906,7 +1906,7 @@ public partial class Player : Entity
     public void CmdUseSkill(int skillIndex)
     {
         // validate
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if ((State == "IDLE" || State == "MOVING" || State == "CASTING") &&
             0 <= skillIndex && skillIndex < skills.Count)
         {
             // skill learned and can be casted?
@@ -1924,7 +1924,7 @@ public partial class Player : Entity
         // only if not casting already
         // (might need to ignore that when coming from pending skill where
         //  CASTING is still true)
-        if (state != "CASTING" || ignoreState)
+        if (State != "CASTING" || ignoreState)
         {
             Skill skill = skills[skillIndex];
             if (CastCheckSelf(skill) && CastCheckTarget(skill))
@@ -1984,7 +1984,7 @@ public partial class Player : Entity
     public void CmdUpgradeSkill(int skillIndex)
     {
         // validate
-        if ((state == "IDLE" || state == "MOVING" || state == "CASTING") &&
+        if ((State == "IDLE" || State == "MOVING" || State == "CASTING") &&
             0 <= skillIndex && skillIndex < skills.Count)
         {
             // can be upgraded?
@@ -2123,7 +2123,7 @@ public partial class Player : Entity
     {
         // validate
         // use collider point(s) to also work with big entities
-        if (state == "IDLE" &&
+        if (State == "IDLE" &&
             target != null &&
             target.health > 0 &&
             target is Npc &&
@@ -2159,7 +2159,7 @@ public partial class Player : Entity
     {
         // validate
         // use collider point(s) to also work with big entities
-        if (state == "IDLE" &&
+        if (State == "IDLE" &&
             target != null &&
             target.health > 0 &&
             target is Npc &&
@@ -2181,7 +2181,7 @@ public partial class Player : Entity
                         quest.OnCompleted(this);
 
                         // gain rewards
-                        gold += quest.rewardGold;
+                        Setgold(Getgold() + quest.rewardGold);
                         experience += quest.rewardExperience;
                         if (quest.rewardItem != null)
                             InventoryAdd(new Item(quest.rewardItem), 1);
@@ -2201,7 +2201,7 @@ public partial class Player : Entity
     {
         // validate: close enough, npc alive and valid index?
         // use collider point(s) to also work with big entities
-        if (state == "IDLE" &&
+        if (State == "IDLE" &&
             target != null &&
             target.health > 0 &&
             target is Npc &&
@@ -2215,10 +2215,10 @@ public partial class Player : Entity
                 long price = npcItem.buyPrice * amount;
 
                 // enough gold and enough space in inventory?
-                if (gold >= price && InventoryCanAdd(npcItem, amount))
+                if (Getgold() >= price && InventoryCanAdd(npcItem, amount))
                 {
                     // pay for it, add to inventory
-                    gold -= price;
+                    Setgold(Getgold() - price);
                     InventoryAdd(npcItem, amount);
                 }
             }
@@ -2230,7 +2230,7 @@ public partial class Player : Entity
     {
         // validate: close enough, npc alive and valid index and valid item?
         // use collider point(s) to also work with big entities
-        if (state == "IDLE" &&
+        if (State == "IDLE" &&
             target != null &&
             target.health > 0 &&
             target is Npc &&
@@ -2246,7 +2246,7 @@ public partial class Player : Entity
                 {
                     // sell the amount
                     long price = slot.item.sellPrice * amount;
-                    gold += price;
+                    Setgold(Getgold() + price);
                     slot.DecreaseAmount(amount);
                     inventory[index] = slot;
                 }
@@ -2259,7 +2259,7 @@ public partial class Player : Entity
     public void CmdNpcTeleport()
     {
         // validate
-        if (state == "IDLE" &&
+        if (State == "IDLE" &&
             target != null &&
             target.health > 0 &&
             target is Npc &&
@@ -2289,7 +2289,7 @@ public partial class Player : Entity
     public bool CanStartTrade()
     {
         // a player can only trade if he is not trading already and alive
-        return health > 0 && state != "TRADING";
+        return health > 0 && State != "TRADING";
     }
 
     public bool CanStartTradeWith(Entity entity)
@@ -2360,7 +2360,7 @@ public partial class Player : Entity
     public void CmdTradeCancel()
     {
         // validate
-        if (state == "TRADING")
+        if (State == "TRADING")
         {
             // clear trade request for both guys. the FSM event will do the rest
             Player player = FindPlayerFromTradeInvitation();
@@ -2373,7 +2373,7 @@ public partial class Player : Entity
     public void CmdTradeOfferLock()
     {
         // validate
-        if (state == "TRADING")
+        if (State == "TRADING")
             tradeStatus = TradeStatus.Locked;
     }
 
@@ -2381,8 +2381,8 @@ public partial class Player : Entity
     public void CmdTradeOfferGold(long amount)
     {
         // validate
-        if (state == "TRADING" && tradeStatus == TradeStatus.Free &&
-            0 <= amount && amount <= gold)
+        if (State == "TRADING" && tradeStatus == TradeStatus.Free &&
+            0 <= amount && amount <= Getgold())
             tradeOfferGold = amount;
     }
 
@@ -2390,7 +2390,7 @@ public partial class Player : Entity
     public void CmdTradeOfferItem(int inventoryIndex, int offerIndex)
     {
         // validate
-        if (state == "TRADING" && tradeStatus == TradeStatus.Free &&
+        if (State == "TRADING" && tradeStatus == TradeStatus.Free &&
             0 <= offerIndex && offerIndex < tradeOfferItems.Count &&
             !tradeOfferItems.Contains(inventoryIndex) && // only one reference
             0 <= inventoryIndex && inventoryIndex < inventory.Count)
@@ -2405,7 +2405,7 @@ public partial class Player : Entity
     public void CmdTradeOfferItemClear(int offerIndex)
     {
         // validate
-        if (state == "TRADING" && tradeStatus == TradeStatus.Free &&
+        if (State == "TRADING" && tradeStatus == TradeStatus.Free &&
             0 <= offerIndex && offerIndex < tradeOfferItems.Count)
             tradeOfferItems[offerIndex] = -1;
     }
@@ -2414,7 +2414,7 @@ public partial class Player : Entity
     bool IsTradeOfferStillValid()
     {
         // not enough gold? then invalid
-        if (gold < tradeOfferGold)
+        if (Getgold() < tradeOfferGold)
             return false;
 
         // all offered items are -1 or valid?
@@ -2465,7 +2465,7 @@ public partial class Player : Entity
     {
         // validate
         // note: distance check already done when starting the trade
-        if (state == "TRADING" && tradeStatus == TradeStatus.Locked &&
+        if (State == "TRADING" && tradeStatus == TradeStatus.Locked &&
             target != null && target is Player)
         {
             Player other = (Player)target;
@@ -2540,11 +2540,11 @@ public partial class Player : Entity
                             Debug.LogWarning("item trade problem");
 
                         // exchange the gold
-                        gold -= tradeOfferGold;
-                        other.gold -= other.tradeOfferGold;
+                        Setgold(Getgold() - tradeOfferGold);
+                        other.Setgold(other.Getgold() - other.tradeOfferGold);
 
-                        gold += other.tradeOfferGold;
-                        other.gold += tradeOfferGold;
+                        Setgold(Getgold() + other.tradeOfferGold);
+                        other.Setgold(other.Getgold() + tradeOfferGold);
                     }
                 }
                 else print("trade canceled (invalid offer)");
@@ -2573,7 +2573,7 @@ public partial class Player : Entity
     {
         // validate: between 1 and 6, all valid, no duplicates?
         // -> can be IDLE or MOVING (in which case we reset the movement)
-        if ((state == "IDLE" || state == "MOVING") &&
+        if ((State == "IDLE" || State == "MOVING") &&
             indices.Length == ScriptableRecipe.recipeSize)
         {
             // find valid indices that are not '-1' and make sure there are no
@@ -2612,7 +2612,7 @@ public partial class Player : Entity
     {
         // should only be called while CRAFTING
         // -> we already validated everything in CmdCraft. let's just craft.
-        if (state == "CRAFTING")
+        if (State == "CRAFTING")
         {
             // build list of item templates from indices
             List<int> validIndices = craftingIndices.Where(index => 0 <= index && index < inventory.Count && inventory[index].amount > 0).ToList();
@@ -2874,12 +2874,12 @@ public partial class Player : Entity
     public void CmdCreateGuild(string guildName)
     {
         // validate
-        if (health > 0 && gold >= GuildSystem.CreationPrice &&
+        if (health > 0 && Getgold() >= GuildSystem.CreationPrice &&
             !InGuild() && IsGuildManagerNear())
         {
             // try to create the guild. pay for it if it worked.
             if (GuildSystem.CreateGuild(name, level, guildName))
-                gold -= GuildSystem.CreationPrice;
+                Setgold(Getgold() - GuildSystem.CreationPrice);
             else
                 chat.TargetMsgInfo("Guild name invalid!");
         }
@@ -3030,8 +3030,8 @@ public partial class Player : Entity
     {
         // only while pet and owner aren't fighting
         return activePet != null &&
-               (state == "IDLE" || state == "MOVING") &&
-               (activePet.state == "IDLE" || activePet.state == "MOVING");
+               (State == "IDLE" || State == "MOVING") &&
+               (activePet.State == "IDLE" || activePet.State == "MOVING");
     }
 
     [Command]
@@ -3050,7 +3050,7 @@ public partial class Player : Entity
     {
         // validate: close enough, npc alive and valid index and valid item?
         // use collider point(s) to also work with big entities
-        if (state == "IDLE" &&
+        if (State == "IDLE" &&
             target != null &&
             target.health > 0 &&
             target is Npc &&
@@ -3066,10 +3066,10 @@ public partial class Player : Entity
                 if (slot.item.summonedHealth == 0 && itemData.summonPrefab != null)
                 {
                     // enough gold?
-                    if (gold >= itemData.revivePrice)
+                    if (Getgold() >= itemData.revivePrice)
                     {
                         // pay for it, revive it
-                        gold -= itemData.revivePrice;
+                        Setgold(Getgold() - itemData.revivePrice);
                         slot.item.summonedHealth = itemData.summonPrefab.healthMax;
                         inventory[index] = slot;
                     }
@@ -3118,9 +3118,9 @@ public partial class Player : Entity
         if (ni != null)
         {
             // can directly change it, or change it after casting?
-            if (state == "IDLE" || state == "MOVING" || state == "STUNNED")
+            if (State == "IDLE" || State == "MOVING" || State == "STUNNED")
                 target = ni.GetComponent<Entity>();
-            else if (state == "CASTING")
+            else if (State == "CASTING")
                 nextTarget = ni.GetComponent<Entity>();
         }
     }
@@ -3207,7 +3207,7 @@ public partial class Player : Entity
                     SetIndicatorViaPosition(bestDestination);
 
                     // casting? then set pending destination
-                    if (state == "CASTING")
+                    if (State == "CASTING")
                     {
                         pendingDestination = bestDestination;
                         pendingDestinationValid = true;
@@ -3261,7 +3261,7 @@ public partial class Player : Entity
                 agent.ResetMovement();
 
                 // casting? then set pending velocity
-                if (state == "CASTING")
+                if (State == "CASTING")
                 {
                     pendingVelocity = direction * speed;
                     pendingVelocityValid = true;

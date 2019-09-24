@@ -124,10 +124,10 @@ public partial class Monster : Entity
         //    so we don't need to worry about an animation number etc.
         if (isClient) // no need for animations on the server
         {
-            animator.SetBool("MOVING", state == "MOVING" && agent.velocity != Vector3.zero);
-            animator.SetBool("CASTING", state == "CASTING");
-            animator.SetBool("STUNNED", state == "STUNNED");
-            animator.SetBool("DEAD", state == "DEAD");
+            animator.SetBool("MOVING", State == "MOVING" && agent.velocity != Vector3.zero);
+            animator.SetBool("CASTING", State == "CASTING");
+            animator.SetBool("STUNNED", State == "STUNNED");
+            animator.SetBool("DEAD", State == "DEAD");
             foreach (Skill skill in skills)
                 animator.SetBool(skill.name, skill.CastTimeRemaining() > 0);
         }
@@ -158,12 +158,12 @@ public partial class Monster : Entity
 
     bool EventDeathTimeElapsed()
     {
-        return state == "DEAD" && NetworkTime.time >= deathTimeEnd;
+        return State == "DEAD" && NetworkTime.time >= deathTimeEnd;
     }
 
     bool EventRespawnTimeElapsed()
     {
-        return state == "DEAD" && respawn && NetworkTime.time >= respawnTimeEnd;
+        return State == "DEAD" && respawn && NetworkTime.time >= respawnTimeEnd;
     }
 
     bool EventTargetDisappeared()
@@ -212,7 +212,7 @@ public partial class Monster : Entity
 
     bool EventMoveEnd()
     {
-        return state == "MOVING" && !IsMoving();
+        return State == "MOVING" && !IsMoving();
     }
 
     bool EventMoveRandomly()
@@ -534,7 +534,7 @@ public partial class Monster : Entity
         if (EventRespawnTimeElapsed())
         {
             // respawn at the start position with full health, visibility, no loot
-            gold = 0;
+            Setgold(0);
             inventory.Clear();
             Show();
             agent.Warp(startPosition); // recommended over transform.position
@@ -568,12 +568,12 @@ public partial class Monster : Entity
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE") return UpdateServer_IDLE();
-        if (state == "MOVING") return UpdateServer_MOVING();
-        if (state == "CASTING") return UpdateServer_CASTING();
-        if (state == "STUNNED") return UpdateServer_STUNNED();
-        if (state == "DEAD") return UpdateServer_DEAD();
-        Debug.LogError("invalid state:" + state);
+        if (State == "IDLE") return UpdateServer_IDLE();
+        if (State == "MOVING") return UpdateServer_MOVING();
+        if (State == "CASTING") return UpdateServer_CASTING();
+        if (State == "STUNNED") return UpdateServer_STUNNED();
+        if (State == "DEAD") return UpdateServer_DEAD();
+        Debug.LogError("invalid state:" + State);
         return "IDLE";
     }
 
@@ -581,7 +581,7 @@ public partial class Monster : Entity
     [Client]
     protected override void UpdateClient()
     {
-        if (state == "CASTING")
+        if (State == "CASTING")
         {
             // keep looking at the target for server & clients (only Y rotation)
             if (target) LookAtY(target.transform.position);
@@ -640,7 +640,7 @@ public partial class Monster : Entity
     public bool HasLoot()
     {
         // any gold or valid items?
-        if (gold > 0)
+        if (Getgold() > 0)
             return true;
 
         // check slots manually. Linq is HEAVY(!) on GC and performance
@@ -666,7 +666,7 @@ public partial class Monster : Entity
         respawnTimeEnd = deathTimeEnd + respawnTime; // after death time ended
 
         // generate gold
-        gold = Random.Range(lootGoldMin, lootGoldMax);
+        Setgold(Random.Range(lootGoldMin, lootGoldMax));
 
         // generate items (note: can't use Linq because of SyncList)
         foreach (ItemDropChance itemChance in dropChances)

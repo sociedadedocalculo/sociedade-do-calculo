@@ -37,7 +37,7 @@ public class UCE_Cost
         bool valid = true;
 
         valid = (itemCost.Length == 0 || player.UCE_checkHasItems(itemCost)) ? valid : false;
-        valid = (goldCost == 0 || player.gold >= goldCost) ? valid : false;
+        valid = (goldCost == 0 || player.Getgold() >= goldCost) ? valid : false;
         valid = (coinCost == 0 || player.coins >= coinCost) ? valid : false;
         valid = (healthCost == 0 || player.health > healthCost) ? valid : false;
         valid = (manaCost == 0 || player.mana >= manaCost) ? valid : false;
@@ -60,7 +60,8 @@ public class UCE_Cost
 
         player.UCE_removeItems(itemCost);
 
-        player.gold -= goldCost;
+        player.Setgold(
+        player.Getgold() - goldCost);
         player.coins -= coinCost;
         player.health -= healthCost;
         player.mana -= manaCost;

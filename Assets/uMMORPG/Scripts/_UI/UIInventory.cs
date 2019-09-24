@@ -67,7 +67,7 @@ public partial class UIInventory : MonoBehaviour
                 }
 
                 // gold
-                goldText.text = player.gold.ToString();
+                goldText.text = player.Getgold().ToString();
 
                 // trash (tooltip always enabled, dropable always true)
                 trash.dragable = player.trash.amount > 0;

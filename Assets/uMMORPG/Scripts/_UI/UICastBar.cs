@@ -12,7 +12,7 @@ public partial class UICastBar : MonoBehaviour
     {
         Player player = Player.localPlayer;
         if (player != null &&
-            player.state == "CASTING" && player.currentSkill != -1 &&
+            player.State == "CASTING" && player.currentSkill != -1 &&
             player.skills[player.currentSkill].showCastBar)
         {
             panel.SetActive(true);

@@ -86,7 +86,7 @@ public partial class UICrafting : MonoBehaviour
 
                     // show progress bar while crafting
                     // (show 100% if craft time = 0 because it's just better feedback)
-                    progressSlider.gameObject.SetActive(player.state == "CRAFTING");
+                    progressSlider.gameObject.SetActive(player.State == "CRAFTING");
                     double startTime = player.craftingTimeEnd - recipe.craftingTime;
                     double elapsedTime = NetworkTime.time - startTime;
                     progressSlider.value = recipe.craftingTime > 0 ? (float)elapsedTime / recipe.craftingTime : 1;
@@ -123,7 +123,7 @@ public partial class UICrafting : MonoBehaviour
                 craftButton.GetComponentInChildren<Text>().text = recipe != null &&
                                                                   recipe.probability < 1 ? "Try Craft" : "Craft";
                 craftButton.interactable = recipe != null &&
-                                           player.state != "CRAFTING" &&
+                                           player.State != "CRAFTING" &&
                                            player.craftingState != CraftingState.InProgress &&
                                            player.InventoryCanAdd(new Item(recipe.result), 1);
                 craftButton.onClick.SetListener(() => {

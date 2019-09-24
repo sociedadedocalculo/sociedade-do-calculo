@@ -103,10 +103,10 @@ public partial class Entity
             return
                     isAlive &&
                     (
-                    state == "IDLE" ||
-                       state == "MOVING" ||
-                       state == "CASTING" ||
-                       state == "TRADING"
+                    State == "IDLE" ||
+                       State == "MOVING" ||
+                       State == "CASTING" ||
+                       State == "TRADING"
                        );
         }
     }

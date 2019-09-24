@@ -64,7 +64,7 @@ public partial class UCE_InteractionRequirements : UCE_Requirements
     public bool checkCosts(Player player, bool valid)
     {
         valid = (removeItems.Length == 0 || player.UCE_checkHasItems(removeItems)) ? valid : false;
-        valid = (goldCost == 0 || player.gold >= goldCost) ? valid : false;
+        valid = (goldCost == 0 || player.Getgold() >= goldCost) ? valid : false;
         valid = (coinCost == 0 || player.coins >= coinCost) ? valid : false;
         valid = (healthCost == 0 || player.health >= healthCost) ? valid : false;
         valid = (manaCost == 0 || player.mana >= manaCost) ? valid : false;
@@ -100,7 +100,8 @@ public partial class UCE_InteractionRequirements : UCE_Requirements
         {
             player.UCE_removeItems(removeItems, true);
 
-            player.gold -= goldCost;
+            player.Setgold(
+            player.Getgold() - goldCost);
             player.coins -= coinCost;
 
             player.mana -= manaCost;

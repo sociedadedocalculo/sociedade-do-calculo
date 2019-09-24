@@ -137,10 +137,10 @@ public partial class Pet : Summonable
         //    so we don't need to worry about an animation number etc.
         if (isClient) // no need for animations on the server
         {
-            animator.SetBool("MOVING", state == "MOVING" && agent.velocity != Vector3.zero);
-            animator.SetBool("CASTING", state == "CASTING");
-            animator.SetBool("STUNNED", state == "STUNNED");
-            animator.SetBool("DEAD", state == "DEAD");
+            animator.SetBool("MOVING", State == "MOVING" && agent.velocity != Vector3.zero);
+            animator.SetBool("CASTING", State == "CASTING");
+            animator.SetBool("STUNNED", State == "STUNNED");
+            animator.SetBool("DEAD", State == "DEAD");
             foreach (Skill skill in skills)
                 animator.SetBool(skill.name, skill.CastTimeRemaining() > 0);
         }
@@ -195,7 +195,7 @@ public partial class Pet : Summonable
 
     bool EventDeathTimeElapsed()
     {
-        return state == "DEAD" && NetworkTime.time >= deathTimeEnd;
+        return State == "DEAD" && NetworkTime.time >= deathTimeEnd;
     }
 
     bool EventTargetDisappeared()
@@ -250,7 +250,7 @@ public partial class Pet : Summonable
 
     bool EventMoveEnd()
     {
-        return state == "MOVING" && !IsMoving();
+        return State == "MOVING" && !IsMoving();
     }
 
     bool EventStunned()
@@ -562,12 +562,12 @@ public partial class Pet : Summonable
     [Server]
     protected override string UpdateServer()
     {
-        if (state == "IDLE")    return UpdateServer_IDLE();
-        if (state == "MOVING")  return UpdateServer_MOVING();
-        if (state == "CASTING") return UpdateServer_CASTING();
-        if (state == "STUNNED") return UpdateServer_STUNNED();
-        if (state == "DEAD")    return UpdateServer_DEAD();
-        Debug.LogError("invalid state:" + state);
+        if (State == "IDLE")    return UpdateServer_IDLE();
+        if (State == "MOVING")  return UpdateServer_MOVING();
+        if (State == "CASTING") return UpdateServer_CASTING();
+        if (State == "STUNNED") return UpdateServer_STUNNED();
+        if (State == "DEAD")    return UpdateServer_DEAD();
+        Debug.LogError("invalid state:" + State);
         return "IDLE";
     }
 
@@ -575,7 +575,7 @@ public partial class Pet : Summonable
     [Client]
     protected override void UpdateClient()
     {
-        if (state == "CASTING")
+        if (State == "CASTING")
         {
             // keep looking at the target for server & clients (only Y rotation)
             if (target) LookAtY(target.transform.position);

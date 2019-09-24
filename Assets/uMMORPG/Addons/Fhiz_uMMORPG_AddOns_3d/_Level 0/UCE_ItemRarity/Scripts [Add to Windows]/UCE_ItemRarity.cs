@@ -132,7 +132,7 @@ public class UCE_ItemRarity : MonoBehaviour
                     break;
 
                 case SlotType.PlayerTrade:
-                    if (player.state == "TRADING")
+                    if (player.State == "TRADING")
                     {
                         Player other = (Player)player.target;
                         int lastPTYCount = 0;

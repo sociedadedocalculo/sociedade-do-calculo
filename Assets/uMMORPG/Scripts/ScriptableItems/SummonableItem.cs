@@ -22,7 +22,7 @@ public abstract class SummonableItem : UsableItem
         //  -> also use riskyActionTime to avoid spamming. we don't want someone
         //     to spawn and destroy a pet 1000x/second
         return base.CanUse(player, inventoryIndex) &&
-               (player.state == "IDLE" || player.state == "MOVING") &&
+               (player.State == "IDLE" || player.State == "MOVING") &&
                NetworkTime.time >= player.nextRiskyActionTime &&
                summonPrefab != null &&
                player.inventory[inventoryIndex].item.summonedHealth > 0 &&

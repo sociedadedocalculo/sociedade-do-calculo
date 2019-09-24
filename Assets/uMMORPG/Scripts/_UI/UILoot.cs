@@ -36,13 +36,13 @@ public partial class UILoot : MonoBehaviour
             ((Monster)player.target).HasLoot())
         {
             // gold slot
-            if (player.target.gold > 0)
+            if (player.target.Getgold() > 0)
             {
                 goldSlot.SetActive(true);
                 goldSlot.GetComponentInChildren<Button>().onClick.SetListener(() => {
                     player.CmdTakeLootGold();
                 });
-                goldText.text = player.target.gold.ToString();
+                goldText.text = player.target.Getgold().ToString();
             }
             else goldSlot.SetActive(false);
 

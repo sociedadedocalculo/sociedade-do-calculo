@@ -49,7 +49,7 @@ public abstract partial class Entity : NetworkBehaviour
     // -> state only writable by entity class to avoid all kinds of confusion
     [Header("State")]
     [SyncVar, SerializeField] string _state = "IDLE";
-    public string state => _state;
+    public string State => _state;
 
     // it's useful to know an entity's last combat time (did/was attacked)
     // e.g. to prevent logging out for x seconds after combat
@@ -288,8 +288,9 @@ public abstract partial class Entity : NetworkBehaviour
     //    mount
     // -> assign to right hand if in doubt!
     [SerializeField] Transform _effectMount;
-    public virtual Transform effectMount { get { return _effectMount; } }
 
+    public virtual Transform GeteffectMount()
+    { return EffectMount; }
     // all entities should have an inventory, not just the player.
     // useful for monster loot, chests, etc.
     [Header("Inventory")]
@@ -305,7 +306,12 @@ public abstract partial class Entity : NetworkBehaviour
     // note: int is not enough (can have > 2 mil. easily)
     [Header("Gold")]
     [SyncVar, SerializeField] long _gold = 0;
-    public long gold { get { return _gold; } set { _gold = Math.Max(value, 0); } }
+
+    public long Getgold()
+    { return _gold; }
+    public void Setgold(long value)
+    { _gold = Math.Max(value, 0); }
+    public Transform EffectMount { get => _effectMount; set => _effectMount = value; }
 
     // 3D text mesh for name above the entity's head
     [Header("Text Meshes")]
@@ -411,7 +417,7 @@ public abstract partial class Entity : NetworkBehaviour
     protected virtual void UpdateOverlays()
     {
         if (stunnedOverlay != null)
-            stunnedOverlay.gameObject.SetActive(state == "STUNNED");
+            stunnedOverlay.gameObject.SetActive(State == "STUNNED");
     }
 
     // visibility //////////////////////////////////////////////////////////////

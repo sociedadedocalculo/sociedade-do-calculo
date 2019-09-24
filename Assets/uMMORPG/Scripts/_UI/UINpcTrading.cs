@@ -72,7 +72,7 @@ public partial class UINpcTrading : MonoBehaviour
                 buySlot.GetComponent<UIShowToolTip>().text = new ItemSlot(new Item(itemData)).ToolTip(); // with slot for {AMOUNT}
                 buySlot.dragable = true;
                 buyCostsText.text = price.ToString();
-                buyButton.interactable = amount > 0 && price <= player.gold &&
+                buyButton.interactable = amount > 0 && price <= player.Getgold() &&
                                          player.InventoryCanAdd(new Item(itemData), amount);
                 buyButton.onClick.SetListener(() => {
                     player.CmdNpcBuyItem(buyIndex, amount);
