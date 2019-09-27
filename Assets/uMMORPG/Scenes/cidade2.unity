@@ -10703,7 +10703,7 @@ MonoBehaviour:
   exclusive: 0
   conversant: {fileID: 287913503}
   useConversationTitlePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: 8c8f5e3443fc78d4bb523c867a376cfb, type: 2}
+  selectedDatabase: {fileID: 0}
   actor: {fileID: 1305707318}
   trigger: 16
   stopConversationOnTriggerExit: 0
@@ -19209,7 +19209,7 @@ MonoBehaviour:
   m_Script: {fileID: -1229025713, guid: b5a7519e94754fb4a8ea0c272031db78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialDatabase: {fileID: 11400000, guid: 8c8f5e3443fc78d4bb523c867a376cfb, type: 2}
+  initialDatabase: {fileID: 0}
   displaySettings:
     conversationOverrideSettings:
       useOverrides: 0
@@ -49491,6 +49491,7 @@ GameObject:
   - component: {fileID: 2072336950}
   - component: {fileID: 1488334802}
   - component: {fileID: 1488334801}
+  - component: {fileID: 1488334804}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -49540,6 +49541,60 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1488334804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488334800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85426ca387621ba4cb2d9611a5fb9ad9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnClientConnected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnClientDataReceived:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Mirror.UnityEventArraySegment, Mirror, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnClientError:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Mirror.UnityEventException, Mirror, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnClientDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnServerConnected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Mirror.UnityEventInt, Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  OnServerDataReceived:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Mirror.UnityEventIntArraySegment, Mirror, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnServerError:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Mirror.UnityEventIntException, Mirror, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnServerDisconnected:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Mirror.UnityEventInt, Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  port: 7777
+  NoDelay: 1
+  serverMaxMessageSize: 16384
+  clientMaxMessageSize: 16384
 --- !u!1 &1488448394
 GameObject:
   m_ObjectHideFlags: 0
@@ -66305,10 +66360,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c0d26fac4e634980916e3501b389ef6, type: 3}
---- !u!224 &1964816448 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 224783439902492766, guid: 9c0d26fac4e634980916e3501b389ef6,
-    type: 3}
+--- !u!4 &1964816448 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 1964816447}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1964816450 stripped
@@ -71241,21 +71295,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 496dccc9ffea546b79bc600b67239364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NetworkPort: 7777
-  m_ServerBindToIP: 0
-  m_ServerBindAddress: 
-  m_NetworkAddress: Use the Server List below!
-  m_DontDestroyOnLoad: 1
-  m_RunInBackground: 1
-  m_ScriptCRCCheck: 1
-  m_MaxDelay: 0.01
-  m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
-  m_AutoCreatePlayer: 0
-  m_PlayerSpawnMethod: 0
-  m_OfflineScene: 
-  m_OnlineScene: 
-  m_SpawnPrefabs:
+  dontDestroyOnLoad: 1
+  runInBackground: 1
+  startOnHeadless: 1
+  serverTickRate: 30
+  showDebugMessages: 0
+  offlineScene: 
+  onlineScene: 
+  transport: {fileID: 1488334804}
+  networkAddress: Use the Server List below!
+  maxConnections: 1000
+  playerPrefab: {fileID: 0}
+  autoCreatePlayer: 0
+  playerSpawnMethod: 0
+  spawnPrefabs:
   - {fileID: 110258, guid: a0d8d3ee1a9d34deab41d803ad7a6ddf, type: 3}
   - {fileID: 142034, guid: eb4d93658e2654e8c9448f27a17f0f9e, type: 3}
   - {fileID: 100000, guid: 3ebbb149fc6e84237ac32a1558ca695a, type: 3}
@@ -71264,71 +71317,29 @@ MonoBehaviour:
   - {fileID: 1861356044303458, guid: f5eb3a5bff7624ecf86cbacca12bc947, type: 3}
   - {fileID: 1987394715921876, guid: 33fbbf344246446cdb5af70062968b61, type: 3}
   - {fileID: 100000, guid: 05682822ff5a34e3f9ee59133371f266, type: 3}
-  m_CustomConfig: 1
-  m_MaxConnections: 1000
-  m_ConnectionConfig:
-    m_PacketSize: 1500
-    m_FragmentSize: 500
-    m_ResendTimeout: 1200
-    m_DisconnectTimeout: 6000
-    m_ConnectTimeout: 6000
-    m_MinUpdateTimeout: 1
-    m_PingTimeout: 2000
-    m_ReducedPingTimeout: 100
-    m_AllCostTimeout: 20
-    m_NetworkDropThreshold: 80
-    m_OverflowDropThreshold: 80
-    m_MaxConnectionAttempt: 10
-    m_AckDelay: 33
-    m_SendDelay: 10
-    m_MaxCombinedReliableMessageSize: 100
-    m_MaxCombinedReliableMessageCount: 10
-    m_MaxSentMessageQueueSize: 512
-    m_AcksType: 4
-    m_UsePlatformSpecificProtocols: 0
-    m_InitialBandwidth: 0
-    m_BandwidthPeakFactor: 2
-    m_WebSocketReceiveBufferMaxSize: 0
-    m_UdpSocketReceiveBufferMaxSize: 0
-    m_SSLCertFilePath: 
-    m_SSLPrivateKeyFilePath: 
-    m_SSLCAFilePath: 
-    m_Channels: []
-  m_GlobalConfig:
-    m_ThreadAwakeTimeout: 1
-    m_ReactorModel: 0
-    m_ReactorMaximumReceivedMessages: 4096
-    m_ReactorMaximumSentMessages: 4096
-    m_MaxPacketSize: 2000
-    m_MaxHosts: 16
-    m_ThreadPoolSize: 3
-    m_MinTimerTimeout: 1
-    m_MaxTimerTimeout: 12000
-    m_MinNetSimulatorTimeout: 1
-    m_MaxNetSimulatorTimeout: 12000
-  m_Channels: 0400000001000000
-  m_UseWebSockets: 0
-  m_UseSimulator: 0
-  m_SimulatedLatency: 400
-  m_PacketLossPercentage: 0
-  m_MaxBufferedPackets: 512
-  m_AllowFragmentation: 1
-  m_MatchHost: mm.unet.unity3d.com
-  m_MatchPort: 443
-  matchName: default
-  matchSize: 4
-  isNetworkActive: 0
-  matchMaker: {fileID: 0}
+  databaseType: 0
+  dbHost: localhost
+  dbName: dbName
+  dbUser: dbUser
+  dbPassword: dbPassword
+  dbPort: 3306
+  dbCharacterSet: utf8mb4
+  state: 0
   uiPopup: {fileID: 1165640891}
   loginAccount: 
   loginPassword: 
   serverList:
   - name: Local
     ip: 127.0.0.1
+  combatLogoutDelay: 5
+  selection: -1
+  selectionLocations: []
+  selectionCameraLocation: {fileID: 0}
   characterLimit: 4
   characterNameMaxLength: 16
   accountMaxLength: 16
   saveInterval: 30
+  passwordSalt: at_least_16_byte
 --- !u!1 &2074409427
 GameObject:
   m_ObjectHideFlags: 0
@@ -72440,7 +72451,7 @@ MonoBehaviour:
   exclusive: 0
   conversant: {fileID: 287913503}
   useConversationTitlePicker: 1
-  selectedDatabase: {fileID: 11400000, guid: 8c8f5e3443fc78d4bb523c867a376cfb, type: 2}
+  selectedDatabase: {fileID: 0}
   actor: {fileID: 1305707318}
   trigger: 16
   stopConversationOnTriggerExit: 0
